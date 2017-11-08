@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>Matcha | <%= @title %></title>
+    <link rel="stylesheet" href="/stylesheets/application.css" />
+  </head>
+  <body class='container'>
+    <%= erb(:'layouts/header') %>
+    </br>
+    <%= yield %>
+    <br/>
+    <%= erb(:'layouts/footer') %>
+  </body>
+</html>

@@ -1,14 +1,10 @@
 <h1>Edit your profile</h1>
 <form method="POST" action="/edit-user">
-  <p>Name</p>
-  <input type="" name="name"/>
-  <p>Firstname</p>
-  <input type="" name="firstname"/>
   <p>Gender</p>
   Male
-  <input type="radio" name="interested_in" value="0"/>
+  <input type="radio" name="gender" value="0"/>
   Female
-  <input type="radio" name="interested_in" value="1"/>
+  <input type="radio" name="gender" value="1"/>
   <p>Interested in</p>
   Men
   <input type="radio" name="interested_in" value="men"/>
@@ -19,5 +15,7 @@
   <p>Bio</p>
   <input type="text" name="bio"/>
   </br>
+  Add tags & images here
+  <input type="hidden" value="<%= current_user.id %>" name="id"/>
   <input type="submit" value="EDIT PROFILE"/>
 </form>

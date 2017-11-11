@@ -21,6 +21,23 @@ class UsersController < ApplicationController
 		erb :'user/edit'
 	end
 
+	post '/edit-user', allows: [:interested_in, :bio, :gender] do
+		@user = User.find_by(id: params[:id])
+		gender = params[:gender] ? params[:gender] : @user.gender
+		bio = params[:bio] ? params[:bio] : @user.bio
+		interested_in = params[:interested_in] ? params[:interested_in] : @user.interested_in
+		puts gender
+		puts bio
+		puts interested_in
+		verified = verify_user(@user.id, current_user.id)
+		if (verified && @user.update(gender: gender, bio: bio, interested_in: interested_in))
+			flash[:success] = "Your profile has been successfully updated."
+		else
+			flash[:notice] = "An error occured while updating your profile"
+		end
+		erb :'user/edit'
+	end
+
 	post '/login' do
 		@user = User.find_by(login: params[:login], email: params[:email]).try(:authenticate, params[:password])
 		if @user
@@ -128,6 +145,10 @@ class UsersController < ApplicationController
 			flash[:notice] = "An error occured."
 		end
 		erb :'user/login'
+	end
+
+	def verify_user(id1, id2)
+		id1.to_i == id2.to_i ? TRUE : FALSE
 	end
 
 end

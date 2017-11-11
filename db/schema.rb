@@ -15,6 +15,9 @@ ActiveRecord::Schema.define(version: 20171110115908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "Application_record", force: :cascade do |t|
+  end
+
   create_table "connections", force: :cascade do |t|
     t.bigint "user_id_id"
     t.boolean "blocked"

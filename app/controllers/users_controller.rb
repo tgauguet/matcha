@@ -16,7 +16,18 @@ class UsersController < ApplicationController
 		erb :'user/login'
 	end
 
-	post '/new' do
+	post '/login' do
+		@user = User.find_by(login: params[:login], email: params[:email]).try(:authenticate, params[:password])
+		session[:current_user_id] = @user.id
+		redirect '/'
+	end
+
+	get '/logout' do
+		session[:current_user_id] = ""
+		redirect '/'
+	end
+
+	post '/new', allows: [:name, :firstname, :password, :password_confirmation, :email, :login] do
 		params.to_s
 		@user = User.new(params)
 		if @user.save

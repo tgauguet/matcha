@@ -1,3 +1,26 @@
 h1{
 	color: green;
 }
+
+footer{
+	border-top: 1px solid black;
+	margin-top: 3em;
+	padding: 2em;
+}
+
+header{
+	border-bottom: 1px solid black;
+	padding: 1em;
+}
+
+header a{
+	padding: .5em;
+}
+
+header img{
+	height: 20px;
+}
+
+p{
+	margin: .2em 0;
+}

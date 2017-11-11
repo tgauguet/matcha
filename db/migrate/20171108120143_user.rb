@@ -1,5 +1,7 @@
 class User < ActiveRecord::Migration[5.1]
   def change
+    create_table :Application_record do |t|
+    end
   	create_table :users do |t|
       t.boolean :admin
       t.string :name

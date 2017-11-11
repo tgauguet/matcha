@@ -2,9 +2,11 @@
 	<img src="/images/logo.png">
 	<a href="/">Home</a>
     <a href="/users">All users</a>
-    <a href="/user/new">Sign in</a>
-    <a href="/user/login">Login</a>
 		<% if signed_in? %>
 			<a href="/logout">Logout</a>
+			<a href="/edit">My profile</a>
+		<% else %>
+			<a href="/user/new">Sign in</a>
+			<a href="/user/login">Login</a>
 		<% end %>
 </header>

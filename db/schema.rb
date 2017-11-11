@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110115908) do
+ActiveRecord::Schema.define(version: 20171111134524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 20171110115908) do
     t.string "password_digest"
     t.boolean "email_confirmed", default: false
     t.string "confirm_token"
+    t.string "password_token"
   end
 
   add_foreign_key "notifications", "conversations"

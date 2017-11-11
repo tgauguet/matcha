@@ -16,10 +16,21 @@ class UsersController < ApplicationController
 		erb :'user/login'
 	end
 
+	get '/edit' do
+		@user = current_user.id
+		erb :'user/edit'
+	end
+
 	post '/login' do
 		@user = User.find_by(login: params[:login], email: params[:email]).try(:authenticate, params[:password])
-		session[:current_user_id] = @user.id
-		redirect '/'
+		if @user
+			flash[:success] = "You are logged in."
+			session[:current_user_id] = @user.id
+			redirect '/'
+		else
+			flash[:notice] = "An error occured, please try again."
+			erb :'user/login'
+		end
 	end
 
 	get '/logout' do
@@ -69,6 +80,54 @@ class UsersController < ApplicationController
 				erb :'user/new'
 			end
 		end
+	end
+
+	get '/forgot-password' do
+		erb :'user/forgot_password'
+	end
+
+	get '/new-password' do
+		erb :'user/edit_password'
+	end
+
+	post '/send-password-email' do
+		@user = User.find_by(email: params[:email])
+		if @user
+			@user.update(password_token: SecureRandom.urlsafe_base64.to_s)
+			token = @user.password_token
+			email = @user.email
+			id = @user.id
+			mail = Mail.new do
+			  from    'noreply@matcha.com'
+			  to      email
+			  subject 'Reset password'
+			  html_part do
+			    content_type 'text/html; charset=UTF-8'
+			    body "<h1>Click on the link below to reset your password :</h1><br/>
+					<a href='http://localhost:4567/new-password?token=#{token}&id=#{id}'>Reset password</a>"
+			  end
+			end
+			mail.deliver
+			flash[:notice] = "We sended you an email to change your password, please check your mailbox."
+		else
+			flash[:notice] = "We couldn't find a user with this email."
+		end
+		redirect '/'
+	end
+
+	post '/edit-password' do
+		@user = User.find_by(id: params[:id])
+		if (@user.password_token == params[:password_token])
+			if (params[:password] ==  params[:password_confirmation])
+				@user.update(password: params[:password])
+				flash[:success] = "Password has been updated."
+			else
+				flash[:notice] = "Password confirmation do not match password"
+			end
+		else
+			flash[:notice] = "An error occured."
+		end
+		erb :'user/login'
 	end
 
 end

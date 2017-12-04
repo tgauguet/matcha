@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+	include FileUtils::Verbose
+
 	get '/users' do
 		@title = 'Utilisateurs'
 		@users = User.all
@@ -21,31 +23,19 @@ class UsersController < ApplicationController
 		erb :'user/edit'
 	end
 
-	post '/edit-user', allows: [:interested_in, :bio, :gender] do
-		@user = User.find_by(id: params[:id])
-		gender = params[:gender] ? params[:gender] : @user.gender
-		bio = params[:bio] ? params[:bio] : @user.bio
-		interested_in = params[:interested_in] ? params[:interested_in] : @user.interested_in
-		puts gender
-		puts bio
-		puts interested_in
-		verified = verify_user(@user.id, current_user.id)
-		if (verified && @user.update(gender: gender, bio: bio, interested_in: interested_in))
-			flash[:success] = "Your profile has been successfully updated."
-		else
-			flash[:notice] = "An error occured while updating your profile"
-		end
-		erb :'user/edit'
-	end
-
 	post '/login' do
 		@user = User.find_by(login: params[:login], email: params[:email]).try(:authenticate, params[:password])
-		if @user
-			flash[:success] = "You are logged in."
-			session[:current_user_id] = @user.id
-			redirect '/'
+		if @user.confirmed?
+			if @user
+				flash[:success] = "You are logged in."
+				session[:current_user_id] = @user.id
+				redirect '/'
+			else
+				flash[:notice] = "An error occured, please try again."
+				erb :'user/login'
+			end
 		else
-			flash[:notice] = "An error occured, please try again."
+			flash[:notice] = "You need to confirm your email before signed_in"
 			erb :'user/login'
 		end
 	end
@@ -132,10 +122,10 @@ class UsersController < ApplicationController
 		redirect '/'
 	end
 
-	post '/edit-password' do
+	post '/edit-password', allows: [:password, :password_confirmation] do
 		@user = User.find_by(id: params[:id])
 		if (@user.password_token == params[:password_token])
-			if (params[:password] ==  params[:password_confirmation])
+			if (params[:password] == params[:password_confirmation])
 				@user.update(password: params[:password])
 				flash[:success] = "Password has been updated."
 			else
@@ -147,8 +137,63 @@ class UsersController < ApplicationController
 		erb :'user/login'
 	end
 
-	def verify_user(id1, id2)
-		id1.to_i == id2.to_i ? TRUE : FALSE
+	post '/edit-user', allows: [:interested_in, :bio, :gen, :all_tags] do
+		@user = User.find_by(id: current_user.id)
+		if @user
+			if @user.update(params)
+				flash[:success] = "Your profile has been successfully updated."
+			else
+				flash[:notice] = "An error occured while updating your profile"
+			end
+		end
+		erb :'user/edit'
+	end
+
+	post '/upload' do
+		@user = User.find_by(id: 1)
+		if params[:img1]
+			copy_image(params[:img1], @user, 1)
+		end
+		if params[:img2]
+			copy_image(params[:img2], @user, 2)
+		end
+		if params[:img3]
+			copy_image(params[:img3], @user, 3)
+		end
+		if params[:img4]
+			copy_image(params[:img4], @user, 4)
+		end
+		if params[:img5]
+			copy_image(params[:img5], @user, 5)
+		end
+		erb :'user/edit'
+	end
+
+	def copy_image(image, user, num)
+		@img = image[:filename]
+		file = image[:tempfile]
+		cp(file, "./app/public/files/#{@img}")
+		img1 = (num == 1 ? @img : user.img1)
+		img2 = (num == 2 ? @img : user.img2)
+		img3 = (num == 3 ? @img : user.img3)
+		img4 = (num == 4 ? @img : user.img4)
+		img5 = (num == 5 ? @img : user.img5)
+		if user
+			if user.update(img1: img1, img2: img2, img3: img3, img4: img4, img5: img5)
+				flash[:success] = "Your images has been successfully added"
+			else
+				flash[:notice] = "An error occured while creating your profile"
+			end
+		end
+	end
+
+	def make_paperclip_mash(file_hash)
+	  mash = Mash.new
+	  mash['tempfile'] = file_hash[:tempfile]
+	  mash['filename'] = file_hash[:filename]
+	  mash['content_type'] = file_hash[:type]
+	  mash['size'] = file_hash[:tempfile].size
+	  mash
 	end
 
 end

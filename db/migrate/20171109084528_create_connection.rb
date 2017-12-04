@@ -1,4 +1,4 @@
-class Connection < ActiveRecord::Migration[5.1]
+class CreateConnection < ActiveRecord::Migration[5.1]
   def change
   	create_table :connections do |t|
       t.references :user_id

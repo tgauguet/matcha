@@ -17,10 +17,12 @@ class ApplicationController < Sinatra::Base
 	end
 
 	def signed_in?
-		if User.find_by(id: session[:current_user_id])
-			TRUE
-		else
-			FALSE
+		if session[:current_user_id]
+			if User.find_by(id: session[:current_user_id])
+				TRUE
+			else
+				FALSE
+			end
 		end
 	end
 end

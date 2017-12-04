@@ -1,5 +1,6 @@
 development:
   adapter: postgresql
   pool: 2
+  user: root
   password: password
   host: localhost

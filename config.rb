@@ -3,11 +3,14 @@ require 'sinatra'
 require 'thin'
 require 'active_support/core_ext/module/delegation'
 require 'paperclip'
+require 'paperclip/rack'
 require 'pony' #email sender
 require 'sinatra/strong-params'
 require 'sinatra/activerecord'
 require './config/environments' #database configuration
 require './app/models/user'
+require './app/models/tagging'
+require './app/models/tag'
 
 Tilt.register Tilt::ERBTemplate, 'html.erb'
 

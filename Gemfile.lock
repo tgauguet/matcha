@@ -12,13 +12,71 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
+    bcrypt (3.1.11)
+    bcrypt-ruby (3.1.5)
+      bcrypt (>= 3.1.3)
     climate_control (0.2.0)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     concurrent-ruby (1.0.5)
+    daemons (1.2.3)
+    data_objects (0.10.17)
+      addressable (~> 2.1)
+    datamapper (1.2.0)
+      dm-aggregates (~> 1.2.0)
+      dm-constraints (~> 1.2.0)
+      dm-core (~> 1.2.0)
+      dm-migrations (~> 1.2.0)
+      dm-serializer (~> 1.2.0)
+      dm-timestamps (~> 1.2.0)
+      dm-transactions (~> 1.2.0)
+      dm-types (~> 1.2.0)
+      dm-validations (~> 1.2.0)
+    dm-aggregates (1.2.0)
+      dm-core (~> 1.2.0)
+    dm-constraints (1.2.0)
+      dm-core (~> 1.2.0)
+    dm-core (1.2.1)
+      addressable (~> 2.3)
+    dm-do-adapter (1.2.0)
+      data_objects (~> 0.10.6)
+      dm-core (~> 1.2.0)
+    dm-migrations (1.2.0)
+      dm-core (~> 1.2.0)
+    dm-postgres-adapter (1.2.0)
+      dm-do-adapter (~> 1.2.0)
+      do_postgres (~> 0.10.6)
+    dm-serializer (1.2.2)
+      dm-core (~> 1.2.0)
+      fastercsv (~> 1.5)
+      json (~> 1.6)
+      json_pure (~> 1.6)
+      multi_json (~> 1.0)
+    dm-timestamps (1.2.0)
+      dm-core (~> 1.2.0)
+    dm-transactions (1.2.0)
+      dm-core (~> 1.2.0)
+    dm-types (1.2.2)
+      bcrypt-ruby (~> 3.0)
+      dm-core (~> 1.2.0)
+      fastercsv (~> 1.5)
+      json (~> 1.6)
+      multi_json (~> 1.0)
+      stringex (~> 1.4)
+      uuidtools (~> 2.1)
+    dm-validations (1.2.0)
+      dm-core (~> 1.2.0)
+    do_postgres (0.10.17)
+      data_objects (= 0.10.17)
+    eventmachine (1.2.0.1)
+    fastercsv (1.5.5)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
+    json (1.8.6)
+    json_pure (1.8.6)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
     mime-types (3.1)
@@ -26,6 +84,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     minitest (5.10.3)
+    multi_json (1.12.2)
     mustermann (1.0.1)
     paperclip (5.1.0)
       activemodel (>= 4.2.0)
@@ -33,14 +92,18 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (~> 0.3.0)
+    paperclip-rack (0.0.2)
+      paperclip (>= 3.0)
     pg (0.21.0)
     pony (1.11)
       mail (>= 2.0)
+    public_suffix (3.0.1)
     rack (2.0.3)
     rack-flash3 (1.0.5)
       rack
     rack-protection (2.0.0)
       rack
+    rake (12.2.1)
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -51,24 +114,36 @@ GEM
       sinatra (>= 1.0)
     sinatra-strong-params (0.0.3)
       sinatra (>= 1.4.0)
+    stringex (1.5.1)
+    thin (1.7.2)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0, >= 1.0.4)
+      rack (>= 1, < 3)
     thread_safe (0.3.6)
     tilt (2.0.8)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
+    uuidtools (2.1.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   activerecord
+  bcrypt-ruby (~> 3.1.2)
+  datamapper
+  dm-postgres-adapter
   mail (~> 2.6.0)
   paperclip
+  paperclip-rack
   pg
   pony (~> 1.11.0)
   rack-flash3
+  rake
   sinatra
   sinatra-activerecord
   sinatra-strong-params
+  thin
 
 BUNDLED WITH
    1.11.2

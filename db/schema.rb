@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171111134524) do
+ActiveRecord::Schema.define(version: 20171113091000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,17 +30,6 @@ ActiveRecord::Schema.define(version: 20171111134524) do
   create_table "conversations", force: :cascade do |t|
     t.integer "connection_id"
     t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "images", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "image_file_name"
-    t.string "image_content_type"
-    t.integer "image_file_size"
-    t.datetime "image_updated_at"
-    t.boolean "main"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -87,16 +76,30 @@ ActiveRecord::Schema.define(version: 20171111134524) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_taggings_on_name"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "tagging_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.boolean "admin"
     t.string "name"
     t.string "firstname"
     t.string "password"
+    t.string "login"
     t.string "password_confirmation"
     t.string "email"
     t.boolean "confirmed"
-    t.boolean "gender"
+    t.string "gen"
     t.string "state"
+    t.string "password_token"
     t.string "country"
     t.string "street"
     t.text "bio"
@@ -109,13 +112,16 @@ ActiveRecord::Schema.define(version: 20171111134524) do
     t.boolean "fake_account"
     t.float "longitude"
     t.integer "connection_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "login"
+    t.string "img1"
+    t.string "img2"
+    t.string "img3"
+    t.string "img4"
+    t.string "img5"
     t.string "password_digest"
     t.boolean "email_confirmed", default: false
     t.string "confirm_token"
-    t.string "password_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "notifications", "conversations"

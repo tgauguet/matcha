@@ -2,9 +2,9 @@
 <form method="POST" action="/edit-user">
   <p>Gender</p>
   Male
-  <input type="radio" name="gender" value="0"/>
+  <input type="radio" name="gen" value='male'/>
   Female
-  <input type="radio" name="gender" value="1"/>
+  <input type="radio" name="gen" value='female'/>
   <p>Interested in</p>
   Men
   <input type="radio" name="interested_in" value="men"/>
@@ -14,8 +14,28 @@
   <input type="radio" name="interested_in" value="both"/>
   <p>Bio</p>
   <input type="text" name="bio"/>
-  </br>
-  Add tags & images here
-  <input type="hidden" value="<%= current_user.id %>" name="id"/>
+  <p>Tags</p>
+  <input type="text" name="all_tags" placeholder="tags with comma..."/>
+  <p>Vos tags actuels</p>
+  <% current_user.taggings.all.each do |tag| %>
+    <%= tag.name %>,
+  <% end %>
+  <br/>
   <input type="submit" value="EDIT PROFILE"/>
+</form>
+<p>________________________________________________________________</p>
+<img src="files/<%= @user.img1 %>"/>
+<img src="files/<%= @user.img2 %>"/>
+<img src="files/<%= @user.img3 %>"/>
+<img src="files/<%= @user.img4 %>"/>
+<img src="files/<%= @user.img5 %>"/>
+<form action='/upload' method="POST" enctype="multipart/form-data">
+  <h1>Upload your images</h1>
+  <input type="file" name="img1"/>
+  <input type="file" name="img2"/>
+  <input type="file" name="img3"/>
+  <input type="file" name="img4"/>
+  <input type="file" name="img5"/>
+  </br>
+  <input type="submit" value="UPLOAD IMAGES"/>
 </form>

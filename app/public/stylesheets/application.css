@@ -24,3 +24,14 @@ header img{
 p{
 	margin: .2em 0;
 }
+
+.img-cntnr{
+	width: 15em;
+	display: inline-block;
+}
+
+.user-imgs img{
+	width: 10em;
+	height: 10em;
+	margin-right: 1em;
+}

@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 
 	post '/login' do
 		@user = User.find_by(login: params[:login], email: params[:email]).try(:authenticate, params[:password])
-		if @user.confirmed?
+		if (@user && @user.confirmed?)
 			if @user
 				flash[:success] = "You are logged in."
 				session[:current_user_id] = @user.id
@@ -137,7 +137,7 @@ class UsersController < ApplicationController
 		erb :'user/login'
 	end
 
-	post '/edit-user', allows: [:interested_in, :bio, :gen, :all_tags] do
+	post '/edit-user', allows: [:interested_in, :bio, :gen, :all_tags, :email] do
 		@user = User.find_by(id: current_user.id)
 		if @user
 			if @user.update(params)
@@ -150,7 +150,7 @@ class UsersController < ApplicationController
 	end
 
 	post '/upload' do
-		@user = User.find_by(id: 1)
+		@user = User.find_by(id: current_user.id)
 		if params[:img1]
 			copy_image(params[:img1], @user, 1)
 		end
@@ -185,15 +185,6 @@ class UsersController < ApplicationController
 				flash[:notice] = "An error occured while creating your profile"
 			end
 		end
-	end
-
-	def make_paperclip_mash(file_hash)
-	  mash = Mash.new
-	  mash['tempfile'] = file_hash[:tempfile]
-	  mash['filename'] = file_hash[:filename]
-	  mash['content_type'] = file_hash[:type]
-	  mash['size'] = file_hash[:tempfile].size
-	  mash
 	end
 
 end

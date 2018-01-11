@@ -6,6 +6,8 @@ require 'paperclip'
 require 'paperclip/rack'
 require 'pony' #email sender
 require 'sinatra/strong-params'
+require 'nokogiri'
+require 'open-uri'
 require 'sinatra/activerecord'
 require './config/environments' #database configuration
 require './app/models/user'

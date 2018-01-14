@@ -1,10 +1,10 @@
 <header>
-	<img src="/images/logo.png">
-	<a href="/">Home</a>
+	<a href="/"><img src="/images/logo.png"></a>
     <a href="/users">All users</a>
 		<% if signed_in? %>
 			<a href="/logout">Logout</a>
-			<a href="/edit">My profile</a>
+			<a href="/user/show">Mon profil</a>
+			<a href="/edit">Modifier profil</a>
 		<% else %>
 			<a href="/user/new">Sign up</a>
 			<a href="/user/login">Login</a>

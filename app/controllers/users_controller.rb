@@ -13,6 +13,11 @@ class UsersController < ApplicationController
 		erb :'user/new'
 	end
 
+	get '/user/show' do
+		@title = "Votre profil"
+		erb :'user/show'
+	end
+
 	get '/user/login' do
 		@title = "Login"
 		erb :'user/login'

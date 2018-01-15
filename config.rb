@@ -25,7 +25,7 @@ Mail.defaults do
   address: "smtp.gmail.com",
   port: 587,
   user_name: "fakefakematcha@gmail.com",
-  password: "fakematchaaccount",
+  password: "fakeaccountpassword",
   authentication: "plain"
 end
 

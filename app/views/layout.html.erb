@@ -20,10 +20,12 @@
       <% end %>
     <% end %>
     <% if flash[:error] %>
-     <% flash[:error].each do |e| %>
-       <p class="error message"><%= e + "." %></p>
-      <% end %>
-    <% end %>
+      <div class="errors-cntnr">
+         <% flash[:error].each do |e| %>
+           <p class="error message">- <%= e %></p>
+          <% end %>
+        <% end %>
+      </div>
     <%= yield %>
     <%= erb(:'layouts/footer') %>
   </body>

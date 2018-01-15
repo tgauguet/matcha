@@ -2,8 +2,10 @@ class WelcomeController < ApplicationController
 
 	get '/' do
 		@title = 'Welcome to Matcha'
-		@user = User.find(current_user.id)
-	  	erb :'welcome/index'
+		if current_user
+			@user = User.find(current_user.id)
+		end
+	  erb :'welcome/index'
 	end
 
 	post '/go' do

@@ -15,18 +15,18 @@ class ApplicationController < Sinatra::Base
 	not_found{ slim :not_found }
 
 	def current_user
-		# current_user = User.find_by(id: session[:current_user_id])
-		current_user = User.find(1)
+		current_user = User.find_by(id: session[:current_user_id])
+		# current_user = User.find(1)
 	end
 
 	def signed_in?
-		# if session[:current_user_id]
-			if current_user # User.find_by(id: session[:current_user_id])
+		if session[:current_user_id]
+			if User.find_by(id: session[:current_user_id]) #current_user
 				TRUE
 			else
 				FALSE
 			end
-		# end
+		end
 	end
 
 	def location

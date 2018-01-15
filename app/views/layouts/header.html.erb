@@ -1,12 +1,16 @@
 <header>
 	<a href="/"><img src="/images/logo.png"></a>
-    <a href="/users">All users</a>
+	<div>
+    <!-- <a href="/users">All users</a> -->
 		<% if signed_in? %>
-			<a href="/logout">Logout</a>
-			<a href="/user/show">Mon profil</a>
-			<a href="/edit">Modifier profil</a>
+			<a href="/user/show"><img src="/images/user.png"/></a>
+			<a href="#"><img src="/images/message.png"/></a>
+			<a href="#"><img src="/images/likes.png"/></a>
+			<a href="/edit"><img src="/images/settings.png"/></a>
+			<a href="/logout"><img src="/images/logout.png"/></a>
 		<% else %>
-			<a href="/user/new">Sign up</a>
-			<a href="/user/login">Login</a>
+			<a href="/user/new" class="red-btn">Inscription</a>
+			<a href="/user/login" class="white-btn">Connexion</a>
 		<% end %>
+	</div>
 </header>

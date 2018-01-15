@@ -32,15 +32,15 @@ class UsersController < ApplicationController
 		@user = User.find_by(login: params[:login], email: params[:email]).try(:authenticate, params[:password])
 		if (@user && @user.confirmed?)
 			if @user
-				flash[:success] = "You are logged in."
+				flash[:success] = "Vous êtes connecté"
 				session[:current_user_id] = @user.id
 				redirect '/'
 			else
-				flash[:notice] = "An error occured, please try again."
+				flash[:notice] = "Une erreur est survenue, merci de réessayer"
 				erb :'user/login'
 			end
 		else
-			flash[:notice] = "You need to confirm your email before signed_in"
+			flash[:notice] = "Vous devez confirmer votre email pour pouvoir vous connecter"
 			erb :'user/login'
 		end
 	end
@@ -61,15 +61,15 @@ class UsersController < ApplicationController
 			mail = Mail.new do
 			  from    'noreply@matcha.com'
 			  to      email
-			  subject 'Confirmation email'
+			  subject 'Confirmer votre email'
 			  html_part do
 			    content_type 'text/html; charset=UTF-8'
-			    body "<h1>Click on the link below to confirm your email :</h1><br/>
-					<a href='http://localhost:4567/confirm?token=#{token}&id=#{id}'>Confirm email</a>"
+			    body "<h1>Cliquez sur le lien ci-dessous pour confirmer votre email :</h1><br/>
+					<a href='http://localhost:4567/confirm?token=#{token}&id=#{id}'>Confirmer mon email</a>"
 			  end
 			end
 			mail.deliver
-			flash[:notice] = "Congratulations, you can now confirm your account. Check your emails !"
+			flash[:notice] = "Félicitations, vous pouvez maintenant confirmer votre email !"
 			redirect '/'
 		else
 			flash[:error] = @user.errors.full_messages
@@ -80,15 +80,15 @@ class UsersController < ApplicationController
 	get '/confirm' do
 		@user = User.find(params[:id])
 		if (@user.confirmed? && @user.confirm_token.blank?)
-			flash[:success] = "Your email has already been confirmed."
+			flash[:success] = "Votre email a déjà été confirmé"
 			erb :'user/login'
 		else
 			if (params[:id] == @user.id.to_s && params[:token] == @user.confirm_token)
 				@user.update(confirmed: true, confirm_token: "")
-				flash[:success] = "Your email has been confirmed !"
+				flash[:success] = "Votre email vient d'être confirmé !"
 				erb :'user/login'
 			else
-				flash[:notice] = "An error occured, please try to confirm your email again"
+				flash[:notice] = "Une erreur est survenue, merci de réessayer"
 				erb :'user/new'
 			end
 		end
@@ -112,17 +112,17 @@ class UsersController < ApplicationController
 			mail = Mail.new do
 			  from    'noreply@matcha.com'
 			  to      email
-			  subject 'Reset password'
+			  subject 'Modifier mon mot de passe'
 			  html_part do
 			    content_type 'text/html; charset=UTF-8'
-			    body "<h1>Click on the link below to reset your password :</h1><br/>
-					<a href='http://localhost:4567/new-password?token=#{token}&id=#{id}'>Reset password</a>"
+			    body "<h1>Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :</h1><br/>
+					<a href='http://localhost:4567/new-password?token=#{token}&id=#{id}'>Modifier</a>"
 			  end
 			end
 			mail.deliver
-			flash[:notice] = "We sended you an email to change your password, please check your mailbox."
+			flash[:notice] = "Nous vous avons envoyé un message pour modifier votre mot de passe. Checkez vos emails !"
 		else
-			flash[:notice] = "We couldn't find a user with this email."
+			flash[:notice] = "Impossible de trouver un utilisateur avec cet email"
 		end
 		redirect '/'
 	end
@@ -132,12 +132,12 @@ class UsersController < ApplicationController
 		if (@user.password_token == params[:password_token])
 			if (params[:password] == params[:password_confirmation])
 				@user.update(password: params[:password])
-				flash[:success] = "Password has been updated."
+				flash[:success] = "Le mot de passe a été modifié"
 			else
-				flash[:notice] = "Password confirmation do not match password"
+				flash[:notice] = "La confirmation ne correspond pas au mot de passe"
 			end
 		else
-			flash[:notice] = "An error occured."
+			flash[:notice] = "Une erreur est survenue"
 		end
 		erb :'user/login'
 	end
@@ -146,9 +146,9 @@ class UsersController < ApplicationController
 		@user = User.find_by(id: current_user.id)
 		if @user
 			if @user.update(params)
-				flash[:success] = "Your profile has been successfully updated."
+				flash[:success] = "Votre profil a été modifié avec succès"
 			else
-				flash[:notice] = "An error occured while updating your profile"
+				flash[:notice] = "Une erreur est survenue pendant la modification de votre profil"
 			end
 		end
 		erb :'user/edit'
@@ -185,9 +185,9 @@ class UsersController < ApplicationController
 		img5 = (num == 5 ? @img : user.img5)
 		if user
 			if user.update(img1: img1, img2: img2, img3: img3, img4: img4, img5: img5)
-				flash[:success] = "Your images has been successfully added"
+				flash[:success] = "Vos images ont été ajoutées avec succès"
 			else
-				flash[:notice] = "An error occured while creating your profile"
+				flash[:notice] = "Une erreur est apparue lors de la modification de votre profil"
 			end
 		end
 	end

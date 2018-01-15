@@ -1,4 +1,12 @@
 <footer>
 	<a href="/"><img src="/images/logo.png"></a>
 	<a href="/">Accueil</a>
+	<% if signed_in? %>
+		<a href="/user/show">Mon profil</a>
+		<a href="/edit">Réglages</a>
+		<a href="/logout">Déconnexion</a>
+	<% else %>
+		<a href="/user/new">Inscription</a>
+		<a href="/user/login">Connexion</a>
+	<% end %>
 </footer>

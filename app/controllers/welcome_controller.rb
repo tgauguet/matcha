@@ -4,8 +4,11 @@ class WelcomeController < ApplicationController
 		@title = 'Welcome to Matcha'
 		if current_user
 			@user = User.find(current_user.id)
+			@users = User.all
+			erb :'user/search'
+		else
+	  	erb :'welcome/index'
 		end
-	  erb :'welcome/index'
 	end
 
 	post '/go' do

@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<div class="search-cntnr">
+  <div class="search-bar">
+    <h2>CHERCHER UN ANIMAL</h2>
+    <form>
+      <!-- Lorsque la case est cochée, les profils donnés en résultats sont ceux qui
+      correspondent à l'utilisateur -->
+      <p class="checkbox-cntnr">
+        <input type="checkbox" id="check1">
+        <label for="check1">Sélection personnalisées</label>
+      </p>
+      <br/>
+      <p>Préférences :</p>
+      <div class="radio-cntnr">
+        <p class="radio">
+          <input type="radio" name="sex" id="match1" value="guy" checked>
+          <label for="match1"><img src="/images/male.png"/></label>
+        </p>
+        <p class="radio">
+          <input type="radio" name="sex" id="match2" value="female">
+          <label for="match2"><img src="/images/female.png"/></label>
+        </p>
+        <p class="radio">
+          <input type="radio" name="sex" id="match3" value="both">
+          <label for="match3"><img src="/images/both.png"/></label>
+        </p>
+        <p class="radio">
+          <input type="radio" name="sex" id="match4" value="cat">
+          <label for="match4"><img src="/images/cat-2.png"/></label>
+        </p>
+      </div>
+      <br/>
+      <p>Age: <input type="text" id="amount" readonly class="age-rank text-dark"></p>
+      <div id="slider-range"></div><br/>
+      <!-- Récupérer l'age et la popularité via le script JS -->
+      <p>Popularité: <input type="text" id="amount2" readonly class="age-rank text-dark"></p>
+      <div id="slider-range2"></div><br/>
+      <p>Localisation:</p>
+      <!-- Ajouter la recherche par localisation sous forme de filter box -->
+      <div class="filters">
+        <!-- Ajouter ici les filtres par age, popularité, localisation et tags avec la classe filter-box -->
+        <select value="pays" class="filter-box">
+          <option value="valeur1">Ile de France</option>
+          <option value="valeur2">Loire Atlantique</option>
+          <option value="valeur3">Midi Pyrénées</option>
+        </select>
+      </div>
+      <br/>
+      <p>Tags:</p>
+      <!-- Ajouter la recherche par tags -->
+      <div class="tags-cntnr">
+        <p>#raclette</p>
+        <p>#chocolat</p>
+        <p>#camembert</p>
+      </div>
+      <div class="btn-cntnr">
+        <input type="submit" value="RECHERCHER" class="red-btn"/>
+      </div>
+    </form>
+    <br/><br/>
+  </div>
+  <div class="usrs">
+    <div class="filters">
+      <!-- Ajouter ici les filtres par age, popularité, localisation et tags avec la classe filter-box -->
+      Filtrer par :
+      <select value="pays" class="filter-box">
+        <option value="valeur1">Age</option>
+        <option value="valeur2">Localisation</option>
+        <option value="valeur3">Popularité</option>
+        <option value="valeur4">Tags</option>
+      </select>
+    </div>
+    <!-- Ajouter ici tous les résultats de la recherche, ajouter un lien
+      vers le profil lorsque l'utilisateur clique -->
+    <a href="/user/show">
+      <div class="usr-result">
+        <img src="/images/fake-usr.jpg"/>
+        <p class="name">JOBY</p>
+        <p class="age">10 ans</p>
+      </div>
+    </a>
+    <div class="usr-result">
+      <img src="/images/fake-usr2.jpg"/>
+      <p class="name">JOBA</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr3.jpg"/>
+      <p class="name">JEAN</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr4.jpg"/>
+      <p class="name">CROQUETTE</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr.jpg"/>
+      <p class="name">PATOU</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr2.jpg"/>
+      <p class="name">LUCKY</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr3.jpg"/>
+      <p class="name">PATRICK</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr4.jpg"/>
+      <p class="name">JOSÉPHINE</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr.jpg"/>
+      <p class="name">DIMITRI</p>
+      <p class="age">10 ans</p>
+    </div>
+    <div class="usr-result">
+      <img src="/images/fake-usr2.jpg"/>
+      <p class="name">VINCENT</p>
+      <p class="age">10 ans</p>
+    </div>
+  </div>
+</div>
+<script>
+  // Age & popularity slider jquery function
+  $( function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: 4,
+      max: 21,
+      values: [ 6, 8 ],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " ans" );
+      }
+    });
+    $( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) +
+      " - " + $( "#slider-range" ).slider( "values", 1 ) + " ans" );
+  } );
+  $( function() {
+    $( "#slider-range2" ).slider({
+      range: true,
+      min: 1,
+      max: 100,
+      values: [ 50, 80 ],
+      slide: function( event, ui ) {
+        $( "#amount2" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " *" );
+      }
+    });
+    $( "#amount2" ).val( $( "#slider-range2" ).slider( "values", 0 ) +
+      " - " + $( "#slider-range2" ).slider( "values", 1 ) + " *" );
+  } );
+</script>

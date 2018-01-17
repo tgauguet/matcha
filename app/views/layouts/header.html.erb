@@ -1,11 +1,11 @@
 <header>
 	<a href="/"><img src="/images/logo.png"></a>
 	<div>
-    <!-- <a href="/users">All users</a> -->
 		<% if signed_in? %>
 			<a href="/user/show"><img src="/images/user.png"/></a>
-			<a href="#"><img src="/images/message.png"/></a>
-			<a href="#"><img src="/images/likes.png"/></a>
+			<!-- put here the counter of messages & likes -->
+			<a href="#"><img src="/images/message.png"/><span class="counter">1</span></a>
+			<a href="#"><img src="/images/likes.png"/><span class="counter">23</span></a>
 			<a href="/edit"><img src="/images/settings.png"/></a>
 			<a href="/logout"><img src="/images/logout.png"/></a>
 		<% else %>

@@ -1,14 +1,17 @@
 <header>
+	<% if signed_in? %>
+		<div class="right-links">
+			<a href="/user/show" class="header-icn"><img src="/images/user.png"/></a>
+			<a href="/edit" class="header-icn"><img src="/images/settings.png"/></a>
+		</div>
+	<% end %>
 	<a href="/" class="non-nude"><img src="/images/logo.png"></a>
 	<a href="/" class="nude"><img src="/images/favicon.png"></a>
 	<div>
 		<% if signed_in? %>
-			<a href="/user/show"><img src="/images/user.png"/></a>
-			<!-- put here the counter of messages & likes -->
-			<a href="/conversation/index"><img src="/images/message.png"/><span class="counter">1</span></a>
-			<a href="/like/index"><img src="/images/likes.png"/><span class="counter">23</span></a>
-			<a href="/edit"><img src="/images/settings.png"/></a>
-			<a href="/logout"><img src="/images/logout.png"/></a>
+			<a href="/conversation/index" class="header-icn"><img src="/images/message.png"/><span class="counter">1</span></a>
+			<a href="/notification/index" class="header-icn"><img src="/images/notification.png"/><span class="counter">23</span></a>
+			<a href="/logout" class="header-icn"><img src="/images/logout.png"/></a>
 		<% else %>
 			<a href="/user/new" class="red-btn non-nude">Inscription</a>
 			<a href="/user/login" class="white-btn non-nude">Connexion</a>

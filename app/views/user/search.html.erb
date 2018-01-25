@@ -3,11 +3,10 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div class="search-cntnr">
   <div class="search-bar">
-    <h2>CHERCHER UN ANIMAL</h2>
+    <h2>OUTILS DE RECHERCHE</h2>
     <form>
-      <!-- Lorsque la case est cochée, les profils donnés en résultats sont ceux qui
-      correspondent à l'utilisateur -->
-      <p class="checkbox-cntnr">
+      <i>Merci de compléter votre profil pour accéder a cette option</i>
+      <p class="checkbox-cntnr check-rgt">
         <input type="checkbox" id="check1">
         <label for="check1">Sélection personnalisées</label>
       </p>
@@ -26,17 +25,19 @@
           <input type="radio" name="sex" id="match3" value="both">
           <label for="match3"><img src="/images/both.png"/></label>
         </p>
-        <p class="radio">
-          <input type="radio" name="sex" id="match4" value="cat">
-          <label for="match4"><img src="/images/cat-2.png"/></label>
-        </p>
       </div>
       <br/>
-      <p>Age: <input type="text" id="amount" readonly class="age-rank text-dark"></p>
-      <div id="slider-range"></div><br/>
-      <!-- Récupérer l'age et la popularité via le script JS -->
-      <p>Popularité: <input type="text" id="amount2" readonly class="age-rank text-dark"></p>
-      <div id="slider-range2"></div><br/>
+      <div class="sliders-cntnr">
+        <div class="sld">
+          <p>Age: <input type="text" id="amount" readonly class="age-rank text-dark"></p>
+          <div id="slider-range"></div><br/>
+        </div>
+          <!-- Récupérer l'age et la popularité via le script JS -->
+        <div class="sld">
+          <p>Popularité: <input type="text" id="amount2" readonly class="age-rank text-dark"></p>
+          <div id="slider-range2"></div><br/>
+        </div>
+      </div>
       <p>Localisation:</p>
       <!-- Ajouter la recherche par localisation sous forme de filter box -->
       <div class="filters">
@@ -47,7 +48,6 @@
           <option value="valeur3">Midi Pyrénées</option>
         </select>
       </div>
-      <br/>
       <p>Tags:</p>
       <!-- Ajouter la recherche par tags -->
       <div class="tags-cntnr">
@@ -59,7 +59,6 @@
         <input type="submit" value="RECHERCHER" class="red-btn"/>
       </div>
     </form>
-    <br/><br/>
   </div>
   <div class="usrs">
     <div class="filters">

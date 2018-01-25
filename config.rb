@@ -35,6 +35,7 @@ Dir.glob('./app/{helpers,controllers}/*.rb').each { |file| require file }
 use Rack::Flash
 use WelcomeController
 use UsersController
+use NotificationsController
 use ApplicationController
 use ConversationsController
 use LikesController

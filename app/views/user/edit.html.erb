@@ -1,20 +1,30 @@
-<div class="usr-profile usr-profile2">
-  <div class="usr-infos usr-infos2">
-    <img src="/images/fake-usr.jpg"/>
-    <h1>JOBY</h1>
-    <div class="params1">Mes réglages <img src="/images/settings-work-tool.png"/></div>
-    <div class="params3">Mes photos <img src="/images/photo-camera.png"/></div>
-    <div class="params2">Localisation <img src="/images/placeholder.png"/></div>
+<div class="settings">
+  <div class="usr-btns">
+    <div class="params1"><img src="/images/settings.png"/></div>
+    <div class="params3"><img src="/images/photo-camera.png"/></div>
+    <div class="params2"><img src="/images/placeholder.png"/></div>
+    <div class="params4"><img src="/images/lock.png"/></div>
+    <div class="params5"><img src="/images/notif-visit.png"/></div>
+    <div class="params6"><img src="/images/notif-like.png"/></div>
   </div>
   <div class="usr-forms">
-    <div class="tog toggle-img" style="display:none;">
-      <%= erb(:'user/images') %>
-    </div>
     <div class="tog toggle-set">
       <%= erb(:'user/settings') %>
     </div>
+    <div class="tog toggle-img" style="display:none;">
+      <%= erb(:'user/images') %>
+    </div>
     <div class="tog toggle-loc" style="display:none;">
       <%= erb(:'user/location') %>
+    </div>
+    <div class="tog toggle-pas" style="display:none;">
+      <%= erb(:'user/password') %>
+    </div>
+    <div class="tog toggle-vis" style="display:none;">
+      <%= erb(:'user/visits') %>
+    </div>
+    <div class="tog toggle-lik" style="display:none;">
+      <%= erb(:'user/likes') %>
     </div>
   </div>
 </div>
@@ -31,6 +41,18 @@
     $(".params3").click(function(){
       $(".tog").hide();
       $(".toggle-img").show();
+    });
+    $(".params4").click(function(){
+      $(".tog").hide();
+      $(".toggle-pas").show();
+    });
+    $(".params5").click(function(){
+      $(".tog").hide();
+      $(".toggle-vis").show();
+    });
+    $(".params6").click(function(){
+      $(".tog").hide();
+      $(".toggle-lik").show();
     });
   });
 </script>

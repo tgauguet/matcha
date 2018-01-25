@@ -1,54 +1,36 @@
-<h1>Edit your profile</h1>
-<form method="POST" action="/edit-user">
-  <p>Gender</p>
-  Male
-  <input type="radio" name="gen" value='male'/>
-  Female
-  <input type="radio" name="gen" value='female'/>
-  <p>Interested in</p>
-  Men
-  <input type="radio" name="interested_in" value="men"/>
-  Girls
-  <input type="radio" name="interested_in" value="girls"/>
-  Both
-  <input type="radio" name="interested_in" value="both"/>
-  <p>Bio</p>
-  <input type="text" name="bio"/>
-  <p>Email</p>
-  <input type="text" name="email"/>
-  <p>Tags</p>
-  <input type="text" name="all_tags" placeholder="tags with comma..."/>
-  <p>Vos tags actuels</p>
-  <% current_user.taggings.all.each do |tag| %>
-    <%= tag.name %>,
-  <% end %>
-  <br/>
-  <input type="submit" value="EDIT PROFILE"/>
-</form>
-<p>________________________________________________________________</p>
-<h1>Upload your images</h1>
-<div class="user-imgs">
-  <form action='/upload' method="POST" enctype="multipart/form-data">
-  <div class="img-cntnr">
-    <i>Cette 1ère image sera utilisée comme photo de profil</i>
-    <img src="files/<%= current_user.img1 %>"/>
-    <input type="file" name="img1"/>
+<div class="usr-profile usr-profile2">
+  <div class="usr-infos usr-infos2">
+    <img src="/images/fake-usr.jpg"/>
+    <h1>JOBY</h1>
+    <div class="params1">Mes réglages <img src="/images/settings-work-tool.png"/></div>
+    <div class="params3">Mes photos <img src="/images/photo-camera.png"/></div>
+    <div class="params2">Localisation <img src="/images/placeholder.png"/></div>
   </div>
-  <div class="img-cntnr">
-    <img src="files/<%= current_user.img2 %>"/>
-    <input type="file" name="img2"/>
+  <div class="usr-forms">
+    <div class="tog toggle-img" style="display:none;">
+      <%= erb(:'user/images') %>
+    </div>
+    <div class="tog toggle-set">
+      <%= erb(:'user/settings') %>
+    </div>
+    <div class="tog toggle-loc" style="display:none;">
+      <%= erb(:'user/location') %>
+    </div>
   </div>
-  <div class="img-cntnr">
-    <img src="files/<%= current_user.img3 %>"/>
-    <input type="file" name="img3"/>
-  </div>
-  <div class="img-cntnr">
-    <img src="files/<%= current_user.img4 %>"/>
-    <input type="file" name="img4"/>
-  </div>
-  <div class="img-cntnr">
-    <img src="files/<%= current_user.img5 %>"/>
-    <input type="file" name="img5"/>
-  </div>
-  <input type="submit" value="UPLOAD IMAGES"/>
 </div>
+<script>
+  $(document).ready(function(){
+    $(".params1").click(function(){
+      $(".tog").hide();
+      $(".toggle-set").show();
+    });
+    $(".params2").click(function(){
+      $(".tog").hide();
+      $(".toggle-loc").show();
+    });
+    $(".params3").click(function(){
+      $(".tog").hide();
+      $(".toggle-img").show();
+    });
+  });
+</script>

@@ -27,9 +27,10 @@
       </div>
     <% end %>
     <div class="yield">
-      <%= yield %>
+      <div class="yield-chld">
+        <%= yield %>
+      </div>
     </div>
-    <%= erb(:'layouts/footer') %>
   </body>
   <script type="text/javascript" src="/javascript/bootstrap.min.js"></script>
 </html>

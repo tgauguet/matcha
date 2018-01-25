@@ -36,3 +36,5 @@ use Rack::Flash
 use WelcomeController
 use UsersController
 use ApplicationController
+use ConversationsController
+use LikesController

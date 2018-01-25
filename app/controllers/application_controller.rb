@@ -19,18 +19,18 @@ class ApplicationController < Sinatra::Base
 
 	def current_user
 		# force user to always be User 1 and logged in
-		# current_user = User.find_by(id: session[:current_user_id])
-		current_user = User.find(6)
+		current_user = User.find_by(id: session[:current_user_id])
+		# current_user = User.find(6)
 	end
 
 	def signed_in?
-		# if session[:current_user_id]
-			if current_user #User.find_by(id: session[:current_user_id])
+		if session[:current_user_id]
+			if User.find_by(id: session[:current_user_id]) #current_user
 				TRUE
 			else
 				FALSE
 			end
-		# end
+		end
 	end
 
 	def location

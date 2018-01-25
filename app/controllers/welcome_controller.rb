@@ -11,8 +11,4 @@ class WelcomeController < ApplicationController
 		end
 	end
 
-	post '/go' do
-	    erb :'welcome/index'
-	end
-
 end

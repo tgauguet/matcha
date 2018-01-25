@@ -1,16 +1,18 @@
 <header>
-	<a href="/"><img src="/images/logo.png"></a>
+	<a href="/" class="non-nude"><img src="/images/logo.png"></a>
+	<a href="/" class="nude"><img src="/images/favicon.png"></a>
 	<div>
 		<% if signed_in? %>
 			<a href="/user/show"><img src="/images/user.png"/></a>
 			<!-- put here the counter of messages & likes -->
-			<a href="#"><img src="/images/message.png"/><span class="counter">1</span></a>
-			<a href="#"><img src="/images/likes.png"/><span class="counter">23</span></a>
+			<a href="/conversation/index"><img src="/images/message.png"/><span class="counter">1</span></a>
+			<a href="/like/index"><img src="/images/likes.png"/><span class="counter">23</span></a>
 			<a href="/edit"><img src="/images/settings.png"/></a>
 			<a href="/logout"><img src="/images/logout.png"/></a>
 		<% else %>
-			<a href="/user/new" class="red-btn">Inscription</a>
-			<a href="/user/login" class="white-btn">Connexion</a>
+			<a href="/user/new" class="red-btn non-nude">Inscription</a>
+			<a href="/user/login" class="white-btn non-nude">Connexion</a>
+			<a href="/user/login" class="nude nude-img"><img src="/images/animal-track.png"/></a>
 		<% end %>
 	</div>
 </header>

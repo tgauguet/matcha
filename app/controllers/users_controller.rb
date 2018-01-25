@@ -192,4 +192,7 @@ class UsersController < ApplicationController
 		end
 	end
 
+	post '/go' do
+	end
+
 end

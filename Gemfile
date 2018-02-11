@@ -1,13 +1,13 @@
 source "https://rubygems.org"
 
 gem "sinatra"
-gem "activerecord"
-gem "sinatra-activerecord"
-gem "pg"
+gem "mysql"
+gem "mysql2"
 gem "rake"
 gem "nokogiri"
-gem "open-uri"
+gem "dbi"
 gem "thin"
+gem "dbd-odbc"
 gem "paperclip"
 gem 'paperclip-rack', require: 'paperclip/rack'
 gem 'sinatra-strong-params', :require => 'sinatra/strong-params'
@@ -17,4 +17,3 @@ gem 'pony', '~> 1.11.0'
 gem 'bcrypt-ruby', '~> 3.1.2'
 gem 'mail', '~> 2.6.0'
 gem 'datamapper'
-gem 'dm-postgres-adapter'

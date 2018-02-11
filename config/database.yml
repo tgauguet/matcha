@@ -1,6 +1,7 @@
 development:
-  adapter: postgresql
+  adapter: mysql
   pool: 2
   user: root
-  password: password
+  password: root
   host: localhost
+  db_name: matcha

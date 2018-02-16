@@ -1,4 +1,4 @@
-class Tag < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :tagging
+class Tag
+  # belongs_to :user
+  # belongs_to :tagging
 end

@@ -79,6 +79,7 @@ GEM
     multi_json (1.12.2)
     mustermann (1.0.1)
     mysql (2.9.1)
+    mysql2 (0.4.10)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     paperclip (5.1.0)
@@ -125,8 +126,10 @@ DEPENDENCIES
   dbd-odbc
   dbi
   geokit
+  json
   mail (~> 2.6.0)
   mysql
+  mysql2
   nokogiri
   paperclip
   paperclip-rack

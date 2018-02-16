@@ -1,4 +1,4 @@
-# Hypertube
+# Matcha
 
 This project belongs to 42's web branch.
 It's purpose is to create a Tinder like without any ORM like ActiveRecord
@@ -16,8 +16,8 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installing
 
 ```
-git clone https://github.com/tgauguet/new_matcha.git
-cd new_matcha
+git clone https://github.com/tgauguet/matcha_tim.git
+cd matcha_tim
 bundle install
 ruby app.rb
 ```
@@ -39,9 +39,9 @@ soon
 * Sinatra
 * jQuery
 
-## How to
+## How to :
 
-### Index Object
+### Index all Objects
 
 in ObjectController
 ```
@@ -54,7 +54,7 @@ in views/object/index.html.erb
 <% end %>
 ```
 
-### Find one object
+### Find object by id (or whatever you want)
 
 in ObjectController
 ```
@@ -64,3 +64,5 @@ in views/object/show.html.erb
 ```
 <%= @object.id %>
 ```
+
+### Create new object

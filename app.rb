@@ -25,7 +25,7 @@ configure do
 
   use Rack::Flash
   use WelcomeController
-  # use UsersController
+  use UsersController
   # use NotificationsController
   # use ApplicationController
   # use ConversationsController

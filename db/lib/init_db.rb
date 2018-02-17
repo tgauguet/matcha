@@ -17,11 +17,11 @@ module InitDb
                   img3 VARCHAR(256),
                   img4 VARCHAR(256),
                   img5 VARCHAR(256),
-                  public_score INT(3) NOT NULL DEFAULT 50,
+                  public_score INT(3) DEFAULT 50,
                   latitude FLOAT,
                   longitude FLOAT,
                   city VARCHAR(256),
-                  age INT(6) NOT NULL
+                  age INT(6)
                   )")
     $server.query("CREATE TABLE IF NOT EXISTS Visit (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

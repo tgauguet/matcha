@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-
+	helpers UserHelper
+	helpers MailHelper
 	include FileUtils::Verbose
 
 	get '/users' do
@@ -50,29 +51,23 @@ class UsersController < ApplicationController
 		redirect '/'
 	end
 
-	post '/new', allows: [:name, :firstname, :password, :password_confirmation, :email, :login] do
-		params.to_s
-		@user = User.new(params)
-		if @user.save
-			@user.update(confirm_token: SecureRandom.urlsafe_base64.to_s)
-			token = @user.confirm_token
-			email = @user.email
-			id = @user.id
-			mail = Mail.new do
-			  from    'noreply@matcha.com'
-			  to      email
-			  subject 'Confirmer votre email'
-			  html_part do
-			    content_type 'text/html; charset=UTF-8'
-			    body "<h1>Cliquez sur le lien ci-dessous pour confirmer votre email :</h1><br/>
-					<a href='http://localhost:4567/confirm?token=#{token}&id=#{id}'>Confirmer mon email</a>"
-			  end
+	post '/new', allows: [:name, :firstname, :password, :email, :login] do
+		form_error = user_params(params)
+		if form_error.empty?
+			@user = User.new(params)
+			if @user
+				puts "--------->"
+				puts @user
+				# @user.update(confirm_token: SecureRandom.urlsafe_base64.to_s)
+				# user_email(@user.email, @user.confirm_token, @user.id)
+				# flash[:notice] = "Félicitations, vous pouvez maintenant confirmer votre email !"
+				# redirect '/'
+			else
+				flash[:notice] = "Erreur lors de la sauvegarde, veuillez réessayer"
+				erb :'user/new'
 			end
-			mail.deliver
-			flash[:notice] = "Félicitations, vous pouvez maintenant confirmer votre email !"
-			redirect '/'
 		else
-			flash[:error] = @user.errors.full_messages
+			flash[:error] = form_error
 			erb :'user/new'
 		end
 	end

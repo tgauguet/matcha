@@ -58,7 +58,7 @@ in views/object/index.html.erb
 
 in ObjectController
 ```
-@object = Object.find_by("id", current_user.id)
+@object = Object.find_by("id", current_object.id)
 ```
 in views/object/show.html.erb
 ```

@@ -19,11 +19,6 @@ class User
 	# 	self.tags.map(&:name).join(", ")
 	# end
 
-  def set_values(data)
-    user = UserData.init(data)
-    puts user
-  end
-
   # √
   def self.all
     $server.query("SELECT * FROM User")
@@ -35,9 +30,12 @@ class User
   end
 
   def self.new(args)
-    args = set_values(args)
-    $server.query("INSERT INTO User (name, firstname, email, login, password, password_token, gender, interested_in)
-                  VALUES ()")
+    # NEXT STEP = validate & secure data before saving user
+    val = UserData.init(data)
+    puts val
+    res = $server.query("INSERT INTO User (name, firstname, email, login, password)
+                  VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{args['password']}')")
+    puts res
   end
 
   def self.update(args)

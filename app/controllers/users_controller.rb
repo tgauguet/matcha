@@ -53,10 +53,11 @@ class UsersController < ApplicationController
 
 	post '/new', allows: [:name, :firstname, :password, :email, :login] do
 		form_error = user_params(params)
+		puts form_error
+		puts "----------__>"
 		if form_error.empty?
 			@user = User.new(params)
 			if @user
-				puts "--------->"
 				puts @user
 				# @user.update(confirm_token: SecureRandom.urlsafe_base64.to_s)
 				# user_email(@user.email, @user.confirm_token, @user.id)

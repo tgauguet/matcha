@@ -1,11 +1,6 @@
+require './app/data_models/user_data.rb'
+
 class User
-	# validates :email, presence: true, format: /\w+@\w+\.{1}[a-zA-Z]{2,}/, uniqueness: true
-	# validates :login, presence: true, uniqueness: true
-	# validates :password, presence: true, on: [:create]
-	# validates :name, presence: true
-	# validates :firstname, presence: true
-	# validates_confirmation_of :password
-	# has_secure_password
 	# has_many :tags
 	# has_many :taggings, through: :tags
   #
@@ -19,26 +14,26 @@ class User
 	# 	self.tags.map(&:name).join(", ")
 	# end
 
-  # √
   def self.all
     $server.query("SELECT * FROM User")
   end
 
-  # √
   def self.find_by(type, value)
     (!type.nil? && !value.nil?) ? $server.query("SELECT * FROM User WHERE #{type} = #{value}").fetch_hash : nil
   end
 
   def self.new(args)
-    # NEXT STEP = validate & secure data before saving user
-    val = UserData.init(data)
-    puts val
-    res = $server.query("INSERT INTO User (name, firstname, email, login, password)
+    # re-check how to create a proper array of data to insert in database
+    # secure user's password
+    args = UserData.init(args)
+    $server.query("INSERT INTO User (name, firstname, email, login, password)
                   VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{args['password']}')")
-    puts res
+    id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash
+    self.find_by("id", id['LAST_INSERT_ID()'])
   end
 
-  def self.update(args)
+  def self.update(args, id)
+    args = UserData.init(args)
   end
 
   def self.delete(value)

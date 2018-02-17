@@ -8,8 +8,11 @@ module UserHelper
     if validate_length_of(params["password"], 8)
       error << "votre mot de passe est trop court (8 char min)"
     end
-    if (params["login"].present? && !validate_uniqueness_of(params["login"], "User"))
+    if (params["login"].present? && !validate_uniqueness_of("login", params["login"], "User"))
       error << "ce login est déjà utilisé, merci d'en choisir un autre"
+    end
+    if (params["email"].present? && !validate_uniqueness_of("email", params["email"], "User"))
+      error << "cet email est déjà utilisé, merci d'en choisir un autre"
     end
     error
   end
@@ -32,8 +35,8 @@ module UserHelper
     param.length < len
   end
 
-  def validate_uniqueness_of(param, table_name)
-    $server.query("SELECT * FROM #{table_name} WHERE login = '#{param}'").num_rows == 0 ? TRUE : FALSE
+  def validate_uniqueness_of(param, value, table_name)
+    $server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").num_rows == 0 ? TRUE : FALSE
   end
 
 end

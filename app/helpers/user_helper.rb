@@ -40,7 +40,4 @@ module UserHelper
     $server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").num_rows == 0 ? TRUE : FALSE
   end
 
-  def sign_in_match(login, email, password)
-  end
-
 end

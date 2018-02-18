@@ -1,10 +1,13 @@
 require 'pony'
 
+set = YAML.load_file(__dir__ + '/secrets.yml')
+set = set['development']
+
 Mail.defaults do
   delivery_method :smtp,
-  address: "smtp.gmail.com",
-  port: 587,
-  user_name: "fakefakematcha@gmail.com",
-  password: "fakeaccountpassword",
-  authentication: "plain"
+  address: set['address'],
+  port: set['port'],
+  user_name: set['user_name'],
+  password: set['password'],
+  authentication: set['authentication']
 end

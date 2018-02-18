@@ -36,7 +36,11 @@ module UserHelper
   end
 
   def validate_uniqueness_of(param, value, table_name)
-    $server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").num_rows == 0 ? TRUE : FALSE
+    value = Mysql.escape_string(Rack::Utils.escape_html(value))
+    @db.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").num_rows == 0 ? TRUE : FALSE
+  end
+
+  def sign_in_match(login, email, password)
   end
 
 end

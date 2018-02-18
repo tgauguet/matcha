@@ -2,6 +2,9 @@ class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
 	include FileUtils::Verbose
+	# before /^(?!\/(login|destroy))/ do
+	#   # ...
+	# end
 
 	get '/users' do
 		@title = 'Utilisateurs'
@@ -30,16 +33,15 @@ class UsersController < ApplicationController
 	end
 
 	post '/login' do
-		@user = User.find_by(login: params[:login], email: params[:email]).try(:authenticate, params[:password])
-		if (@user && @user.confirmed?)
-			if @user
-				flash[:success] = "Vous êtes connecté"
-				session[:current_user_id] = @user.id
-				redirect '/'
-			else
-				flash[:notice] = "Une erreur est survenue, merci de réessayer"
+		if sign_in_match(params[:login], params[:email], params[:password])
+			# if @user
+			# 	flash[:success] = "Vous êtes connecté"
+			# 	session[:current_user_id] = @user.id
+			# 	redirect '/'
+			# else
+				flash[:notice] = "Une erreur est survenue, merci de réessayer (YES)"
 				erb :'user/login'
-			end
+			# end
 		else
 			flash[:notice] = "Vous devez confirmer votre email pour pouvoir vous connecter"
 			erb :'user/login'
@@ -53,20 +55,15 @@ class UsersController < ApplicationController
 
 	post '/new', allows: [:name, :firstname, :password, :email, :login] do
 		form_error = user_params(params)
-		puts form_error
-		puts "----------__>"
 		if form_error.empty?
 			@user = User.new(params)
 			if @user
-				puts @user
-				# @user.update(confirm_token: SecureRandom.urlsafe_base64.to_s)
-				# user_email(@user.email, @user.confirm_token, @user.id)
-				# flash[:notice] = "Félicitations, vous pouvez maintenant confirmer votre email !"
-				# redirect '/'
+				welcome_email(@user['email'], @user['id'])
+				flash[:notice] = "Félicitations, vous êtes inscris sur Petsder !"
 			else
 				flash[:notice] = "Erreur lors de la sauvegarde, veuillez réessayer"
-				erb :'user/new'
 			end
+			redirect '/'
 		else
 			flash[:error] = form_error
 			erb :'user/new'

@@ -21,7 +21,9 @@ module InitDb
                   latitude FLOAT,
                   longitude FLOAT,
                   city VARCHAR(256),
-                  age INT(6)
+                  age INT(6),
+                  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
     $server.query("CREATE TABLE IF NOT EXISTS Visit (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

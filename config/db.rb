@@ -14,6 +14,7 @@ begin
   if ($server.query("SELECT * FROM User").num_rows == 0)
     InitDb.create_seeds
   end
-rescue Exception => e
-  logger.debug "#{e.class}"
+rescue Mysql::Error => e
+  puts "ERROR #{e.errno} (#{e.sqlstate}): #{e.error}"
+  puts "Can't connect to the MySQL database specified."
 end

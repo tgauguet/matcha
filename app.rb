@@ -3,6 +3,7 @@ require 'active_support/core_ext/module/delegation'
 require 'sinatra'
 require 'rack-flash'
 require 'thin'
+require 'bcrypt'
 require 'paperclip'
 require 'paperclip/rack'
 require 'sinatra/strong-params'
@@ -17,7 +18,7 @@ configure do
 
   enable :sessions, :method_override
   Tilt.register Tilt::ERBTemplate, 'html.erb'
-  Dir.glob('./app/{helpers,controllers,models}/*.rb').each { |file| require file }
+  Dir.glob('./app/{helpers,controllers,models,lib}/*.rb').each { |file| require file }
 
   def herb(template, options={}, locals={})
     render "html.erb", template, options, locals

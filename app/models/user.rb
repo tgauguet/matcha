@@ -19,7 +19,7 @@ class User
   end
 
   def self.find_by(type, value)
-    (!type.nil? && !value.nil?) ? $server.query("SELECT * FROM User WHERE #{type} = #{value}").fetch_hash : nil
+    (!type.nil? && !value.nil?) ? $server.query("SELECT * FROM User WHERE #{type} = '#{value}'").fetch_hash : nil
   end
 
   def self.new(args)
@@ -55,6 +55,12 @@ class User
       return self.find_by("id", value).nil?
     end
     false
+  end
+
+  def self.match(args)
+    user = self.find_by("login", args["login"])
+    password = args["password"].encrypt
+    (user && (password == user['password'])) ? self.find_by("id", user['id']) : nil
   end
 
 end

@@ -7,43 +7,41 @@ class UsersController < ApplicationController
 	# end
 
 	get '/users' do
-		@title = 'Utilisateurs'
+		@title = 'Tous les utilisateurs'
 		@users = User.all
 		erb :'user/index'
 	end
 
 	get '/user/new' do
-		@title = "Sign in"
+		@title = "Inscription"
 		erb :'user/new'
 	end
 
 	get '/user/show' do
-		@title = "Votre profil"
+		# @user = User.find_by("id", params[:id])
+		# @title = "Profil de #{@user['firstname']} #{@user['name']}"
 		erb :'user/show'
 	end
 
 	get '/user/login' do
-		@title = "Login"
+		@title = "Connexion"
 		erb :'user/login'
 	end
 
 	get '/edit' do
+		@title = "Modification du profil"
 		@user = current_user.id
 		erb :'user/edit'
 	end
 
 	post '/login' do
-		if sign_in_match(params[:login], params[:email], params[:password])
-			# if @user
-			# 	flash[:success] = "Vous êtes connecté"
-			# 	session[:current_user_id] = @user.id
-			# 	redirect '/'
-			# else
-				flash[:notice] = "Une erreur est survenue, merci de réessayer (YES)"
-				erb :'user/login'
-			# end
+		@user = User.match(params)
+		if @user
+			flash[:success] = "Vous êtes connecté"
+			session[:current_user_id] = @user['id']
+			redirect '/'
 		else
-			flash[:notice] = "Vous devez confirmer votre email pour pouvoir vous connecter"
+			flash[:notice] = "Le mot de passe et le login ne correspondent pas."
 			erb :'user/login'
 		end
 	end
@@ -58,6 +56,7 @@ class UsersController < ApplicationController
 		if form_error.empty?
 			@user = User.new(params)
 			if @user
+				User.delete(@user['id'])
 				welcome_email(@user['email'], @user['id'])
 				flash[:notice] = "Félicitations, vous êtes inscris sur Petsder !"
 			else
@@ -70,7 +69,9 @@ class UsersController < ApplicationController
 		end
 	end
 
+	# to be deleted
 	get '/confirm' do
+		@title = "Confirmation de votre email"
 		@user = User.find(params[:id])
 		if (@user.confirmed? && @user.confirm_token.blank?)
 			flash[:success] = "Votre email a déjà été confirmé"
@@ -88,10 +89,12 @@ class UsersController < ApplicationController
 	end
 
 	get '/forgot-password' do
+		@title = "Mot de passe oublié"
 		erb :'user/forgot_password'
 	end
 
 	get '/new-password' do
+		@title = "Modifier le mot de passe"
 		erb :'user/edit_password'
 	end
 

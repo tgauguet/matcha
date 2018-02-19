@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
 	include FileUtils::Verbose
-	['/images', '/user/show', '/edit', '/upload'].each do |path|
+	['/images', '/user/show', '/edit', '/upload', '/edit-password', '/edit-user'].each do |path|
 		before path do
 			authenticate
 		end
@@ -74,8 +74,7 @@ class UsersController < ApplicationController
 	end
 
 	post '/edit-password', allows: [:password, :password_confirmation, :id, :token] do
-		@user = User.find_by("id", params['id'])
-		if (@user && !validate_length_of(params['password'], 8) && (@user.password_token == params['token'] && params['password'] == params['password_confirmation']))
+		if (!validate_length_of(params['password'], 8) && (@user.password_token == params['token'] && params['password'] == params['password_confirmation']))
 			@user = User.update({'password' => params['password']}, @user)
 			flash.now[:success] = "Le mot de passe a été modifié"
 			erb :'user/login'
@@ -108,9 +107,8 @@ class UsersController < ApplicationController
 	end
 
 	post '/edit-user', allows: [:interested_in, :description, :gender, :email, :name, :firstname] do
-		@user = User.find_by('id', current_user.id)
 		valid_email = params['email'].empty? ? 1 : update_params(params)
-		if @user && valid_email
+		if valid_email
 			@user = User.update(params, @user)
 			if @user
 				flash.now[:success] = "Votre profil a été modifié avec succès"

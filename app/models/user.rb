@@ -19,15 +19,16 @@ class User
   end
 
   def self.find_by(type, value)
-    (!type.nil? && !value.nil?) ? $server.query("SELECT * FROM User WHERE #{type} = '#{value}'").fetch_hash : nil
+    (!type.nil? && !value.nil?) ? $server.query("SELECT * FROM User WHERE #{type} = '#{value}'").fetch_hash.to_dot : nil
   end
 
   def self.new(args)
     begin
-      password = args['password'].encrypt
+      salt = BCrypt::Engine.generate_salt
+      password = args['password'].encrypt(salt)
       args = UserData.init(args)
-      $server.query("INSERT INTO User (name, firstname, email, login, password)
-                    VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}')")
+      $server.query("INSERT INTO User (name, firstname, email, login, password, salt)
+                    VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}', '#{salt}')")
       id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash
       self.find_by("id", id['LAST_INSERT_ID()'])
     rescue Mysql::Error => e
@@ -59,8 +60,7 @@ class User
 
   def self.match(args)
     user = self.find_by("login", args["login"])
-    password = args["password"].encrypt
-    (user && (password == user['password'])) ? self.find_by("id", user['id']) : nil
+    return user && (args["password"].check_password(user['salt'], user['password'])) ? self.find_by("id", user['id']) : nil
   end
 
 end

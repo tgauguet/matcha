@@ -64,6 +64,7 @@ GEM
     eventmachine (1.2.0.1)
     fastercsv (1.5.5)
     geokit (1.11.0)
+    hash_dot (2.4.0)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     json (1.8.6)
@@ -126,6 +127,7 @@ DEPENDENCIES
   dbd-odbc
   dbi
   geokit
+  hash_dot
   json
   mail (~> 2.6.0)
   mysql

@@ -8,6 +8,7 @@ gem "nokogiri"
 gem "dbi"
 gem "thin"
 gem "dbd-odbc"
+gem 'hash_dot'
 gem "paperclip"
 gem 'paperclip-rack', require: 'paperclip/rack'
 gem 'sinatra-strong-params', :require => 'sinatra/strong-params'

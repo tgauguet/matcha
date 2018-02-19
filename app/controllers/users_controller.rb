@@ -38,16 +38,16 @@ class UsersController < ApplicationController
 		@user = User.match(params)
 		if @user
 			flash[:success] = "Vous êtes connecté"
-			session[:current_user_id] = @user['id']
+			session[:current_user_id] = @user.id
 			redirect '/'
 		else
-			flash[:notice] = "Le mot de passe et le login ne correspondent pas."
+			flash[:notice] = "Le mot de passe et/ou le login ne correspondent pas."
 			erb :'user/login'
 		end
 	end
 
 	get '/logout' do
-		session[:current_user_id] = ""
+		session[:current_user_id] = nil
 		redirect '/'
 	end
 
@@ -56,8 +56,7 @@ class UsersController < ApplicationController
 		if form_error.empty?
 			@user = User.new(params)
 			if @user
-				User.delete(@user['id'])
-				welcome_email(@user['email'], @user['id'])
+				welcome_email(@user.email, @user.id)
 				flash[:notice] = "Félicitations, vous êtes inscris sur Petsder !"
 			else
 				flash[:notice] = "Erreur lors de la sauvegarde, veuillez réessayer"
@@ -72,7 +71,7 @@ class UsersController < ApplicationController
 	# to be deleted
 	get '/confirm' do
 		@title = "Confirmation de votre email"
-		@user = User.find(params[:id])
+		@user = User.find_by("id", params[:id])
 		if (@user.confirmed? && @user.confirm_token.blank?)
 			flash[:success] = "Votre email a déjà été confirmé"
 			erb :'user/login'

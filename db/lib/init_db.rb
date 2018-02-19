@@ -12,6 +12,7 @@ module InitDb
                   gender VARCHAR(256),
                   interested_in VARCHAR(256),
                   description TEXT,
+                  salt VARCHAR(256),
                   img1 VARCHAR(256),
                   img2 VARCHAR(256),
                   img3 VARCHAR(256),

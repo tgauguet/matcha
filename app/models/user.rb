@@ -1,16 +1,4 @@
 class User
-	# has_many :tags
-	# has_many :taggings, through: :tags
-  #
-	# def all_tags=(names)
-	# 	self.taggings = names.split(",").map do |name|
-	# 		Tagging.where(name: name.strip).first_or_create!
-	# 	end
-	# end
-  #
-	# def all_tags
-	# 	self.tags.map(&:name).join(", ")
-	# end
 
   def self.all
     $server.query("SELECT * FROM User")
@@ -21,7 +9,6 @@ class User
        user = $server.query("SELECT * FROM User WHERE #{type} = '#{value}'").fetch_hash
        return user ? user.to_dot : nil
     end
-    nil
   end
 
   def self.new(args)
@@ -68,5 +55,15 @@ class User
     user = self.find_by("login", args["login"])
     return user && (args["password"].check_password(user['salt'], user['password'])) ? self.find_by("id", user['id']) : nil
   end
+
+  # def all_tags=(names)
+	# 	self.taggings = names.split(",").map do |name|
+	# 		Tagging.where(name: name.strip).first_or_create!
+	# 	end
+	# end
+  #
+	# def all_tags
+	# 	self.tags.map(&:name).join(", ")
+	# end
 
 end

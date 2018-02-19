@@ -1,0 +1,15 @@
+<% flash.keys.each do |type| %>
+  <% if type %>
+    <div data-alert class="flash <%= type %> alert-box radius">
+      <%= flash[type] %></br>
+    </div>
+  <% end %>
+<% end %>
+<% if flash[:errors] %>
+  <div class="errors-cntnr">
+    <p>les erreurs suivantes sont survenues : </p>
+     <% flash[:errors].each do |e| %>
+       <p class="message">- <%= e %></p>
+      <% end %>
+  </div>
+<% end %>

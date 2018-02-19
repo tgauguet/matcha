@@ -200,6 +200,10 @@ h1, h2{
 	margin-left: .2em;
 }
 
+.non-nude{
+  margin-top: -.1em !important;
+}
+
 header{
 	padding: .3em;
 	background: white;
@@ -314,9 +318,12 @@ p{
   width: 80%;
   margin: 1em auto;
   padding: .8em 2em;
-  background: #DB4C2C;
   border-radius: .2em;
   color: white;
+}
+
+.error{
+  background: #DB4C2C;
 }
 
 .success{

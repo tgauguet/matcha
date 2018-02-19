@@ -12,21 +12,7 @@
   </head>
   <body>
     <%= erb(:'layouts/header') %>
-    <% flash.keys.each do |type| %>
-      <% if type %>
-        <div data-alert class="flash <%= type %> alert-box radius">
-          <%= flash[type] %></br>
-        </div>
-      <% end %>
-    <% end %>
-    <% if flash[:errors] %>
-      <div class="errors-cntnr">
-        <p>les erreurs suivantes sont survenues : </p>
-         <% flash[:errors].each do |e| %>
-           <p class="error message">- <%= e %></p>
-          <% end %>
-      </div>
-    <% end %>
+    <%= erb(:'layouts/flashs') %>
     <div class="yield">
       <div class="yield-chld">
         <%= yield %>

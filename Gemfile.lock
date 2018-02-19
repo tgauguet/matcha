@@ -90,7 +90,7 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
     paperclip-rack (0.0.2)
-      paperclip (>= 3.0)
+      paperclip (~> 5.2.1)
     pony (1.11)
       mail (>= 2.0)
     public_suffix (3.0.1)

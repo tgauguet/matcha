@@ -1,4 +1,4 @@
-module UserData
+module DataModel
 
   def self.init(data)
     data.each do |k,v|

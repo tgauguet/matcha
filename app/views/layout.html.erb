@@ -12,16 +12,17 @@
   </head>
   <body>
     <%= erb(:'layouts/header') %>
-    <% if flash[:notice] || flash[:success] %>
-      <% flash.keys.each do |type| %>
+    <% flash.keys.each do |type| %>
+      <% if type %>
         <div data-alert class="flash <%= type %> alert-box radius">
           <%= flash[type] %></br>
         </div>
       <% end %>
     <% end %>
-    <% if flash[:error] %>
+    <% if flash[:errors] %>
       <div class="errors-cntnr">
-         <% flash[:error].each do |e| %>
+        <p>les erreurs suivantes sont survenues : </p>
+         <% flash[:errors].each do |e| %>
            <p class="error message">- <%= e %></p>
           <% end %>
       </div>

@@ -2,9 +2,6 @@ class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
 	include FileUtils::Verbose
-	# before /^(?!\/(login|destroy))/ do
-	#   # ...
-	# end
 
 	get '/users' do
 		@title = 'Tous les utilisateurs'
@@ -18,8 +15,8 @@ class UsersController < ApplicationController
 	end
 
 	get '/user/show' do
-		# @user = User.find_by("id", params[:id])
-		# @title = "Profil de #{@user['firstname']} #{@user['name']}"
+		@user = User.find_by("id", params[:id])
+		@title = "Profil de #{@user['firstname']} #{@user['name']}"
 		erb :'user/show'
 	end
 
@@ -41,7 +38,7 @@ class UsersController < ApplicationController
 			session[:current_user_id] = @user.id
 			redirect '/'
 		else
-			flash[:notice] = "Le mot de passe et/ou le login ne correspondent pas."
+			flash[:error] = "Le mot de passe et/ou le login ne correspondent pas."
 			erb :'user/login'
 		end
 	end
@@ -63,8 +60,20 @@ class UsersController < ApplicationController
 			end
 			redirect '/'
 		else
-			flash[:error] = form_error
+			flash[:errors] = form_error
 			erb :'user/new'
+		end
+	end
+
+	post '/edit-password', allows: [:password, :password_confirmation, :id, :token] do
+		@user = User.find_by("id", params['id'])
+		if (@user && !validate_length_of(params['password'], 8) && (@user.password_token == params['token'] && params['password'] == params['password_confirmation']))
+			@user = User.update({'password' => params['password']}, @user)
+			flash[:succes] = "Le mot de passe a été modifié"
+			erb :'user/login'
+		else
+			flash[:error] = "Une erreur est survenue"
+			erb :'user/edit_password'
 		end
 	end
 
@@ -97,44 +106,16 @@ class UsersController < ApplicationController
 		erb :'user/edit_password'
 	end
 
-	post '/send-password-email' do
-		@user = User.find_by(email: params[:email])
+	post '/send-password-email', allows: [:email] do
+		@user = User.find_by("email", params[:email])
 		if @user
-			@user.update(password_token: SecureRandom.urlsafe_base64.to_s)
-			token = @user.password_token
-			email = @user.email
-			id = @user.id
-			mail = Mail.new do
-			  from    'noreply@matcha.com'
-			  to      email
-			  subject 'Modifier mon mot de passe'
-			  html_part do
-			    content_type 'text/html; charset=UTF-8'
-			    body "<h1>Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :</h1><br/>
-					<a href='http://localhost:4567/new-password?token=#{token}&id=#{id}'>Modifier</a>"
-			  end
-			end
-			mail.deliver
+			@user = User.update({password_token: SecureRandom.urlsafe_base64.to_s}, @user)
+			password_email(@user)
 			flash[:notice] = "Nous vous avons envoyé un message pour modifier votre mot de passe. Checkez vos emails !"
 		else
 			flash[:notice] = "Impossible de trouver un utilisateur avec cet email"
 		end
 		redirect '/'
-	end
-
-	post '/edit-password', allows: [:password, :password_confirmation] do
-		@user = User.find_by(id: params[:id])
-		if (@user.password_token == params[:password_token])
-			if (params[:password] == params[:password_confirmation])
-				@user.update(password: params[:password])
-				flash[:success] = "Le mot de passe a été modifié"
-			else
-				flash[:notice] = "La confirmation ne correspond pas au mot de passe"
-			end
-		else
-			flash[:notice] = "Une erreur est survenue"
-		end
-		erb :'user/login'
 	end
 
 	post '/edit-user', allows: [:interested_in, :bio, :gen, :all_tags, :email] do

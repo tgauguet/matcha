@@ -1,5 +1,3 @@
-require './app/data_models/user_data.rb'
-
 class User
 	# has_many :tags
 	# has_many :taggings, through: :tags
@@ -19,14 +17,18 @@ class User
   end
 
   def self.find_by(type, value)
-    (!type.nil? && !value.nil?) ? $server.query("SELECT * FROM User WHERE #{type} = '#{value}'").fetch_hash.to_dot : nil
+    if !type.nil? && !value.nil?
+       user = $server.query("SELECT * FROM User WHERE #{type} = '#{value}'").fetch_hash
+       return user ? user.to_dot : nil
+    end
+    nil
   end
 
   def self.new(args)
     begin
       salt = BCrypt::Engine.generate_salt
       password = args['password'].encrypt(salt)
-      args = UserData.init(args)
+      args = DataModel.init(args)
       $server.query("INSERT INTO User (name, firstname, email, login, password, salt)
                     VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}', '#{salt}')")
       id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash
@@ -39,7 +41,11 @@ class User
 
   def self.update(params, args)
     begin
-      params = UserData.init(params)
+      if params['password']
+        params['salt'] = BCrypt::Engine.generate_salt
+        params['password'] = params['password'].encrypt(params['salt'])
+      end
+      params = DataModel.init(params)
       params.each do |k,v|
         $server.query("UPDATE User SET #{k} = '#{v}' WHERE id = '#{args['id']}'")
       end

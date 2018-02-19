@@ -319,6 +319,14 @@ p{
   color: white;
 }
 
+.success{
+  background: #1dd1a1;
+}
+
+.notice{
+  background: #ff9f43;
+}
+
 .errors-cntnr p{
   opacity: .8;
   margin: 0;

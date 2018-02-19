@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
 	include FileUtils::Verbose
-	['/images', '/user/show', '/edit'].each do |path|
+	['/images', '/user/show', '/edit', '/upload'].each do |path|
 		before path do
 			authenticate
 		end
@@ -124,41 +124,8 @@ class UsersController < ApplicationController
 	end
 
 	post '/upload' do
-		@user = User.find_by('id', current_user.id)
-		if params[:img1]
-			copy_image(params[:img1], @user, 1)
-		end
-		if params[:img2]
-			copy_image(params[:img2], @user, 2)
-		end
-		if params[:img3]
-			copy_image(params[:img3], @user, 3)
-		end
-		if params[:img4]
-			copy_image(params[:img4], @user, 4)
-		end
-		if params[:img5]
-			copy_image(params[:img5], @user, 5)
-		end
+		upload_images(params, @user)
 		erb :'user/edit'
-	end
-
-	def copy_image(image, user, num)
-		@img = image[:filename]
-		file = image[:tempfile]
-		cp(file, "./app/public/files/#{@img}")
-		img1 = (num == 1 ? @img : user.img1)
-		img2 = (num == 2 ? @img : user.img2)
-		img3 = (num == 3 ? @img : user.img3)
-		img4 = (num == 4 ? @img : user.img4)
-		img5 = (num == 5 ? @img : user.img5)
-		if user
-			if user.update(img1: img1, img2: img2, img3: img3, img4: img4, img5: img5)
-				flash.now[:success] = "Vos images ont été ajoutées avec succès"
-			else
-				flash.now[:notice] = "Une erreur est apparue lors de la modification de votre profil"
-			end
-		end
 	end
 
 	post '/go' do

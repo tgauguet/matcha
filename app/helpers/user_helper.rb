@@ -44,4 +44,22 @@ module UserHelper
     $server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").num_rows == 0 ? TRUE : FALSE
   end
 
+  def upload_images(params, user)
+		c = 0
+		params.each do |k,v|
+			puts k
+			puts v['filename']
+			@img = v['filename']
+			file = v['tempfile']
+			cp(file, "./app/public/files/#{@img}")
+			res = User.update({k => @img}, user)
+			c += 1 unless res.nil?
+		end
+		if c > 0
+			flash.now[:success] = "#{c} image(s) ont été ajoutées a votre profil"
+		else
+			flash.now[:notice] = "Une erreur est apparue lors de l'upload d'images'"
+		end
+	end
+
 end

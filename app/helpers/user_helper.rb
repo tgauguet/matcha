@@ -62,4 +62,11 @@ module UserHelper
 		end
 	end
 
+  def edit_location(params, user)
+    if params['latitude'].valid_float? && params['longitude'].valid_float?
+      @user = User.update(params, user)
+      return !@user.nil?
+    end
+  end
+
 end

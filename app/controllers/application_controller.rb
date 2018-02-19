@@ -6,15 +6,17 @@ class ApplicationController < Sinatra::Base
 	set :views, Proc.new { File.join(root, "views") }
 	set :public_folder, Proc.new { File.join(root, "public") }
 	not_found{ slim :not_found }
-	
+
 	before '/*' do
 		location
 	end
 
 	def current_user
-		if session[:current_user_id]
-			current_user = User.find_by("id", session[:current_user_id])
-		end
+		# to be removed
+		current_user = User.find_by("id", 601)
+		# if session[:current_user_id]
+		# 	current_user = User.find_by("id", session[:current_user_id])
+		# end
 	end
 
 	def signed_in?

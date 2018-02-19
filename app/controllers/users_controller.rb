@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
 	include FileUtils::Verbose
-	['/images', '/user/show', '/edit', '/upload', '/edit-password', '/edit-user'].each do |path|
+	['/images', '/user/show', '/edit', '/set-location', '/location', '/upload', '/edit-user'].each do |path|
 		before path do
 			authenticate
 		end
@@ -22,6 +22,16 @@ class UsersController < ApplicationController
 	get '/images' do
 		@title = "Images"
 		erb :'user/images'
+	end
+
+	get '/location' do
+		@title = "Géolocalisation"
+		erb :'user/location'
+	end
+
+	get '/edit-password' do
+		@title = 'Modifier votre mot de passe'
+		erb :'user/edit_password'
 	end
 
 	get '/user/show' do
@@ -74,10 +84,14 @@ class UsersController < ApplicationController
 	end
 
 	post '/edit-password', allows: [:password, :password_confirmation, :id, :token] do
-		if (!validate_length_of(params['password'], 8) && (@user.password_token == params['token'] && params['password'] == params['password_confirmation']))
+		@user = signed_in? ? current_user : User.find_by("id", params['id'])
+		len_match = !validate_length_of(params['password'], 8)
+		password_match = params['password'] == params['password_confirmation']
+		token_match = signed_in? ? true : @user.password_token == params['token']
+		if len_match && password_match && token_match
 			@user = User.update({'password' => params['password']}, @user)
 			flash.now[:success] = "Le mot de passe a été modifié"
-			erb :'user/login'
+			erb :'user/edit_password' if signed_in? rescue erb :'user/login'
 		else
 			flash.now[:error] = "Une erreur est survenue"
 			erb :'user/edit_password'
@@ -126,7 +140,14 @@ class UsersController < ApplicationController
 		erb :'user/edit'
 	end
 
-	post '/go' do
+	post '/set-location' do
+		update = edit_location(params, @user) unless (params['latitude'].nil? || params['longitude'].nil?)
+		if update
+			flash.now[:success] = "Votre localisation a été modifiée"
+		else
+			flash.now[:error] = "Erreur lors de la modification."
+		end
+		erb :'user/location'
 	end
 
 	def authenticate

@@ -2,6 +2,11 @@ class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
 	include FileUtils::Verbose
+	['/images', '/user/show', '/edit'].each do |path|
+		before path do
+			authenticate
+		end
+	end
 
 	get '/users' do
 		@title = 'Tous les utilisateurs'
@@ -14,9 +19,13 @@ class UsersController < ApplicationController
 		erb :'user/new'
 	end
 
+	get '/images' do
+		@title = "Images"
+		erb :'user/images'
+	end
+
 	get '/user/show' do
-		@user = User.find_by("id", params[:id])
-		@title = "Profil de #{@user['firstname']} #{@user['name']}"
+		@title = "Profil de #{@user.firstname} #{@user.name}"
 		erb :'user/show'
 	end
 
@@ -27,7 +36,6 @@ class UsersController < ApplicationController
 
 	get '/edit' do
 		@title = "Modification du profil"
-		@user = current_user.id
 		erb :'user/edit'
 	end
 
@@ -77,25 +85,6 @@ class UsersController < ApplicationController
 		end
 	end
 
-	# to be deleted
-	get '/confirm' do
-		@title = "Confirmation de votre email"
-		@user = User.find_by("id", params[:id])
-		if (@user.confirmed? && @user.confirm_token.blank?)
-			flash.now[:success] = "Votre email a déjà été confirmé"
-			erb :'user/login'
-		else
-			if (params[:id] == @user.id.to_s && params[:token] == @user.confirm_token)
-				@user.update(confirmed: true, confirm_token: "")
-				flash.now[:success] = "Votre email vient d'être confirmé !"
-				erb :'user/login'
-			else
-				flash.now[:notice] = "Une erreur est survenue, merci de réessayer"
-				erb :'user/new'
-			end
-		end
-	end
-
 	get '/forgot-password' do
 		@title = "Mot de passe oublié"
 		erb :'user/forgot_password'
@@ -118,20 +107,24 @@ class UsersController < ApplicationController
 		redirect '/'
 	end
 
-	post '/edit-user', allows: [:interested_in, :bio, :gen, :all_tags, :email] do
-		@user = User.find_by(id: current_user.id)
-		if @user
-			if @user.update(params)
+	post '/edit-user', allows: [:interested_in, :description, :gender, :email, :name, :firstname] do
+		@user = User.find_by('id', current_user.id)
+		valid_email = params['email'].empty? ? 1 : update_params(params)
+		if @user && valid_email
+			@user = User.update(params, @user)
+			if @user
 				flash.now[:success] = "Votre profil a été modifié avec succès"
 			else
-				flash.now[:notice] = "Une erreur est survenue pendant la modification de votre profil"
+				flash.now[:error] = "Une erreur est survenue pendant la modification de votre profil"
 			end
+		else
+			flash.now[:error] = "Une erreur est survenue, vérifiez vos paramètres"
 		end
 		erb :'user/edit'
 	end
 
 	post '/upload' do
-		@user = User.find_by(id: current_user.id)
+		@user = User.find_by('id', current_user.id)
 		if params[:img1]
 			copy_image(params[:img1], @user, 1)
 		end
@@ -169,6 +162,11 @@ class UsersController < ApplicationController
 	end
 
 	post '/go' do
+	end
+
+	def authenticate
+		@user = current_user
+		redirect '/' unless @user
 	end
 
 end

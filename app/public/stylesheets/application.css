@@ -288,8 +288,8 @@ p{
 }
 
 .user-imgs img{
-	width: 10em;
-	height: 10em;
+	width: 8em;
+	height: 8em;
 	margin-right: 1em;
 }
 
@@ -623,6 +623,7 @@ box-shadow: 0px 3px 11px -5px rgba(194,194,194,1);
 .usr-forms h2{
   color: #DB4C2C;
   font-size: 1.2em;
+  text-align: center;
 }
 
 .usr-forms h3{
@@ -631,18 +632,35 @@ box-shadow: 0px 3px 11px -5px rgba(194,194,194,1);
   margin-top: .3em;
 }
 
+.usr-forms{
+  margin: auto;
+  margin-top: -3em;
+}
+
+.usr-forms input[type="text"], .usr-forms textarea{
+  width: 100%;
+}
+
 .usr-btns{
-  margin-top: -.1em;
   padding: 1em;
 }
 
 .usr-btns div{
-  display: inline-block;vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
   margin: .3em;
   padding: .7em;
   border-radius: 50%;
   background: rgb(245,245,245);
   cursor: pointer;
+}
+
+.usr-btns .true{
+  background: #DB4C2C;
+}
+
+.usr-btns .true img{
+  filter: brightness(0) invert(1);
 }
 
 .usr-btns div img{

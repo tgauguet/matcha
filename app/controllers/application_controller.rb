@@ -2,15 +2,14 @@ class ApplicationController < Sinatra::Base
 	helpers ApplicationHelper
 	register Sinatra::StrongParams
 	$:.unshift(File.expand_path('../../lib', __FILE__))
-
-	before '/*' do
-		location
-	end
-
 	set :root, File.join(File.dirname(__FILE__), '..')
 	set :views, Proc.new { File.join(root, "views") }
 	set :public_folder, Proc.new { File.join(root, "public") }
 	not_found{ slim :not_found }
+	
+	before '/*' do
+		location
+	end
 
 	def current_user
 		if session[:current_user_id]

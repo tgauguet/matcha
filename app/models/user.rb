@@ -34,7 +34,7 @@ class User
       end
       params = DataModel.init(params)
       params.each do |k,v|
-        $server.query("UPDATE User SET #{k} = '#{v}' WHERE id = '#{args['id']}'")
+        $server.query("UPDATE User SET #{k} = '#{v}' WHERE id = '#{args['id']}'") unless v.empty?
       end
       self.find_by("id", args['id'])
     rescue Mysql::Error => e

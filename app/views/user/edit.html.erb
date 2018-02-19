@@ -1,58 +1,42 @@
-<div class="settings">
-  <div class="usr-btns">
-    <div class="params1"><img src="/images/settings.png"/></div>
-    <div class="params3"><img src="/images/photo-camera.png"/></div>
-    <div class="params2"><img src="/images/placeholder.png"/></div>
-    <div class="params4"><img src="/images/lock.png"/></div>
-    <div class="params5"><img src="/images/notif-visit.png"/></div>
-    <div class="params6"><img src="/images/notif-like.png"/></div>
-  </div>
-  <div class="usr-forms">
-    <div class="tog toggle-set">
-      <%= erb(:'user/settings') %>
-    </div>
-    <div class="tog toggle-img" style="display:none;">
-      <%= erb(:'user/images') %>
-    </div>
-    <div class="tog toggle-loc" style="display:none;">
-      <%= erb(:'user/location') %>
-    </div>
-    <div class="tog toggle-pas" style="display:none;">
-      <%= erb(:'user/password') %>
-    </div>
-    <div class="tog toggle-vis" style="display:none;">
-      <%= erb(:'user/visits') %>
-    </div>
-    <div class="tog toggle-lik" style="display:none;">
-      <%= erb(:'user/likes') %>
-    </div>
-  </div>
+<%= erb(:'layouts/settings_header') %>
+<div class="usr-forms basic-cntnr">
+  <h2>MES INFORMATIONS</h2>
+    <form method="POST" action="/edit-user">
+      <h3>GENRE</h3>
+      <div class="radio-cntnr">
+        <p class="radio">
+          <input type="radio" name="gender" id="kind1" value="male">
+          <label for="kind1"><img src="/images/male.png"/></label>
+        </p>
+        <p class="radio">
+          <input type="radio" name="gender" id="kind2" value="female">
+          <label for="kind2"><img src="/images/female.png"/></label>
+        </p>
+      </div>
+      <h3>INTÉRESSÉ PAR</h3>
+      <div class="radio-cntnr">
+        <p class="radio">
+          <input type="radio" name="interested_in" id="match1" value="guy">
+          <label for="match1"><img src="/images/male.png"/></label>
+        </p>
+        <p class="radio">
+          <input type="radio" name="interested_in" id="match2" value="female">
+          <label for="match2"><img src="/images/female.png"/></label>
+        </p>
+        <p class="radio">
+          <input type="radio" name="interested_in" id="match3" value="both">
+          <label for="match3"><img src="/images/both.png"/></label>
+        </p>
+      </div>
+        <h3>DESCRIPTION</h3>
+        <textarea rows="3"name="description"/></textarea>
+        <h3>NOM</h3>
+        <input type="text" name="name"/>
+        <h3>PRÉNOM</h3>
+        <input type="text" name="firstname"/>
+        <h3>EMAIL</h3>
+        <input type="text" name="email"/>
+        <br/><br/>
+        <input type="submit" value="ENREGISTRER" class="red-btn"/>
+  </form>
 </div>
-<script>
-  $(document).ready(function(){
-    $(".params1").click(function(){
-      $(".tog").hide();
-      $(".toggle-set").show();
-    });
-    $(".params2").click(function(){
-      $(".tog").hide();
-      $(".toggle-loc").show();
-    });
-    $(".params3").click(function(){
-      $(".tog").hide();
-      $(".toggle-img").show();
-    });
-    $(".params4").click(function(){
-      $(".tog").hide();
-      $(".toggle-pas").show();
-    });
-    $(".params5").click(function(){
-      $(".tog").hide();
-      $(".toggle-vis").show();
-    });
-    $(".params6").click(function(){
-      $(".tog").hide();
-      $(".toggle-lik").show();
-    });
-  });
-</script>

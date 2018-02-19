@@ -17,6 +17,10 @@ module UserHelper
     error
   end
 
+  def update_params(params)
+    params['email'] && validate_email_format(params["email"])
+  end
+
   def validate_presence_of(params)
     error = []
     params.each do |k, v|

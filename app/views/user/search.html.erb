@@ -73,59 +73,16 @@
     </div>
     <!-- Ajouter ici tous les résultats de la recherche, ajouter un lien
       vers le profil lorsque l'utilisateur clique -->
-    <a href="/user/show">
-      <div class="usr-result">
-        <img src="/images/fake-usr.jpg"/>
-        <p class="name">JOBY</p>
-        <p class="age">10 ans</p>
-      </div>
-    </a>
-    <div class="usr-result">
-      <img src="/images/fake-usr2.jpg"/>
-      <p class="name">JOBA</p>
-      <p class="age">10 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/fake-usr3.jpg"/>
-      <p class="name">JEAN</p>
-      <p class="age">10 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/fake-usr4.jpg"/>
-      <p class="name">CROQUETTE</p>
-      <p class="age">10 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/fake-usr.jpg"/>
-      <p class="name">PATOU</p>
-      <p class="age">10 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/fake-usr2.jpg"/>
-      <p class="name">LUCKY</p>
-      <p class="age">10 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/fake-usr3.jpg"/>
-      <p class="name">PATRICK</p>
-      <p class="age">10 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/fake-usr4.jpg"/>
-      <p class="name">JOSÉPHINE</p>
-      <p class="age">10 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/dimitri.png"/>
-      <p class="name">DIMITRI</p>
-      <p class="age">19 ans</p>
-    </div>
-    <div class="usr-result">
-      <img src="/images/fake-usr2.jpg"/>
-      <p class="name">VINCENT</p>
-      <p class="age">10 ans</p>
-    </div>
-  </div>
+    <% @users.each_hash do |user| %>
+      <% user.to_dot %>
+      <a href="/user/<%= user.id %>/show">
+        <div class="usr-result">
+          <img src="/files/<%= user.img1 %>"/>
+          <p class="name"><%= user.name.upcase %></p>
+          <p class="age"><%= user.age %> ans</p>
+        </div>
+      </a>
+    <% end %>
 </div>
 <script>
   // Age & popularity slider jquery function

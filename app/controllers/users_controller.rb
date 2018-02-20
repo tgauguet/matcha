@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
 	include FileUtils::Verbose
-	['/images', '/user/show', '/edit', '/set-location', '/location', '/upload', '/edit-user'].each do |path|
+	['/images', '/edit', '/set-location', '/location', '/upload', '/edit-user'].each do |path|
 		before path do
 			authenticate
 		end
@@ -34,7 +34,9 @@ class UsersController < ApplicationController
 		erb :'user/edit_password'
 	end
 
-	get '/user/show' do
+	get '/user/:id/show' do
+		@user = User.find_by("id", params[:id])
+		redirect '/' unless @user
 		@title = "Profil de #{@user.firstname} #{@user.name}"
 		erb :'user/show'
 	end

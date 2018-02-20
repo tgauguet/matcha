@@ -16,8 +16,8 @@ class User
       salt = BCrypt::Engine.generate_salt
       password = args['password'].encrypt(salt)
       args = DataModel.init(args)
-      $server.query("INSERT INTO User (name, firstname, email, login, password, salt)
-                    VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}', '#{salt}')")
+      $server.query("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude)
+                    VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}', '#{salt}', '#{args['latitude']}', '#{args['longitude']}')")
       id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash
       self.find_by("id", id['LAST_INSERT_ID()'])
     rescue Mysql::Error => e

@@ -66,15 +66,15 @@ class UsersController < ApplicationController
 		redirect '/'
 	end
 
-	post '/new', allows: [:name, :firstname, :password, :email, :login] do
+	post '/new', allows: [:name, :firstname, :password, :email, :login, :latitude, :longitude] do
 		form_error = user_params(params)
 		if form_error.empty?
 			@user = User.new(params)
 			if @user
 				welcome_email(@user.email, @user.id)
-				flash.now[:notice] = "Félicitations, vous êtes inscris sur Petsder !"
+				flash[:success] = "Félicitations, vous êtes inscris sur Petsder !"
 			else
-				flash.now[:notice] = "Erreur lors de la sauvegarde, veuillez réessayer"
+				flash[:error] = "Erreur lors de la sauvegarde, veuillez réessayer"
 			end
 			redirect '/'
 		else

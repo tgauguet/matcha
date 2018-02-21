@@ -5,7 +5,7 @@ class ApplicationController < Sinatra::Base
 	set :root, File.join(File.dirname(__FILE__), '..')
 	set :views, Proc.new { File.join(root, "views") }
 	set :public_folder, Proc.new { File.join(root, "public") }
-	not_found{ slim :not_found }
+	# not_found{ slim :not_found }
 
 	before '/*' do
 		location

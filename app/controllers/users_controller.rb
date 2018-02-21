@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 		@title = 'Modifier votre mot de passe'
 		erb :'user/edit_password'
 	end
-
+  
 	get '/user/:id/show' do
 		@user = User.find_by("id", params[:id])
 		redirect '/' unless @user

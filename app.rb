@@ -1,37 +1,41 @@
-require 'rubygems'
-require 'active_support/core_ext/module/delegation'
-require 'sinatra'
-require 'rack-flash'
-require 'thin'
-require 'bcrypt'
-require 'paperclip'
-require 'paperclip/rack'
-require 'hash_dot'
-require 'sinatra/strong-params'
-require 'nokogiri'
-require 'open-uri'
-require 'json'
-require './config/environments'
-require './config/db'
-require './config/email'
+require "./config/app.rb"
 
-configure do
+EM.run do
 
-  enable :sessions, :method_override
-  Tilt.register Tilt::ERBTemplate, 'html.erb'
-  Dir.glob('./app/{helpers,controllers,models,lib,data_models}/*.rb').each { |file| require file }
+  # hit Control + C to stop
+  Signal.trap("INT")  {
+    puts "Shutting down"
+    EventMachine.stop
+  }
 
-  def herb(template, options={}, locals={})
-    render "html.erb", template, options, locals
+  Signal.trap("TERM") {
+    puts "Shutting down"
+    EventMachine.stop
+  }
+
+  @clients = []
+
+  EM::WebSocket.start(:host => '0.0.0.0', :port => '3001') do |ws|
+    ws.onopen do |handshake|
+      @clients << ws
+      ws.send "Connected to #{handshake.path}."
+    end
+
+    ws.onclose do
+      ws.send "Closed."
+      @clients.delete ws
+    end
+
+    ws.onmessage do |msg|
+      puts "Received message: #{msg}"
+      @clients.each do |socket|
+        socket.send msg
+      end
+    end
   end
 
-  use Rack::Flash
-  use WelcomeController
-  use UsersController
-  # use NotificationsController
-  # use ApplicationController
-  # use ConversationsController
-  use LikesController
-  use BlocksController
-
+  Thin::Server.start(
+    MatchaApp, '0.0.0.0', 4567,
+    signals: false
+  )
 end

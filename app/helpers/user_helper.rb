@@ -69,4 +69,24 @@ module UserHelper
     end
   end
 
+  def have_image
+    @user.img1 || @user.img2 || @user.img3 || @user.img4 || @user.img5
+  end
+
+  def proper_value(value)
+    @user[value] ? @user[value].force_encoding("UTF-8") : "ND"
+  end
+
+  def proper_img(img)
+    img ? img : "empty.png"
+  end
+
+  def get_img(id)
+    User.find_by("id", id).to_dot
+  end
+
+  def reported_as_fake?
+    @user.reported_as_fake
+  end
+
 end

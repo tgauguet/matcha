@@ -21,6 +21,7 @@ module InitDb
                   public_score INT(3) DEFAULT 50,
                   latitude FLOAT,
                   longitude FLOAT,
+                  reported_as_fake INT(3),
                   city VARCHAR(256),
                   age INT(6),
                   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,

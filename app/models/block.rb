@@ -5,12 +5,25 @@ class Block
       args = DataModel.init(args)
       $server.query("INSERT INTO Block (user_id, sender_id)
                     VALUES ('#{args['user_id']}', '#{args['sender_id']}')")
-      id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash
-      self.find_by("id", id['LAST_INSERT_ID()'])
+      $server.query("SELECT LAST_INSERT_ID();").fetch_hash["LAST_INSERT_ID()"]
     rescue Mysql::Error => e
       puts e.errno
       puts e.error
     end
+  end
+
+  def self.blocked?(user_id, sender_id)
+    begin
+      $server.query("SELECT * FROM Block WHERE (user_id='#{user_id}' AND sender_id='#{sender_id}')").num_rows
+    rescue Mysql::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
+  def self.delete(args)
+    $server.query("DELETE FROM Block WHERE (user_id = '#{args['user_id']}' AND sender_id = '#{args['sender_id']}')")
+    return !self.blocked?(args['user_id'], args['sender_id']).nil?
   end
 
 end

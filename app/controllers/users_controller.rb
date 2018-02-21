@@ -1,17 +1,13 @@
 class UsersController < ApplicationController
 	helpers UserHelper
 	helpers MailHelper
+	helpers LikesHelper
+	helpers BlockHelper
 	include FileUtils::Verbose
 	['/images', '/edit', '/set-location', '/location', '/upload', '/edit-user'].each do |path|
 		before path do
 			authenticate
 		end
-	end
-
-	get '/users' do
-		@title = 'Tous les utilisateurs'
-		@users = User.all
-		erb :'user/index'
 	end
 
 	get '/user/new' do
@@ -150,6 +146,16 @@ class UsersController < ApplicationController
 			flash.now[:error] = "Erreur lors de la modification."
 		end
 		erb :'user/location'
+	end
+
+	post '/report-as-fake' do
+		user = User.find_by("id", params['user_id'])
+		if User.update({'reported_as_fake' => 1}, user)
+			flash[:success] = "L'utilisateur a été reporté comme faux compte"
+		else
+			flash[:error] = "Une erreur est survenue"
+		end
+		redirect back
 	end
 
 	def authenticate

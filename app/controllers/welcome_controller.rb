@@ -1,4 +1,5 @@
 class WelcomeController < ApplicationController
+	helpers UserHelper
 
 	get '/' do
 		@title = 'Welcome to Matcha'

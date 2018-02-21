@@ -77,7 +77,7 @@
       <% user.to_dot %>
       <a href="/user/<%= user.id %>/show">
         <div class="usr-result">
-          <img src="/files/<%= user.img1 %>"/>
+          <img src="/files/<%= proper_img(user.img1) %>"/>
           <p class="name"><%= user.name.upcase %></p>
           <p class="age"><%= user.age %> ans</p>
         </div>

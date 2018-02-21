@@ -31,6 +31,7 @@ configure do
   # use NotificationsController
   # use ApplicationController
   # use ConversationsController
-  # use LikesController
+  use LikesController
+  use BlocksController
 
 end

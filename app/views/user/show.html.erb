@@ -1,66 +1,83 @@
-<div class="usr-profile usr-profile1">
+<div class="usr-profile usr-profile1 <%= heart_animation(@user.id) %>">
   <div class="usr-banner">
-    <img src="/files/<%= @user.img1 %>"/>
-    <h1 class="name"><%= @user.login.upcase.force_encoding("UTF-8") %></h1>
+    <img src="/files/<%= proper_img(@user.img1) %>"/>
+    <% if its_a_match?(@user.id) %>
+      <div class="its_a_match">
+        VOUS AVEZ MATCHÉ !
+      </div>
+    <% end %>
+    <h1 class="name"><%= proper_value('login') %></h1>
     <div class="score-cntnr">
       <%= @user.public_score %> / 100 <img src="/images/stars.png"/>
     </div>
     <div class="banner-sub">
       <p><img src="/images/age.png"/> <%= @user.age %> ans</p>
-      <p><img src="/images/location.png"/> <%= @user.city.force_encoding("UTF-8") %></p>
+      <p><img src="/images/location.png"/> <%= proper_value('city') %></p>
       <p><img src="/images/gender-symbols.png"/> <%= @user.gender %></p>
       <p><img src="/images/rabbit-shape.png"/> Zoophile/<%= @user.interested_in %></p>
     </div>
   </div>
-  <div class="usr-infos">
-    <div class="usr-like-cntnr">
-      <form action="">
-        <img src='/images/heart2.png'/>
-        <input type="submit" value="Liker " class="white-btn">
-      </form>
-      <form action="">
-        <img src='/images/angry.png'/>
-        <input type="submit" value="Faux compte " class="white-btn">
-      </form>
-      <form action="">
-        <img src='/images/stop.png'/>
-        <input type="submit" value="Bloquer " class="white-btn">
-      </form>
-      <div class="fake">
-        <img src='/images/like-2.png'/>
-        <input type="submit" value="Vous a liké " class="white-btn">
+  <% if !reported_as_fake? %>
+    <div class="usr-infos">
+      <% unless @user.id == current_user.id %>
+        <div class="usr-like-cntnr">
+          <% if have_image %>
+            <form action="/like" method="POST">
+              <img src='/images/<%= heart_img %>'/>
+              <input type="hidden" value="<%= @user.id %>" name="user_id"/>
+              <input type="hidden" value="<%= current_user.id %>" name="sender_id"/>
+              <input type="submit" value="<%= like_btn_val %> " class="white-btn">
+            </form>
+          <% end %>
+            <form action="/report-as-fake" method="POST">
+              <img src='/images/angry.png'/>
+              <input type="hidden" value="<%= @user.id %>" name="user_id"/>
+              <input type="submit" value="Faux compte " class="white-btn">
+            </form>
+          <form action="/block" method="POST">
+            <img src='/images/<%= block_img %>'/>
+            <input type="hidden" value="<%= @user.id %>" name="user_id"/>
+            <input type="hidden" value="<%= current_user.id %>" name="sender_id"/>
+            <input type="submit" value="<%= block_btn_val %> " class="white-btn">
+          </form>
+          <div class="fake">
+            <img src='/images/connected.png'/>
+            <input type="submit" value="En ligne " class="white-btn">
+          </div>
+        </div>
+      <% end %>
+      <h3>PHOTOS</h3>
+      <div class="usr-img-cntnr">
+        <div class="flex-first">
+          <div><img src="/files/<%= proper_img(@user.img1) %>"></div>
+        </div>
+        <div class="flex-first">
+          <div><img src="/files/<%= proper_img(@user.img2) %>"></div>
+        </div>
+        <div class="flex-first">
+          <div><img src="/files/<%= proper_img(@user.img3) %>"></div>
+        </div>
+        <div class="flex-first">
+          <div><img src="/files/<%= proper_img(@user.img4) %>"></div>
+        </div>
+        <div class="flex-first">
+          <div><img src="/files/<%= proper_img(@user.img5) %>"></div>
+        </div>
       </div>
-      <div class="fake">
-        <img src='/images/connected.png'/>
-        <input type="submit" value="En ligne " class="white-btn">
+      <div class="usr-show-tags">
+        <p>#bananes</p>
+        <p>#fessesrouges</p>
+        <p>#papillons</p>
+      </div>
+      <h3>DESCRIPTION</h3>
+      <div class="usr-description-cntnr">
+        <%= proper_value('description') %>
       </div>
     </div>
-    <h3>PHOTOS</h3>
-    <div class="usr-img-cntnr">
-      <div class="flex-first">
-        <div><img src="/files/<%= @user.img1 %>"></div>
-      </div>
-      <div class="flex-first">
-        <div><img src="/files/<%= @user.img2 %>"></div>
-      </div>
-      <div class="flex-first">
-        <div><img src="/files/<%= @user.img3 %>"></div>
-      </div>
-      <div class="flex-first">
-        <div><img src="/files/<%= @user.img4 %>"></div>
-      </div>
-      <div class="flex-first">
-        <div><img src="/files/<%= @user.img5 %>"></div>
-      </div>
+  <% else %>
+    <div class="fake-user">
+      <h3>Cet utilisateur a été reporté comme faux compte</h3>
+      <p>Nous étudions actuellement son profil, merci de votre compréhension</p>
     </div>
-    <div class="usr-show-tags">
-      <p>#bananes</p>
-      <p>#fessesrouges</p>
-      <p>#papillons</p>
-    </div>
-    <h3>DESCRIPTION</h3>
-    <div class="usr-description-cntnr">
-      <%= @user.description.force_encoding("UTF-8") %>
-    </div>
-  </div>
+  <% end %>
 </div>

@@ -1,8 +1,0 @@
-<h1>Tous les utilisateurs</h1>
-<div>
-	<% if @users.count_rows != 0 %>
-		<% @users.each_hash do |user| %>
-			<p>- <%= user['email'] %> | <%= user['confirmed'] %></p>
-		<% end %>
-	<% end %>
-</div>

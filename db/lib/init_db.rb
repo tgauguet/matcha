@@ -50,6 +50,7 @@ module InitDb
     $server.query("CREATE TABLE IF NOT EXISTS Message (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
+                  content TEXT,
                   conversation_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
@@ -61,8 +62,12 @@ module InitDb
                   )")
     $server.query("CREATE TABLE IF NOT EXISTS Conversation (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                  )")
+    $server.query("CREATE TABLE IF NOT EXISTS User_conversation(
+                  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
-                  user2_id INT(6) NOT NULL,
+                  conversation_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
     $server.query("CREATE TABLE IF NOT EXISTS Block (

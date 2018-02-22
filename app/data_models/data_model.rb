@@ -14,4 +14,8 @@ module DataModel
     old_data
   end
 
+  def self.protect_arg(uniq)
+    uniq = uniq ? Mysql.escape_string(Rack::Utils.escape_html(uniq)) : nil
+  end
+
 end

@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 		@title = 'Modifier votre mot de passe'
 		erb :'user/edit_password'
 	end
-  
+
 	get '/user/:id/show' do
 		@user = User.find_by("id", params[:id])
 		redirect '/' unless @user
@@ -156,11 +156,6 @@ class UsersController < ApplicationController
 			flash[:error] = "Une erreur est survenue"
 		end
 		redirect back
-	end
-
-	def authenticate
-		@user = current_user
-		redirect '/' unless @user
 	end
 
 end

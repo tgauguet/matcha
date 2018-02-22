@@ -1,7 +1,7 @@
 class LikesController < ApplicationController
   helpers LikesHelper
   helpers UserHelper
-  ['/likes/index'].each do |path|
+  ['/likes/index', '/like'].each do |path|
 		before path do
 			authenticate
 		end
@@ -15,8 +15,9 @@ class LikesController < ApplicationController
   post '/like' do
     if to_delete?(params['user_id'])
       flash[:success] = "Vous ne likez plus ce profil" if Liked.delete(params)
-    else
-      flash[:success] = "Vous avez liké ce profil" if Liked.new(params)
+    elsif Liked.new(params)
+      flash[:success] = "Vous avez liké ce profil"
+      Conversation.new(@user.id, params['user_id']) if its_a_match?(params['user_id'])
     end
     flash[:error] = "Une erreur est survenue" unless flash[:success]
     redirect back

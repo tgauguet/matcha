@@ -29,13 +29,18 @@ class MatchaApp < Sinatra::Base
         render "html.erb", template, options, locals
       end
 
+      not_found do
+    		status 404
+    		redirect '/not-found'
+    	end
+
     end
 
     use ApplicationController
     use WelcomeController
     use UsersController
     # # # use NotificationsController
-    # # # use ConversationsController
+    use ConversationsController
     use LikesController
     use BlocksController
 end

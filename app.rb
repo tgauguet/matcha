@@ -13,16 +13,18 @@ EM.run do
     EventMachine.stop
   }
 
+  @log = Logger.new(STDOUT)
   @clients = []
 
-  EM::WebSocket.start(:host => '0.0.0.0', :port => '3001') do |ws|
+  EM::WebSocket.run(:host => '0.0.0.0', :port => '3001') do |ws|
     ws.onopen do |handshake|
+      @log.info "Connected :-)"
       @clients << ws
       ws.send "Connected to #{handshake.path}."
     end
 
     ws.onclose do
-      ws.send "Closed."
+      @log.info "WebSocket connection closed."
       @clients.delete ws
     end
 

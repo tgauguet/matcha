@@ -26,4 +26,9 @@ class ApplicationController < Sinatra::Base
 		!current_user.nil?
 	end
 
+	def authenticate
+		@user = current_user
+		redirect '/' unless @user
+	end
+
 end

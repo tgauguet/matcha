@@ -26,9 +26,4 @@ class ConversationsController < ApplicationController
 		redirect back
 	end
 
-	def authenticate
-		@user = current_user
-		redirect '/' unless @user
-	end
-
 end

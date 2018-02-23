@@ -15,6 +15,17 @@ module ConversationHelper
     User.find_by("id", id)
   end
 
+  def not_exists?(user_id)
+    res = 1
+    @conversations = UserConversation.all(current_user.id)
+    @conversations.each_hash do |c|
+      c = c.to_dot
+      i = get_interlocutor(c.user_id, c.conversation_id)
+      res = 0 if i.id == user_id
+    end
+    res
+  end
+
   def get_interlocutor(user, conversation)
     id = UserConversation.find_interlocutor(user, conversation)
     User.find_by("id", id)

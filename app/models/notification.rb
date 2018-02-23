@@ -20,10 +20,18 @@ class Notification
     end
   end
 
-  def self.find(id)
+  def self.all_message(id)
     begin
-      res = $server.query("SELECT * FROM Notification WHER id='#{id}'").fetch_hash
-      return res ? res.to_dot : nil
+      $server.query("SELECT * FROM Notification WHERE (user_id='#{id}' AND event_type='message' AND is_read='0')")
+    rescue Mysql::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
+  def self.all(id)
+    begin
+      $server.query("SELECT * FROM Notification WHERE (user_id='#{id}' AND is_read='0')")
     rescue Mysql::Error => e
       puts e.errno
       puts e.error

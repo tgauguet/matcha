@@ -1,48 +1,15 @@
 <div class="conversation-cntnr">
   <h3>NOTIFICATIONS</h3>
-  <a href="/conversation/show">
-    <div class="unit-cntnr notif-cntnr">
-      <img src="/images/notif-message.png"/>
-      <div>
-        <p class="unit-name">Nouveau message</p>
-        <p class="unit-mssg">Alexandre vous a envoyé un message</p>
+  <% @notifications.each_hash do |notif| %>
+    <% notif.to_dot %>
+    <a href="<%= notif_path(notif.event_type) %>">
+      <div class="unit-cntnr notif-cntnr">
+        <img src="/images/notif-<%= notif.event_type %>.png"/>
+        <div>
+          <p class="unit-name"><%= event(notif.event_type) %></p>
+          <p class="unit-mssg"><%= notif.description %></p>
+        </div>
       </div>
-    </div>
-  </a>
-  <a>
-    <div class="unit-cntnr notif-cntnr">
-      <img src="/images/notif-visit.png"/>
-      <div>
-        <p class="unit-name">Nouvelle visite</p>
-        <p class="unit-mssg">Julia a visité votre profil</p>
-      </div>
-    </div>
-  </a>
-  <a>
-    <div class="unit-cntnr notif-cntnr">
-      <img src="/images/notif-like.png"/>
-      <div>
-        <p class="unit-name">Nouveau like</p>
-        <p class="unit-mssg">Julia a liké votre profil</p>
-      </div>
-    </div>
-  </a>
-  <a>
-    <div class="unit-cntnr notif-cntnr">
-      <img src="/images/notif-match.png"/>
-      <div>
-        <p class="unit-name">Nouveau match</p>
-        <p class="unit-mssg">Vous avez un nouveau match avec Isabelle</p>
-      </div>
-    </div>
-  </a>
-  <a>
-    <div class="unit-cntnr notif-cntnr">
-      <img src="/images/notif-unmatch.png"/>
-      <div>
-        <p class="unit-name">Match supprimé</p>
-        <p class="unit-mssg">Lucky a supprimé votre match en commun</p>
-      </div>
-    </div>
-  </a>
+    </a>
+  <% end %>
 </div>

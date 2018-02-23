@@ -13,7 +13,6 @@ class Conversation
     begin
       $server.query("INSERT INTO Conversation VALUES ()")
       conversation_id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash["LAST_INSERT_ID()"]
-      puts conversation_id
       UserConversation.new(id1, conversation_id)
       UserConversation.new(id2, conversation_id)
     rescue Mysql::Error => e

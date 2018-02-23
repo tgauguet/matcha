@@ -9,8 +9,8 @@
 	<a href="/" class="nude"><img src="/images/favicon.png"></a>
 	<div>
 		<% if signed_in? %>
-			<a href="/conversation/index" class="header-icn"><img src="/images/message.png"/><span class="counter">1</span></a>
-			<a href="/notification/index" class="header-icn"><img src="/images/notification.png"/><span class="counter">23</span></a>
+			<a href="/conversation/index" class="header-icn"><img src="/images/message.png"/><span class="counter"><%= message_count %></span></a>
+			<a href="/notification/index" class="header-icn"><img src="/images/notification.png"/><span class="counter"><%= notification_count %></span></a>
 			<a href="/logout" class="header-icn"><img src="/images/logout.png"/></a>
 		<% else %>
 			<a href="/user/new" class="red-btn non-nude">Inscription</a>

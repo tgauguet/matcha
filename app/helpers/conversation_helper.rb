@@ -28,4 +28,8 @@ module ConversationHelper
     id != current_user.id
   end
 
+  def last_message(messages)
+    messages.fetch_hash.nil? ? "Aucun message" : messages.fetch_hash.to_dot.content
+  end
+
 end

@@ -16,7 +16,7 @@ class ApplicationController < Sinatra::Base
 
 	def current_user
 		# to be removed
-		current_user = User.find_by("id", 4)
+		current_user = User.find_by("id", 3)
 		# if session[:current_user_id]
 		# 	current_user = User.find_by("id", session[:current_user_id])
 		# end

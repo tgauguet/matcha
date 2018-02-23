@@ -1,12 +1,14 @@
 <div class="chat-cntnr">
   <a href="/conversation/index"><img src="/images/back.png" class="back"/></a>
   <h3>CONVERSATION AVEC <%= @interlocutor.login.upcase %></h3>
+  <%= @interlocutor.id %><br/>
   <% @messages.each_hash do |message| %>
     <% message.to_dot %>
     <div class="<%= msg_class(message.user_id) %>"><% if my_msg(message.user_id) %><img src="/images/fake-usr3.jpg"/><% end %><div><%= message.content %></div></div>
   <% end %>
   <form method="POST" action="/new-message">
     <input type="text" name="message" placeholder="Rédigez un message"/>
+    <input type="hidden" name="interlocutor_id" value="<%= @interlocutor.id %>"/>
     <input type="hidden" name="conversation_id" value="<%= @conversation.id %>"/>
     <input type="submit" value="Envoyer"/>
   </form>

@@ -19,9 +19,11 @@ class ConversationsController < ApplicationController
     erb :'conversation/show'
   end
 
-	post '/new-message', allows: [:message, :conversation_id] do
+	post '/new-message', allows: [:message, :conversation_id, :interlocutor_id] do
+		@interlocutor = get_interlocutor(@user.id, params['conversation_id'])
 		if params['message']
 			Message.new(params['message'], @user.id, params['conversation_id'])
+			Notification.new("message", @interlocutor.id, "#{@interlocutor.login} vous a envoyé un message")
 		end
 		redirect back
 	end

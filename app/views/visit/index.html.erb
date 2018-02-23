@@ -1,0 +1,12 @@
+<%= erb(:'layouts/settings_header') %>
+<div class="usr-forms basic-cntnr center-cntnt">
+  <h2>ILS ONT VISITÉ MON PROFIL</h2>
+  <% @visits.each_hash do |visit| %>
+    <% visit.to_dot %>
+    <a href="/user/<%= visit.sender_id %>/show">
+      <div class="min-usr">
+        <img src="/files/<%= proper_img(get_img(visit.sender_id).img1) %>"/>
+      </div>
+    </a>
+  <% end %>
+</div>

@@ -45,6 +45,7 @@ module InitDb
                   user_id INT(6) NOT NULL,
                   event_type VARCHAR(256) NOT NULL,
                   description VARCHAR(256) NOT NULL,
+                  is_read INT(2) DEFAULT 0,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
     $server.query("CREATE TABLE IF NOT EXISTS Message (

@@ -39,8 +39,9 @@ class MatchaApp < Sinatra::Base
     use ApplicationController
     use WelcomeController
     use UsersController
-    # # # use NotificationsController
+    use NotificationsController
     use ConversationsController
     use LikesController
     use BlocksController
+    use VisitsController
 end

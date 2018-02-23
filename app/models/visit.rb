@@ -1,16 +1,33 @@
 class Visit
 
-  def self.new(args)
+  def self.not_exists(id, sender_id)
     begin
-      args = DataModel.init(args)
-      $server.query("INSERT INTO Visit (user_id, sender_id)
-                    VALUES ('#{args['user_id']}', '#{args['sender_id']}')")
-      id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash
-      self.find_by("id", id['LAST_INSERT_ID()'])
+      $server.query("SELECT id FROM Visit WHERE (user_id='#{id}' AND sender_id='#{sender_id}')").num_rows
     rescue Mysql::Error => e
       puts e.errno
       puts e.error
     end
   end
+
+  def self.new(user_id, sender_id)
+    begin
+      $server.query("INSERT INTO Visit (user_id, sender_id)
+                    VALUES ('#{user_id}', '#{sender_id}')")
+      $server.query("SELECT LAST_INSERT_ID();").fetch_hash
+    rescue Mysql::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
+  def self.all(id)
+    begin
+      $server.query("SELECT * FROM Visit WHERE user_id='#{id}'")
+    rescue Mysql::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
 
 end

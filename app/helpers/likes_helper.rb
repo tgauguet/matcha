@@ -24,6 +24,11 @@ module LikesHelper
     liked_me?(id) && to_delete?(id)
   end
 
+  def match_notifications(id)
+    Notification.new("match", id, "Vous avez un match avec #{current_user.login}")
+    Notification.new("match", current_user.id, "Vous avez un match avec #{User.find_by("id", id).login}")
+  end
+
   def heart_animation(id)
     "bg_heart" if liked_me?(id) unless its_a_match?(id)
   end

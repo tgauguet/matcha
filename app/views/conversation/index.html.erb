@@ -8,7 +8,7 @@
         <img src="/files/<%= proper_img(@interlocutor.img1) %>"/>
         <div>
           <p class="unit-name"><%= @interlocutor.login.upcase %></p>
-          <p class="unit-mssg"><%= @messages.fetch_hash.to_dot.content %></p>
+          <p class="unit-mssg"><%= last_message(@messages) %></p>
         </div>
       </div>
     </a>

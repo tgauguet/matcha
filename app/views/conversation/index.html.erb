@@ -9,6 +9,14 @@
         <div>
           <p class="unit-name"><%= @interlocutor.login.upcase %></p>
           <p class="unit-mssg"><%= last_message(@messages) %></p>
+          <% i = 0 %>
+          <% @messages.each_hash do |m| %>
+            <% i += 1 %>
+            <% m.to_dot %>
+            <% if @messages.num_rows == i %>
+              <%= m.content %>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </a>

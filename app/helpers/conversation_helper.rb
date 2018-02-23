@@ -29,7 +29,15 @@ module ConversationHelper
   end
 
   def last_message(messages)
-    messages.fetch_hash.nil? ? "Aucun message" : messages.fetch_hash.to_dot.content
+    i = 0
+    res = "Aucun message"
+    messages.each_hash do |m|
+      i += 1
+      if messages.num_rows == i
+        res = m.to_dot.content
+      end
+    end
+    res
   end
 
 end

@@ -29,9 +29,18 @@ class Notification
     end
   end
 
-  def self.all(id)
+  def self.unread(id)
     begin
       $server.query("SELECT * FROM Notification WHERE (user_id='#{id}' AND is_read='0')")
+    rescue Mysql::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
+  def self.all(id)
+    begin
+      $server.query("SELECT * FROM Notification WHERE user_id='#{id}'")
     rescue Mysql::Error => e
       puts e.errno
       puts e.error

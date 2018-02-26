@@ -43,6 +43,17 @@ class User
     end
   end
 
+  def self.update_score(user_id, score)
+    begin
+      score = DataModel.protect_arg(score)
+      $server.query("UPDATE User SET public_score='#{score}' WHERE id='#{user_id}'") unless score.empty?
+      self.find_by("id", user_id)
+    rescue Mysql::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
   def self.delete(value)
     if value.to_i.to_s == value
       $server.query("DELETE FROM User WHERE id = '#{value}'")
@@ -55,15 +66,5 @@ class User
     user = self.find_by("login", args["login"])
     return user && (args["password"].check_password(user['salt'], user['password'])) ? self.find_by("id", user['id']) : nil
   end
-
-  # def all_tags=(names)
-	# 	self.taggings = names.split(",").map do |name|
-	# 		Tagging.where(name: name.strip).first_or_create!
-	# 	end
-	# end
-  #
-	# def all_tags
-	# 	self.tags.map(&:name).join(", ")
-	# end
 
 end

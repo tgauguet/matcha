@@ -18,7 +18,7 @@ module InitDb
                   img3 VARCHAR(256),
                   img4 VARCHAR(256),
                   img5 VARCHAR(256),
-                  public_score INT(3) DEFAULT 50,
+                  public_score INT(3) DEFAULT 1,
                   latitude FLOAT,
                   longitude FLOAT,
                   reported_as_fake INT(3),
@@ -36,8 +36,13 @@ module InitDb
                   )")
     $server.query("CREATE TABLE IF NOT EXISTS Tag (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                  user_id INT(6) NOT NULL,
                   content VARCHAR(256) NOT NULL,
+                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                  )")
+    $server.query("CREATE TABLE IF NOT EXISTS Tagging (
+                  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                  user_id INT(6) NOT NULL,
+                  tag_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
     $server.query("CREATE TABLE IF NOT EXISTS Notification (

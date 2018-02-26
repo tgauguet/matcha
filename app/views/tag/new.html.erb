@@ -1,0 +1,22 @@
+<%= erb(:'layouts/settings_header') %>
+<div class="usr-forms basic-cntnr center-cntnt">
+  <h2>MES TAGS</h2>
+  <div class="tags-cntnr">
+    <% if @tags %>
+      <% @tags.each_hash do |tag| %>
+        <% tag.to_dot %>
+        <p><%= get_content(tag.tag_id) %></p>
+      <% end %>
+    <% else %>
+      <h4>Vous n'avez pas créé de tags.</h4>
+    <% end %>
+  </div>
+  <h2>NOUVEAUX</h2>
+  <form method="POST" action="/tags/new">
+    <i>Ajoutez plusieurs tags en les séparant par une virgule</i>
+    <br/><br/>
+    <input type="text" name="content" placeholder="exemple, exemple, exemple..."/>
+    <br/><br/>
+    <input type="submit" value=" " class="red-btn submit">
+  </form>
+</div>

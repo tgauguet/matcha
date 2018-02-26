@@ -18,6 +18,7 @@ class LikesController < ApplicationController
       if Liked.delete(params)
         flash[:success] = "Vous ne likez plus ce profil"
         Notification.new("unmatch", params['user_id'], "#{@user.login} a supprimé votre match")
+        update_public_score(params['user_id'], -1)
       end
     elsif Liked.new(params)
       flash[:success] = "Vous avez liké ce profil"
@@ -28,6 +29,7 @@ class LikesController < ApplicationController
       if its_a_match?(params['user_id'])
         match_notifications(params['user_id'])
       end
+      update_public_score(params['user_id'], 1)
     end
     flash[:error] = "Une erreur est survenue" unless flash[:success]
     redirect back

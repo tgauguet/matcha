@@ -1,5 +1,12 @@
 module NotificationHelper
 
+  def mark_all_as_read
+    @notif = Notification.unread(current_user.id)
+    @notif.each_hash do |notif|
+      Notification.mark_as_read(notif.to_dot.id)
+    end
+  end
+
   def event(type)
     if ['message', 'match', 'like'].include? type
       "Nouveau " + type

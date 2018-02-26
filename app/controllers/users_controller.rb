@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 	helpers MailHelper
 	helpers LikesHelper
 	helpers BlockHelper
+	helpers TagHelper
 	include FileUtils::Verbose
 	['/images', '/edit', '/set-location', '/location', '/upload', '/edit-user'].each do |path|
 		before path do
@@ -33,11 +34,13 @@ class UsersController < ApplicationController
 	get '/user/:id/show' do
 		@user = User.find_by("id", params[:id])
 		redirect '/' unless @user
+		@tags = Tagging.all(@user.id)
 		@title = "Profil de #{@user.firstname} #{@user.name}"
 		if @user.id != current_user.id
 			if Visit.not_exists(@user.id, current_user.id) == 0
 				Visit.new(@user.id, current_user.id)
 				Notification.new("visit", @user.id, "#{current_user.login} a visité votre profil")
+				update_public_score(@user.id, 1)
 			end
 		end
 		erb :'user/show'

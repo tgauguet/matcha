@@ -2,6 +2,7 @@
   <h3>NOTIFICATIONS</h3>
   <% @notifications.each_hash do |notif| %>
     <% notif.to_dot %>
+    <% notif.is_read %>
     <a href="<%= notif_path(notif.event_type) %>">
       <div class="unit-cntnr notif-cntnr">
         <img src="/images/notif-<%= notif.event_type %>.png"/>

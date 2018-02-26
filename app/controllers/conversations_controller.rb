@@ -24,6 +24,7 @@ class ConversationsController < ApplicationController
 		if params['message']
 			Message.new(params['message'], @user.id, params['conversation_id'])
 			Notification.new("message", @interlocutor.id, "#{@interlocutor.login} vous a envoyé un message")
+			update_public_score(@interlocutor.id, 1)
 		end
 		redirect back
 	end

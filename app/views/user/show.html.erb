@@ -65,9 +65,16 @@
         </div>
       </div>
       <div class="usr-show-tags">
-        <p>#bananes</p>
-        <p>#fessesrouges</p>
-        <p>#papillons</p>
+        <div class="tags-cntnr">
+          <% if @tags %>
+            <% @tags.each_hash do |tag| %>
+              <% tag.to_dot %>
+              <p><%= get_content(tag.tag_id) %></p>
+            <% end %>
+          <% else %>
+            <h5>Vous n'avez pas créé de tags.</h5>
+          <% end %>
+        </div>
       </div>
       <h3>DESCRIPTION</h3>
       <div class="usr-description-cntnr">

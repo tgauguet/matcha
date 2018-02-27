@@ -73,11 +73,6 @@
     </div>
     <!-- Ajouter ici tous les résultats de la recherche, ajouter un lien
       vers le profil lorsque l'utilisateur clique -->
-    <% @users.to_a %>
-    <% @users.each do |u| %>
-      <% u.to_dot %>
-      <%= u.id %>
-    <% end %>
     <% @users.each do |user| %>
       <% user.to_dot %>
       <% unless user.id == current_user.id %>
@@ -85,9 +80,14 @@
           <div class="usr-result">
             <img src="/files/<%= proper_img(user.img1) %>"/>
             <p class="name"><%= user.name.upcase %></p>
-            <p class="age"><%= user.age %> ans | <%= user.id %></p>
+            <p class="age"><%= user.id %> ans</p>
           </div>
         </a>
       <% end %>
     <% end %>
+    <div class="paginate">
+      <div><%= previous_page(@page, @page_count, @per_page) %></div>
+      <div><%= @page %></div>
+      <div><%= next_page(@page, @page_count, @per_page) %></div>
+    </div>
 </div>

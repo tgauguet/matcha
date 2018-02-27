@@ -458,6 +458,23 @@ p{
   margin-top: .8em;
 }
 
+.paginate{
+  margin-top: 1em;
+}
+
+.paginate div a, .paginate div:nth-child(2){
+  margin: 0 .4em;
+  padding: .4em 1em;
+  border-radius: .2em;
+  color: white;
+	background: #DB4C2C;
+  border-bottom: 2px solid #771E10;
+}
+
+.paginate div, .paginate div a{
+  display: inline-block;
+}
+
 .usr-result .age{
   opacity: .5;
   margin-top: -.2em;

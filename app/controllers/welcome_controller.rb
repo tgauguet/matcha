@@ -1,18 +1,14 @@
 class WelcomeController < ApplicationController
 	helpers UserHelper
+	helpers SortHelper
 
-	get '/', allows: [:page] do
+	get '/', allows: [:page, :per_page] do
 		@title = 'Welcome to Matcha'
 		if current_user
 			@user = User.find_by("id", current_user.id)
-			@users = User.all
-			if params['page']
-				@page = params['page']
-				min = params['page'].to_i * 20
-				max = min + 19
-			else
-				@page = "1"
-			end
+			users = User.all
+			@per_page = params['per_page'] ? params['per_page'].to_i : 20
+			paginate(users, params['page'], @per_page)
 			erb :'user/search'
 		else
 	  	erb :'welcome/index'

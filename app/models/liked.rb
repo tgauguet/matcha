@@ -5,8 +5,8 @@ class Liked
       args = DataModel.init(args)
       $server.query("INSERT INTO Liked (user_id, sender_id)
                     VALUES ('#{args['user_id']}', '#{args['sender_id']}')")
-      $server.query("SELECT LAST_INSERT_ID();").fetch_hash["LAST_INSERT_ID()"]
-    rescue Mysql::Error => e
+      $server.query("SELECT LAST_INSERT_ID();").first.to_dot
+    rescue Mysql2::Error => e
       puts e.errno
       puts e.error
     end
@@ -14,8 +14,8 @@ class Liked
 
   def self.liked?(user_id, sender_id)
     begin
-      $server.query("SELECT * FROM Liked WHERE (user_id='#{user_id}' AND sender_id='#{sender_id}')").num_rows
-    rescue Mysql::Error => e
+      $server.query("SELECT * FROM Liked WHERE (user_id='#{user_id}' AND sender_id='#{sender_id}')").count
+    rescue Mysql2::Error => e
       puts e.errno
       puts e.error
     end

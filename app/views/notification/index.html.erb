@@ -1,6 +1,6 @@
 <div class="conversation-cntnr">
   <h3>NOTIFICATIONS</h3>
-  <% @notifications.each_hash do |notif| %>
+  <% @notifications.each do |notif| %>
     <% notif.to_dot %>
     <% notif.is_read %>
     <a href="<%= notif_path(notif.event_type) %>">

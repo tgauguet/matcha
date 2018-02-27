@@ -61,6 +61,7 @@ class UsersController < ApplicationController
 		if @user
 			flash[:success] = "Vous êtes connecté"
 			session[:current_user_id] = @user.id
+			User.logged_in(@user.id)
 			redirect '/'
 		else
 			flash.now[:error] = "Le mot de passe et/ou le login ne correspondent pas."

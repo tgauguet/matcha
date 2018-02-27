@@ -2,7 +2,7 @@ module NotificationHelper
 
   def mark_all_as_read
     @notif = Notification.unread(current_user.id)
-    @notif.each_hash do |notif|
+    @notif.each do |notif|
       Notification.mark_as_read(notif.to_dot.id)
     end
   end

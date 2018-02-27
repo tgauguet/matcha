@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
 gem "sinatra"
-gem "mysql"
 gem "mysql2"
 gem "rake"
 gem "nokogiri"
@@ -11,6 +10,7 @@ gem "dbd-odbc"
 gem 'em-websocket'
 gem 'hash_dot'
 gem "paperclip"
+gem "sanitize"
 gem 'paperclip-rack', require: 'paperclip/rack'
 gem 'sinatra-strong-params', :require => 'sinatra/strong-params'
 gem 'rack-flash3'

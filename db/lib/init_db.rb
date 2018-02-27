@@ -24,7 +24,7 @@ module InitDb
                   reported_as_fake INT(3),
                   city VARCHAR(256),
                   age INT(6),
-                  last_login DATETIME,
+                  last_login DATETIME DEFAULT CURRENT_TIMESTAMP,
                   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")

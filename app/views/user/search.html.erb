@@ -73,43 +73,21 @@
     </div>
     <!-- Ajouter ici tous les résultats de la recherche, ajouter un lien
       vers le profil lorsque l'utilisateur clique -->
-    <% @users.each_hash do |user| %>
+    <% @users.to_a %>
+    <% @users.each do |u| %>
+      <% u.to_dot %>
+      <%= u.id %>
+    <% end %>
+    <% @users.each do |user| %>
       <% user.to_dot %>
-      <a href="/user/<%= user.id %>/show">
-        <div class="usr-result">
-          <img src="/files/<%= proper_img(user.img1) %>"/>
-          <p class="name"><%= user.name.upcase %></p>
-          <p class="age"><%= user.age %> ans</p>
-        </div>
-      </a>
+      <% unless user.id == current_user.id %>
+        <a href="/user/<%= user.id %>/show">
+          <div class="usr-result">
+            <img src="/files/<%= proper_img(user.img1) %>"/>
+            <p class="name"><%= user.name.upcase %></p>
+            <p class="age"><%= user.age %> ans | <%= user.id %></p>
+          </div>
+        </a>
+      <% end %>
     <% end %>
 </div>
-<script>
-  // Age & popularity slider jquery function
-  $( function() {
-    $( "#slider-range" ).slider({
-      range: true,
-      min: 4,
-      max: 21,
-      values: [ 6, 8 ],
-      slide: function( event, ui ) {
-        $( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " ans" );
-      }
-    });
-    $( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) +
-      " - " + $( "#slider-range" ).slider( "values", 1 ) + " ans" );
-  } );
-  $( function() {
-    $( "#slider-range2" ).slider({
-      range: true,
-      min: 1,
-      max: 100,
-      values: [ 50, 80 ],
-      slide: function( event, ui ) {
-        $( "#amount2" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " *" );
-      }
-    });
-    $( "#amount2" ).val( $( "#slider-range2" ).slider( "values", 0 ) +
-      " - " + $( "#slider-range2" ).slider( "values", 1 ) + " *" );
-  } );
-</script>

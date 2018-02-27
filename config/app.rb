@@ -8,6 +8,7 @@ require 'em-websocket'
 require 'bcrypt'
 require 'paperclip'
 require 'paperclip/rack'
+require 'sanitize'
 require 'hash_dot'
 require 'sinatra/strong-params'
 require 'nokogiri'
@@ -22,7 +23,7 @@ class MatchaApp < Sinatra::Base
       enable :sessions, :method_override
       Tilt.register Tilt::ERBTemplate, 'html.erb'
       Dir.glob('./app/{helpers,controllers,models,lib,data_models}/*.rb').each { |file| require file }
-      set :database, {adapter: 'mysql', host: 'localhost', encoding: 'unicode', database: 'matcha', pool: 2}
+      set :database, {adapter: 'mysql2', host: 'localhost', encoding: 'unicode', database: 'matcha', pool: 2}
       use Rack::Flash
 
       def herb(template, options={}, locals={})

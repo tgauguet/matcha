@@ -22,7 +22,7 @@ class ApplicationController < Sinatra::Base
 
 	def current_user
 		# to be removed
-		current_user = User.find_by("id", 4)
+		current_user = User.find_by("id", 5)
 		# if session[:current_user_id]
 		# 	current_user = User.find_by("id", session[:current_user_id])
 		# end
@@ -30,12 +30,12 @@ class ApplicationController < Sinatra::Base
 
 	def message_count
 		res = Notification.all_message(current_user.id)
-		res.num_rows == 0 ? "" : "<span class='counter'>" + res.num_rows.to_s + "</span>"
+		res.count == 0 ? "" : "<span class='counter'>" + res.count.to_s + "</span>"
 	end
 
 	def notification_count
 		res = Notification.unread(current_user.id)
-		res.num_rows == 0 ? "" : "<span class='counter'>" + res.num_rows.to_s + "</span>"
+		res.count == 0 ? "" : "<span class='counter'>" + res.count.to_s + "</span>"
 	end
 
 	def signed_in?

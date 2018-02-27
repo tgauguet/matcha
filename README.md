@@ -49,8 +49,9 @@ in ObjectController
 ```
 in views/object/index.html.erb
 ```
-<% @object.each_hash do |object| %>
-  <%= object['id'] %>
+<% @object.each do |object| %>
+  <% object.to_dot %>
+  <%= object.id %>
 <% end %>
 ```
 

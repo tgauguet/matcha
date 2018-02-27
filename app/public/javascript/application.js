@@ -21,3 +21,31 @@ var love = setInterval(function() {
         }
     });
 }, 500);
+
+// sliders code
+$( function() {
+	$( "#slider-range" ).slider({
+		range: true,
+		min: 4,
+		max: 21,
+		values: [ 6, 8 ],
+		slide: function( event, ui ) {
+			$( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " ans" );
+		}
+	});
+	$( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) +
+		" - " + $( "#slider-range" ).slider( "values", 1 ) + " ans" );
+} );
+$( function() {
+	$( "#slider-range2" ).slider({
+		range: true,
+		min: 1,
+		max: 100,
+		values: [ 50, 80 ],
+		slide: function( event, ui ) {
+			$( "#amount2" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " *" );
+		}
+	});
+	$( "#amount2" ).val( $( "#slider-range2" ).slider( "values", 0 ) +
+		" - " + $( "#slider-range2" ).slider( "values", 1 ) + " *" );
+} );

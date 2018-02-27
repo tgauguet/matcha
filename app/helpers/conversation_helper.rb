@@ -18,7 +18,7 @@ module ConversationHelper
   def not_exists?(user_id)
     res = 1
     @conversations = UserConversation.all(current_user.id)
-    @conversations.each_hash do |c|
+    @conversations.each do |c|
       c = c.to_dot
       i = get_interlocutor(c.user_id, c.conversation_id)
       res = 0 if i.id == user_id
@@ -42,9 +42,9 @@ module ConversationHelper
   def last_message(messages)
     i = 0
     res = "Aucun message"
-    messages.each_hash do |m|
+    messages.each do |m|
       i += 1
-      if messages.num_rows == i
+      if messages.count == i
         res = m.to_dot.content
       end
     end

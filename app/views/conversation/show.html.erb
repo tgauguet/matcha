@@ -1,7 +1,7 @@
 <div class="chat-cntnr">
   <a href="/conversation/index"><img src="/images/back.png" class="back"/></a>
   <h3>CONVERSATION AVEC <%= @interlocutor.login.upcase %></h3>
-  <% @messages.each_hash do |message| %>
+  <% @messages.each do |message| %>
     <% message.to_dot %>
     <div class="<%= msg_class(message.user_id) %>"><% if my_msg(message.user_id) %><img src="/files/<%= @interlocutor.img1 %>"/><% end %><div><%= message.content.force_encoding("UTF-8") %></div></div>
   <% end %>

@@ -15,6 +15,7 @@
       <p><img src="/images/location.png"/> <%= proper_value('city') %></p>
       <p><img src="/images/gender-symbols.png"/> <%= @user.gender %></p>
       <p><img src="/images/rabbit-shape.png"/> Zoophile/<%= @user.interested_in %></p>
+      <p><img src="/images/clock.png"/> <%= @user.last_login.strftime('%m/%d/%Y') %></p>
     </div>
   </div>
   <% if !reported_as_fake? %>
@@ -67,7 +68,7 @@
       <div class="usr-show-tags">
         <div class="tags-cntnr">
           <% if @tags %>
-            <% @tags.each_hash do |tag| %>
+            <% @tags.each do |tag| %>
               <% tag.to_dot %>
               <p><%= get_content(tag.tag_id) %></p>
             <% end %>

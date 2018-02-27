@@ -41,7 +41,7 @@ module UserHelper
 
   def validate_uniqueness_of(param, value, table_name)
     value = Mysql.escape_string(Rack::Utils.escape_html(value))
-    $server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").num_rows == 0 ? TRUE : FALSE
+    $server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").count == 0 ? TRUE : FALSE
   end
 
   def upload_images(params, user)

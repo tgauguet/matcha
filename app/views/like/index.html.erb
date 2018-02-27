@@ -1,7 +1,7 @@
 <%= erb(:'layouts/settings_header') %>
 <div class="usr-forms basic-cntnr center-cntnt">
   <h2>ILS ONT LIKÉ MON PROFIL</h2>
-  <% @likes.each_hash do |like| %>
+  <% @likes.each do |like| %>
     <% like.to_dot %>
     <a href="/user/<%= like.sender_id %>/show">
       <div class="min-usr">

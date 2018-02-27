@@ -6,8 +6,8 @@ class User
 
   def self.find_by(type, value)
     if !type.nil? && !value.nil?
-       user = $server.query("SELECT * FROM User WHERE #{type} = '#{value}'").fetch_hash
-       return user ? user.to_dot : nil
+       user = $server.query("SELECT * FROM User WHERE #{type} = '#{value}'")
+       return user ? user.first.to_dot : nil
     end
   end
 
@@ -18,9 +18,9 @@ class User
       args = DataModel.init(args)
       $server.query("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude)
                     VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}', '#{salt}', '#{args['latitude']}', '#{args['longitude']}')")
-      id = $server.query("SELECT LAST_INSERT_ID();").fetch_hash
+      id = $server.query("SELECT LAST_INSERT_ID();")
       self.find_by("id", id['LAST_INSERT_ID()'])
-    rescue Mysql::Error => e
+    rescue Mysql2::Error => e
       puts e.errno
       puts e.error
     end
@@ -37,7 +37,7 @@ class User
         $server.query("UPDATE User SET #{k} = '#{v}' WHERE id = '#{args['id']}'") unless v.empty?
       end
       self.find_by("id", args['id'])
-    rescue Mysql::Error => e
+    rescue Mysql2::Error => e
       puts e.errno
       puts e.error
     end
@@ -48,7 +48,7 @@ class User
       score = DataModel.protect_arg(score)
       $server.query("UPDATE User SET public_score='#{score}' WHERE id='#{user_id}'") unless score.empty?
       self.find_by("id", user_id)
-    rescue Mysql::Error => e
+    rescue Mysql2::Error => e
       puts e.errno
       puts e.error
     end
@@ -65,6 +65,19 @@ class User
   def self.match(args)
     user = self.find_by("login", args["login"])
     return user && (args["password"].check_password(user['salt'], user['password'])) ? self.find_by("id", user['id']) : nil
+  end
+
+  def self.logged_in(id)
+    begin
+      $server.query("UPDATE User SET last_login=NOW() WHERE id='#{id}'")
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
+  def self.between(min, max)
+    $server.query("SELECT * FROM User WHERE id BETWEEN '#{min}' AND '#{max}'")
   end
 
 end

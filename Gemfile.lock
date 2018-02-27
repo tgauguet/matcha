@@ -17,6 +17,7 @@ GEM
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     concurrent-ruby (1.0.5)
+    crass (1.0.3)
     daemons (1.2.6)
     datamapper (1.0.2)
       dm-aggregates (= 1.0.2)
@@ -81,10 +82,11 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     mustermann (1.0.2)
-    mysql (2.9.1)
     mysql2 (0.4.10)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    nokogumbo (1.5.0)
+      nokogiri
     paperclip (5.2.1)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -102,6 +104,10 @@ GEM
     rack-protection (2.0.1)
       rack
     rake (12.3.0)
+    sanitize (4.6.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.4.4)
+      nokogumbo (~> 1.4)
     sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -133,7 +139,6 @@ DEPENDENCIES
   hash_dot
   json
   mail (~> 2.6.0)
-  mysql
   mysql2
   nokogiri
   paperclip
@@ -141,6 +146,7 @@ DEPENDENCIES
   pony (~> 1.11.0)
   rack-flash3
   rake
+  sanitize
   sinatra
   sinatra-strong-params
   thin

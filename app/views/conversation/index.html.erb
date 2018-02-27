@@ -1,6 +1,6 @@
 <div class="conversation-cntnr">
   <h3>MESSAGES</h3>
-  <% @conversations.each_hash do |c| %>
+  <% @conversations.each do |c| %>
     <% c.to_dot %>
     <% init_conversation(c.user_id, c.conversation_id) %>
     <a href="/conversation/<%= @conversation.id %>/show">

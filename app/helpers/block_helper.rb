@@ -16,4 +16,8 @@ module BlockHelper
     is_blocked? ? "Débloquer" : "Bloquer"
   end
 
+  def not_allowed(user)
+    Block.blocked?(user.id, current_user.id) == 1
+  end
+
 end

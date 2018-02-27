@@ -4,7 +4,7 @@ module SortHelper
     @page_count = per_page < 1 ? 20 : users.count / per_page
     @page = set_page(page.to_i, @page_count)
     @min = @page == 1 ? 0 : ((@page - 1) * per_page + 1)
-    @max = @page == 1 ? per_page : @min + (per_page - 1)
+    @max = @page == 1 ? (per_page - 1) : @min + (per_page - 1)
     @users = users[@min..@max]
   end
 

@@ -1,7 +1,7 @@
 class User
 
-  def self.all
-    $server.query("SELECT * FROM User").to_a
+  def self.all(id)
+    $server.query("SELECT * FROM User WHERE NOT id='#{id}'").to_a
   end
 
   def self.find_by(type, value)

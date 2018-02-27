@@ -75,7 +75,11 @@
       vers le profil lorsque l'utilisateur clique -->
     <% @users.each do |user| %>
       <% user.to_dot %>
-      <% unless user.id == current_user.id %>
+      <% if not_allowed(user) %>
+        <div class="usr-result blocked">
+          <img src="/images/stop.png"/>
+        </div>
+      <% else %>
         <a href="/user/<%= user.id %>/show">
           <div class="usr-result">
             <img src="/files/<%= proper_img(user.img1) %>"/>

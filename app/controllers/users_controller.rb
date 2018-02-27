@@ -168,7 +168,8 @@ class UsersController < ApplicationController
 		redirect back
 	end
 
-	post "/search" do
+	post "/search", allows: [:public_score, :location, :age, :personalized, :interested_in, :tags] do
+		# Params interested_in is Bisexual by default
 		puts params
 	end
 

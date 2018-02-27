@@ -25,8 +25,13 @@ module LikesHelper
   end
 
   def match_notifications(id)
-    Notification.new("match", id, "Vous avez un match avec #{current_user.login}")
-    Notification.new("match", current_user.id, "Vous avez un match avec #{User.find_by("id", id).login}")
+    @user = User.find_by("id", id)
+    puts @user.id
+    puts current_user.id
+    if !Block.blocked?(current_user.id, @user.id)
+      Notification.new("match", id, "Vous avez un match avec #{current_user.login}")
+      Notification.new("match", current_user.id, "Vous avez un match avec #{@user.login}")
+    end
   end
 
   def heart_animation(id)

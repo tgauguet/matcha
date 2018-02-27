@@ -23,7 +23,7 @@ class ConversationsController < ApplicationController
 		@interlocutor = get_interlocutor(@user.id, params['conversation_id'])
 		if params['message']
 			Message.new(params['message'], @user.id, params['conversation_id'])
-			Notification.new("message", @interlocutor.id, "#{@interlocutor.login} vous a envoyé un message")
+			Notification.new("message", @interlocutor.id, "#{@interlocutor.login} vous a envoyé un message") unless Block.blocked?(@user.id, @interlocutor.id)
 			update_public_score(@interlocutor.id, 1)
 		end
 		redirect back

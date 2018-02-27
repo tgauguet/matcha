@@ -39,7 +39,7 @@ class UsersController < ApplicationController
 		if @user.id != current_user.id
 			if Visit.not_exists(@user.id, current_user.id) == 0
 				Visit.new(@user.id, current_user.id)
-				Notification.new("visit", @user.id, "#{current_user.login} a visité votre profil")
+				Notification.new("visit", @user.id, "#{current_user.login} a visité votre profil") unless Block.blocked?(current_user.id, @user.id)
 				update_public_score(@user.id, 1)
 			end
 		end
@@ -166,11 +166,6 @@ class UsersController < ApplicationController
 			flash[:error] = "Une erreur est survenue"
 		end
 		redirect back
-	end
-
-	post "/search", allows: [:public_score, :location, :age, :personalized, :interested_in, :tags] do
-		# Params interested_in is Bisexual by default
-		puts params
 	end
 
 end

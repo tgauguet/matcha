@@ -1,11 +1,11 @@
 module BlockHelper
 
   def block_to_delete?(id)
-    Block.blocked?(id, current_user.id) != 0
+    Block.blocked?(id, current_user.id)
   end
 
   def is_blocked?
-    Block.blocked?(@user.id, current_user.id) != 0
+    Block.blocked?(@user.id, current_user.id)
   end
 
   def block_img
@@ -17,7 +17,7 @@ module BlockHelper
   end
 
   def not_allowed(user)
-    Block.blocked?(user.id, current_user.id) == 1
+    Block.blocked?(user.id, current_user.id)
   end
 
 end

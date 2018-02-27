@@ -14,7 +14,7 @@ class Block
 
   def self.blocked?(user_id, sender_id)
     begin
-      $server.query("SELECT * FROM Block WHERE (user_id='#{user_id}' AND sender_id='#{sender_id}')").count
+      $server.query("SELECT * FROM Block WHERE (user_id='#{user_id}' AND sender_id='#{sender_id}')").count == 1
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

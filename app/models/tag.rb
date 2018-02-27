@@ -1,5 +1,9 @@
 class Tag
 
+  def self.all
+    $server.query("SELECT * FROM Tag")
+  end
+
   def self.exists?(content)
     begin
       $server.query("SELECT id FROM Tag WHERE content='#{content}'").first

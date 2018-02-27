@@ -168,4 +168,8 @@ class UsersController < ApplicationController
 		redirect back
 	end
 
+	post "/search" do
+		puts params
+	end
+
 end

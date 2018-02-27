@@ -26,11 +26,11 @@ var love = setInterval(function() {
 $( function() {
 	$( "#slider-range" ).slider({
 		range: true,
-		min: 4,
-		max: 21,
-		values: [ 6, 8 ],
+		min: 0,
+		max: 100,
+		values: [ 18, 88 ],
 		slide: function( event, ui ) {
-			$( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " ans" );
+			$("#amount").val( ui.values[ 0 ] + " - " + ui.values[ 1 ] + " ans" );
 		}
 	});
 	$( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) +

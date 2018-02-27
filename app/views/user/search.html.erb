@@ -3,58 +3,63 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div class="search-cntnr">
   <div class="search-bar">
-    <h2>OUTILS DE RECHERCHE</h2>
-    <form>
+    <h2>RECHERCHE AVANCÉE</h2>
+    <form action="/search" method="POST">
       <i>Merci de compléter votre profil pour accéder a cette option</i>
       <p class="checkbox-cntnr check-rgt">
-        <input type="checkbox" id="check1">
+        <input type="checkbox" id="check1" name="personalized">
         <label for="check1">Sélection personnalisées</label>
       </p>
       <br/>
       <p>Préférences :</p>
       <div class="radio-cntnr">
         <p class="radio">
-          <input type="radio" name="sex" id="match1" value="guy" checked>
+          <input type="radio" name="sex" id="match1" value="M">
           <label for="match1"><img src="/images/male.png"/></label>
         </p>
         <p class="radio">
-          <input type="radio" name="sex" id="match2" value="female">
+          <input type="radio" name="sex" id="match2" value="F">
           <label for="match2"><img src="/images/female.png"/></label>
         </p>
         <p class="radio">
-          <input type="radio" name="sex" id="match3" value="both">
+          <input type="radio" name="sex" id="match3" value="B">
           <label for="match3"><img src="/images/both.png"/></label>
         </p>
       </div>
       <br/>
       <div class="sliders-cntnr">
         <div class="sld">
-          <p>Age: <input type="text" id="amount" readonly class="age-rank text-dark"></p>
+          <p>Age: <input type="text" id="amount" class="age-rank text-dark"></p>
           <div id="slider-range"></div><br/>
         </div>
           <!-- Récupérer l'age et la popularité via le script JS -->
         <div class="sld">
-          <p>Popularité: <input type="text" id="amount2" readonly class="age-rank text-dark"></p>
+          <p>Popularité: <input type="text" id="amount2" class="age-rank text-dark"></p>
           <div id="slider-range2"></div><br/>
         </div>
       </div>
-      <p>Localisation:</p>
-      <!-- Ajouter la recherche par localisation sous forme de filter box -->
+      <p>Proximité:</p>
       <div class="filters">
-        <!-- Ajouter ici les filtres par age, popularité, localisation et tags avec la classe filter-box -->
-        <select value="pays" class="filter-box">
-          <option value="valeur1">Ile de France</option>
-          <option value="valeur2">Loire Atlantique</option>
-          <option value="valeur3">Midi Pyrénées</option>
+        <select class="filter-box" name="location">
+          <option value="2">2km</option>
+          <option value="3">3km</option>
+          <option value="5">5km</option>
+          <option value="10">10km</option>
+          <option value="20">20km</option>
+          <option value="50">50km</option>
+          <option value="100">100km</option>
+          <option value="500">500km</option>
+          <option value="1000">1000km</option>
         </select>
       </div>
       <p>Tags:</p>
       <!-- Ajouter la recherche par tags -->
-      <div class="tags-cntnr">
-        <p>#raclette</p>
-        <p>#chocolat</p>
-        <p>#camembert</p>
-      </div>
+        <div class="tags-cntnr">
+          <% @tags.each do |tag| %>
+            <% tag.to_dot %>
+            <p><%= tag.content %></p>
+          <% end %>
+        </div>
       <div class="btn-cntnr">
         <input type="submit" value="RECHERCHER" class="red-btn"/>
       </div>
@@ -62,7 +67,6 @@
   </div>
   <div class="usrs">
     <div class="filters">
-      <!-- Ajouter ici les filtres par age, popularité, localisation et tags avec la classe filter-box -->
       Filtrer par :
       <select value="pays" class="filter-box">
         <option value="valeur1">Age</option>
@@ -71,8 +75,6 @@
         <option value="valeur4">Tags</option>
       </select>
     </div>
-    <!-- Ajouter ici tous les résultats de la recherche, ajouter un lien
-      vers le profil lorsque l'utilisateur clique -->
     <% @users.each do |user| %>
       <% user.to_dot %>
       <% if not_allowed(user) %>

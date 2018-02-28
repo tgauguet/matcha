@@ -1,7 +1,7 @@
 class User
 
   def self.all(id)
-    $server.query("SELECT * FROM User WHERE NOT id='#{id}'").to_a
+    $server.query("SELECT * FROM User WHERE (id <> '#{id}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{id}'))").to_a
   end
 
   def self.find_by(type, value)

@@ -40,7 +40,7 @@ module UserHelper
   end
 
   def validate_uniqueness_of(param, value, table_name)
-    value = Mysql.escape_string(Rack::Utils.escape_html(value))
+    value = Sanitize.clean(value.to_s.force_encoding("UTF-8"))
     $server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").count == 0 ? TRUE : FALSE
   end
 

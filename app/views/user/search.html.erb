@@ -73,11 +73,6 @@
     </div>
     <% @users.each do |user| %>
       <% user.to_dot %>
-      <% if not_allowed(user) %>
-        <div class="usr-result blocked">
-          <img src="/images/stop.png"/>
-        </div>
-      <% else %>
         <a href="/user/<%= user.id %>/show">
           <div class="usr-result">
             <img src="/files/<%= proper_img(user.img1) %>"/>
@@ -85,11 +80,10 @@
             <p class="age"><%= user.age %> ans</p>
           </div>
         </a>
-      <% end %>
     <% end %>
     <div class="paginate">
-      <div><%= previous_page(@page, @page_count, @per_page) %></div>
+      <div><%= previous_page(@page, @per_page, order) %></div>
       <div><%= @page %></div>
-      <div><%= next_page(@page, @page_count, @per_page) %></div>
+      <div><%= next_page(@page, @page_count, @per_page, order) %></div>
     </div>
 </div>

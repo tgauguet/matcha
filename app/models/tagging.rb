@@ -16,6 +16,10 @@ class Tagging
     end
   end
 
+  def self.matchs(id, interlocutor)
+    $server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE(user_id='#{id}')) AND user_id='#{interlocutor}')))")
+  end
+
   def self.new(user_id, tag_id)
     begin
       $server.query("INSERT INTO Tagging (user_id, tag_id) VALUES ('#{user_id}', '#{tag_id}')")

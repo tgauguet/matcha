@@ -34,10 +34,14 @@ class WelcomeController < ApplicationController
 	end
 
 	def set_order(order)
-		if (order == "age" || order == "public_score")
+		if order == "age" || order == "public_score"
 			@total_users.sort_by { |u| u[order] }
-		else
+		elsif order == "tags"
 			@total_users.sort_by { |u| tags_count(u.to_dot.id) }.reverse
+		elsif order == "location"
+			@total_users.sort_by { |u| get_distance([current_user['latitude'], current_user['longitude']], [u.to_dot.latitude, u.to_dot.longitude]) }
+		else
+			@total_users.sort_by { |u| u['id'] }
 		end
 	end
 

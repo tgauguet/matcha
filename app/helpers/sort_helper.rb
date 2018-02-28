@@ -8,7 +8,22 @@ module SortHelper
     @users = users[@min..@max]
   end
 
-  def get_distance(user)
+  def get_distance(current, user)
+    rad_per_deg = Math::PI/180  # PI / 180
+    rkm = 6371                  # Earth radius in kilometers
+    rm = rkm * 1000             # Radius in meters
+
+    dlat_rad = (user[0]-current[0]) * rad_per_deg  # Delta, converted to rad
+    dlon_rad = (user[1]-current[1]) * rad_per_deg
+
+    lat1_rad, lon1_rad = current.map {|i| i * rad_per_deg }
+    lat2_rad, lon2_rad = user.map {|i| i * rad_per_deg }
+
+    a = Math.sin(dlat_rad/2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad/2)**2
+    c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1-a))
+    res = rm * c / 1000
+
+    res.to_i # Delta in meters
   end
 
   def tags_count(user)

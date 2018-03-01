@@ -4,6 +4,15 @@ class User
     $server.query("SELECT * FROM User WHERE (id <> '#{id}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{id}'))").to_a
   end
 
+  def self.all_according_to(args)
+    begin
+      $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}'))").to_a
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
   def self.find_by(type, value)
     if !type.nil? && !value.nil?
        user = $server.query("SELECT * FROM User WHERE #{type} = '#{value}'")

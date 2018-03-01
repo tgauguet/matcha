@@ -50,4 +50,29 @@ module SortHelper
     order ? "&order=#{order}" : ""
   end
 
+  def full_order
+    @total_users = User.all(current_user.id)
+    @total_users.sort_by { |u| [u['interested_in'], get_distance(user_location,loc_params(u)), tags_count(u.to_dot.id), u['public_score']] }
+  end
+
+  def set_order(order)
+		if order == "age" || order == "public_score" || order == "id"
+			@total_users.sort_by { |u| u[order] }
+		elsif order == "tags"
+			@total_users.sort_by { |u| tags_count(u.to_dot.id) }.reverse
+		elsif order == "location"
+			@total_users.sort_by { |u| get_distance(user_location,loc_params(u)) }
+		else
+			@total_users.sort_by { |u| u['id'] }
+		end
+	end
+
+  def user_location
+    [current_user['latitude'], current_user['longitude']]
+  end
+
+  def loc_params(user)
+    [user.to_dot.latitude, user.to_dot.longitude]
+  end
+
 end

@@ -14,10 +14,13 @@ class WelcomeController < ApplicationController
 		current_user ? (erb :'user/search', :locals => {:order => params['order']}) : (erb :'welcome/index')
 	end
 
-	post "/search", allows: [:public_score, :location, :age, :personalized, :interested_in, :tags] do
-		# Params interested_in is Bisexual by default
+	post "/search", allows: [:public_score, :location, :age, :personalized, :interested_in, :tags, :order] do
+		params['id'] = current_user.id.to_s
+		order = params['order']
+		init_search(order) if order
 		puts params
-		erb :'user/search'
+		@users = User.all_according_to(params)
+		erb :'user/search', :locals => {:order => order}
 	end
 
 	post "/search-filter", allows: [:order] do
@@ -31,18 +34,6 @@ class WelcomeController < ApplicationController
 		@total_users = set_order(order) if order
 		@per_page = params['per_page'] ? params['per_page'].to_i : 20
 		paginate(@total_users, params['page'], @per_page)
-	end
-
-	def set_order(order)
-		if order == "age" || order == "public_score"
-			@total_users.sort_by { |u| u[order] }
-		elsif order == "tags"
-			@total_users.sort_by { |u| tags_count(u.to_dot.id) }.reverse
-		elsif order == "location"
-			@total_users.sort_by { |u| get_distance([current_user['latitude'], current_user['longitude']], [u.to_dot.latitude, u.to_dot.longitude]) }
-		else
-			@total_users.sort_by { |u| u['id'] }
-		end
 	end
 
 end

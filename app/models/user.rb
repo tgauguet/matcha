@@ -6,7 +6,26 @@ class User
 
   def self.all_according_to(args)
     begin
-      $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}'))").to_a
+      args = DataModel.clean(args)
+      if args['interested_in'] == "B"
+        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}'))").to_a
+      else
+        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}') AND gender='#{args['interested_in']}')").to_a
+      end
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
+  def self.all_personalized(args)
+    begin
+      args = DataModel.generate_suggestions(args)
+      if args['interested_in'] == "B"
+        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND ((age BETWEEN '#{args['user_min_age']}' AND  '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}')))")
+      else
+        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND ((age BETWEEN '#{args['user_min_age']}' AND '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}') OR gender='#{args['interested_in']}'))")
+      end
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -87,6 +106,15 @@ class User
 
   def self.between(min, max)
     $server.query("SELECT * FROM User WHERE id BETWEEN '#{min}' AND '#{max}'")
+  end
+
+  def self.complete?(id)
+    begin
+      $server.query("SELECT id FROM User WHERE ( name AND firstname AND login AND email AND password AND latitude AND longitude AND img1 AND img2 AND img3 AND img4 AND img5 AND gender AND interested_in AND description AND city AND age IS NOT NULL)")
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
 end

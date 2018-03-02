@@ -20,6 +20,10 @@ class Tagging
     $server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE(user_id='#{id}')) AND user_id='#{interlocutor}')))")
   end
 
+  def self.selection_match(id, interlocutor, ids_list)
+    $server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE (user_id='#{id}' AND tag_id IN (SELECT id FROM Tag WHERE id IN (#{ids_list.join(', ')})))) AND user_id='#{interlocutor}')))")
+  end
+
   def self.new(user_id, tag_id)
     begin
       $server.query("INSERT INTO Tagging (user_id, tag_id) VALUES ('#{user_id}', '#{tag_id}')")

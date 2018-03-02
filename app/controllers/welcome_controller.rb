@@ -8,32 +8,31 @@ class WelcomeController < ApplicationController
 		end
 	end
 
-	get '/', allows: [:page, :per_page, :order] do
+	get '/', allows: [:location, :min_age, :max_age, :min_score, :max_score, :personalized, :interested_in, :tags, :order, :page, :per_page] do
 		@title = 'Welcome to Matcha'
-		init_search(params['order']) if current_user
-		current_user ? (erb :'user/search', :locals => {:order => params['order']}) : (erb :'welcome/index')
-	end
-
-	post "/search", allows: [:public_score, :location, :age, :personalized, :interested_in, :tags, :order] do
-		params['id'] = current_user.id.to_s
-		order = params['order']
-		init_search(order) if order
 		puts params
-		@users = User.all_according_to(params)
-		erb :'user/search', :locals => {:order => order}
+		params['order'] = params['order'] ? params['order'] : "id"
+		generate_users_list(params)
+		paginate(@total_users, params)
+		current_user ? (erb :'user/search', :locals => params) : (erb :'welcome/index')
 	end
 
-	post "/search-filter", allows: [:order] do
-		order = params['order']
-		init_search(order) if order
-		erb :'user/search', :locals => {:order => order}
+	post "/search", allows: [:location, :min_age, :max_age, :min_score, :max_score, :personalized, :interested_in, :tags, :order, :page, :per_page] do
+		@title = "Recherche"
+		puts params
+		params['order'] = params['order'] ? params['order'] : "id"
+		generate_users_list(params)
+		paginate(@total_users, params)
+		erb :'user/search', :locals => params
 	end
 
-	def init_search(order)
-		@total_users = User.all(current_user.id)
-		@total_users = set_order(order) if order
-		@per_page = params['per_page'] ? params['per_page'].to_i : 20
-		paginate(@total_users, params['page'], @per_page)
+	def personalized_search(order, params)
+		list = generate_tags_list(params["tags"])
+		@total_users = User.all_according_to(params)
+		@total_users = @total_users.select { |u| get_distance(user_location,loc_params(u)) <= params['location'].to_i } if params['location']
+		@total_users = @total_users.select { |u| tags_match(list,u.to_dot.id) > 0 } if params["tags"] != ""
+		# @total_users = User.all_personalized(current_user.id, params)
+		paginate(@total_users, params['page'], @per_page, order)
 	end
 
 end

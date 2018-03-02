@@ -89,4 +89,12 @@ module UserHelper
     @user.reported_as_fake
   end
 
+  def profile_complete?(user)
+    c = 25
+    user.each do |k,v|
+      c -= 1 if v.nil? || v == ""
+    end
+    ((c.to_f / 25) * 100).to_i
+  end
+
 end

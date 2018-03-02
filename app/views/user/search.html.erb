@@ -5,11 +5,14 @@
   <div class="search-bar">
     <h2>RECHERCHE AVANCÉE</h2>
     <form action="/search" method="POST">
-      <i>Merci de compléter votre profil pour accéder a cette option</i>
-      <p class="checkbox-cntnr check-rgt">
-        <input type="checkbox" id="check1" name="personalized">
-        <label for="check1">Sélection personnalisées</label>
-      </p>
+      <% if profile_complete?(current_user) < 80 %>
+        <i>Complétez votre profil pour accéder aux suggestions</i>
+      <% else %>
+        <p class="checkbox-cntnr check-rgt">
+          <input type="checkbox" id="check1" name="personalized">
+          <label for="check1">Sélection personnalisées</label>
+        </p>
+      <% end %>
       <br/>
       <p>Préférences :</p>
       <div class="radio-cntnr">
@@ -29,17 +32,18 @@
       <br/>
       <div class="sliders-cntnr">
         <div class="sld">
-          <p>Age: <input type="text" id="amount" class="age-rank text-dark" name="age">ans</p>
+          <p>Age: <input type="text" id="age_min" class="age-rank text-dark" name="min_age"> - <input type="text" id="age_max" class="age-rank text-dark" name="max_age">ans</p>
           <div id="slider-range"></div><br/>
         </div>
         <div class="sld">
-          <p>Popularité: <input type="text" id="amount2" class="age-rank text-dark" name="public_score"></p>
+          <p>Popularité: <input type="text" id="score_min" class="age-rank text-dark" name="min_score"> - <input type="text" id="score_max" class="age-rank text-dark" name="max_score"></p>
           <div id="slider-range2"></div><br/>
         </div>
       </div>
       <p>Proximité:</p>
       <div class="filters">
         <select class="filter-box" name="location">
+          <option disabled selected value></option>
           <option value="2">2km</option>
           <option value="3">3km</option>
           <option value="5">5km</option>
@@ -51,7 +55,7 @@
           <option value="1000">1000km</option>
         </select>
       </div>
-      <input type="hidden" name="order" value="id"/>
+      <input type="hidden" name="order" value="<%= order %>"/>
       <p>Tags: <i>(séparés par une virgule)</i></p>
       <input id="tags" type="text" name="tags"/>
       <div class="btn-cntnr">
@@ -61,7 +65,7 @@
   </div>
   <div class="usrs">
     <div class="filters">
-      <form method="POST" action="/search-filter">
+      <form method="POST" action="/search">
         Filtrer par :
         <select name="order" class="filter-box" onchange="this.form.submit()">
           <option disabled selected value></option>
@@ -85,6 +89,37 @@
     <div class="paginate">
       <div><%= previous_page(@page, @per_page, order) %></div>
       <div><%= @page %></div>
-      <div><%= next_page(@page, @page_count, @per_page, order) %></div>
+      <div><%= next_page(@page, @page_count, @per_page, order, @users.count) %></div>
     </div>
 </div>
+<script>
+// sliders code
+$( function() {
+	$( "#slider-range" ).slider({
+		range: true,
+		min: 0,
+		max: 100,
+		values: [ <%= params["min_age"] ? params["min_age"] : 0 %>, <%= params["max_age"] ? params["max_age"] : 100 %> ],
+		slide: function( event, ui ) {
+			$("#age_min").val( ui.values[ 0 ] );
+      $("#age_max").val( ui.values[ 1 ] );
+		}
+	});
+	$( "#age_min" ).val( $( "#slider-range" ).slider( "values", 0 ));
+  $( "#age_max" ).val( $( "#slider-range" ).slider( "values", 1 ));
+} );
+$( function() {
+	$( "#slider-range2" ).slider({
+		range: true,
+		min: 0,
+		max: 100,
+		values: [ <%= params["min_score"] ? params["min_score"] : 0 %>, <%= params["max_score"] ? params["max_score"] : 100 %> ],
+		slide: function( event, ui ) {
+			$( "#score_min" ).val( ui.values[ 0 ]);
+      $( "#score_max" ).val( ui.values[ 1 ]);
+		}
+	});
+  $( "#score_min" ).val( $( "#slider-range2" ).slider( "values", 0 ));
+  $( "#score_max" ).val( $( "#slider-range2" ).slider( "values", 1 ));
+} );
+</script>

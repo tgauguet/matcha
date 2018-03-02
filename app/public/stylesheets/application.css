@@ -443,6 +443,19 @@ p{
   opacity: 1 !important;
 }
 
+.completed{
+  width: 15em;
+  text-align: center;
+  background: #EBC137;
+  border-bottom-right-radius: .5em;
+  border-bottom-left-radius: .5em;
+  color: white;
+  margin: auto;
+  margin-top: -.1em;
+  z-index: -6;
+  padding: .3em;
+}
+
 .usr-result{
   background: rgb(249,249,249);
   border: 1px solid rgb(244,244,244);

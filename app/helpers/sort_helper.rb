@@ -1,10 +1,17 @@
 module SortHelper
 
-  def paginate(users, page, per_page)
-    @page_count = per_page < 1 ? 20 : users.count / per_page
-    @page = set_page(page.to_i, @page_count)
-    @min = @page == 1 ? 0 : ((@page - 1) * per_page + 1)
-    @max = @page == 1 ? (per_page - 1) : @min + (per_page - 1)
+  def generate_users_list(params)
+    params['id'] = current_user.id
+    @total_users = User.all_according_to(params)
+  end
+
+  def paginate(users, params)
+    users = set_order(params['order']) unless params["no_order"]
+    @per_page = params['per_page'] ? params['per_page'].to_i : 20
+    @page_count = @per_page < 1 ? 20 : users.count / @per_page
+    @page = set_page(params['page'].to_i, @page_count)
+    @min = @page == 1 ? 0 : ((@page - 1) * @per_page + 1)
+    @max = @page == 1 ? (@per_page - 1) : @min + (@per_page - 1)
     @users = users[@min..@max]
   end
 
@@ -30,12 +37,27 @@ module SortHelper
     Tagging.matchs(current_user.id, user).count
   end
 
+  def generate_tags_list(tags)
+    list = []
+    return nil if !tags
+    tags = tags.split(/\s*,\s*/)
+    tags.each do |tag|
+      v = Tag.exists?(tag)
+      list << v["id"] if (v && !list.include?(v["id"]))
+    end
+    list.empty? ? [0] : list
+  end
+
+  def tags_match(list, user)
+    Tagging.selection_match(current_user.id, user, list).count
+  end
+
   def set_page(page, count)
     (page > count || page < 1) ? 1 : page.to_i
   end
 
-  def next_page(page, page_count, per_page, order)
-    "<a href='http://localhost:4567/?page=#{page+1}#{use(per_page)}#{get_order(order)}'>Suivante</a>" unless page == page_count
+  def next_page(page, page_count, per_page, order, count)
+    "<a href='http://localhost:4567/?page=#{page+1}#{use(per_page)}#{get_order(order)}'>Suivante</a>" unless (page == page_count || count <= per_page)
   end
 
   def previous_page(page, per_page, order)
@@ -56,7 +78,7 @@ module SortHelper
   end
 
   def set_order(order)
-		if order == "age" || order == "public_score" || order == "id"
+		if order == "age" || order == "public_score"
 			@total_users.sort_by { |u| u[order] }
 		elsif order == "tags"
 			@total_users.sort_by { |u| tags_count(u.to_dot.id) }.reverse

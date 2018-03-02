@@ -18,4 +18,20 @@ module DataModel
     uniq = uniq ? Sanitize.clean(uniq.to_s.force_encoding("UTF-8")) : nil
   end
 
+  def self.clean(data)
+    data = DataModel.init(data)
+    data['interested_in'] = data['interested_in'] ? data['interested_in'] : "B"
+    data
+  end
+
+  def self.generate_suggestions(data)
+    data = DataModel.init(data)
+    user = User.find_by("id", data['id'])
+    data['user_min_score'] = (user.public_score.to_i - 5).to_s
+    data['user_max_score'] = (user.public_score.to_i + 5).to_s
+    data['user_min_age'] = (user.age.to_i - 5).to_s
+    data['user_max_age'] = (user.age.to_i + 5).to_s
+    data
+  end
+
 end

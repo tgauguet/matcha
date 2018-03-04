@@ -43,8 +43,8 @@ class User < DBset
 
   def self.find_by(type, value)
     if !type.nil? && !value.nil?
-       user = DBset.server.query("SELECT * FROM User WHERE #{type} = '#{value}'")
-       return user ? user.first.to_dot : nil
+       user = DBset.server.query("SELECT * FROM User WHERE #{type} = '#{value}'").to_a
+       return user.empty? ? nil : user.first.to_dot
     end
   end
 
@@ -53,10 +53,10 @@ class User < DBset
       salt = BCrypt::Engine.generate_salt
       password = args['password'].encrypt(salt)
       args = DataModel.init(args)
-      DBset.server.query("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude)
+      res = DBset.server.query("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude)
                     VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}', '#{salt}', '#{args['latitude']}', '#{args['longitude']}')")
-      id = DBset.server.query("SELECT LAST_INSERT_ID();")
-      self.find_by("id", id['LAST_INSERT_ID()'])
+      id = DBset.server.query("SELECT LAST_INSERT_ID();").first['LAST_INSERT_ID()']
+      self.find_by("id", id)
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -124,6 +124,11 @@ class User < DBset
       puts e.errno
       puts e.error
     end
+  end
+
+  def self.validate_uniqueness_of(param, value, table_name)
+    value = DataModel.protect_arg(value)
+    DBset.server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").count == 0 ? TRUE : FALSE
   end
 
 end

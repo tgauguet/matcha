@@ -1,12 +1,12 @@
-class Tag
+class Tag < DBset
 
   def self.all
-    $server.query("SELECT * FROM Tag")
+    DBset.server.query("SELECT * FROM Tag")
   end
 
   def self.exists?(content)
     begin
-      $server.query("SELECT id FROM Tag WHERE content='#{content}'").first
+      DBset.server.query("SELECT id FROM Tag WHERE content='#{content}'").first
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -15,7 +15,7 @@ class Tag
 
   def self.find_by_id(id)
     if !id.nil?
-       tagging = $server.query("SELECT content FROM Tag WHERE id='#{id}'").first
+       tagging = DBset.server.query("SELECT content FROM Tag WHERE id='#{id}'").first
        return tagging ? tagging.to_dot : nil
     end
   end
@@ -23,8 +23,8 @@ class Tag
   def self.new(content)
     begin
       content = DataModel.protect_arg(content)
-      $server.query("INSERT INTO Tag (content) VALUES ('#{content}')")
-      tag = $server.query("SELECT LAST_INSERT_ID();").first
+      DBset.server.query("INSERT INTO Tag (content) VALUES ('#{content}')")
+      tag = DBset.server.query("SELECT LAST_INSERT_ID();").first
       tag ? tag['LAST_INSERT_ID()'] : nil
     rescue Mysql2::Error => e
       puts e.errno

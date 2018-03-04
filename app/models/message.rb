@@ -1,9 +1,9 @@
-class Message
+class Message < DBset
 
   def self.new(content, user_id, conversation_id)
     begin
       content = DataModel.protect_arg(content)
-      $server.query("INSERT INTO Message (content, user_id, conversation_id)
+      DBset.server.query("INSERT INTO Message (content, user_id, conversation_id)
                     VALUES ('#{content}', '#{user_id}', '#{conversation_id}')")
     rescue Mysql2::Error => e
       puts e.errno
@@ -13,7 +13,7 @@ class Message
 
   def self.all(id)
     begin
-      $server.query("SELECT * FROM Message WHERE conversation_id='#{id}'")
+      DBset.server.query("SELECT * FROM Message WHERE conversation_id='#{id}'")
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

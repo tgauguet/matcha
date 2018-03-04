@@ -1,5 +1,9 @@
 class TagsController < ApplicationController
   helpers TagHelper
+  helpers UserHelper
+  before '/tags/new' do
+    authenticate
+  end
 
   get '/tags/new' do
     @title = "Mes tags"

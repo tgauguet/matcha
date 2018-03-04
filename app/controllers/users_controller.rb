@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
 	get '/user/new' do
 		@title = "Inscription"
+		set_default_location
 		erb :'user/new'
 	end
 
@@ -28,6 +29,7 @@ class UsersController < ApplicationController
 
 	get '/edit-password' do
 		@title = 'Modifier votre mot de passe'
+		@user = current_user if signed_in?
 		erb :'user/edit_password'
 	end
 
@@ -95,11 +97,13 @@ class UsersController < ApplicationController
 		@user = signed_in? ? current_user : User.find_by("id", params['id'])
 		len_match = !validate_length_of(params['password'], 8)
 		password_match = params['password'] == params['password_confirmation']
-		token_match = signed_in? ? true : @user.password_token == params['token']
+		if @user
+			token_match = signed_in? ? true : @user.password_token == params['token']
+		end
 		if len_match && password_match && token_match
-			@user = User.update({'password' => params['password']}, @user)
+			@user = User.update({'password' => params['password'], 'password_token' => " "}, @user)
 			flash.now[:success] = "Le mot de passe a été modifié"
-			erb :'user/edit_password' if signed_in? rescue erb :'user/login'
+			signed_in? ? (erb :'user/edit_password') : (erb :'user/login')
 		else
 			flash.now[:error] = "Une erreur est survenue"
 			erb :'user/edit_password'
@@ -117,9 +121,9 @@ class UsersController < ApplicationController
 	end
 
 	post '/send-password-email', allows: [:email] do
-		@user = User.find_by("email", params[:email])
+		@user = User.find_by("email", params['email'])
 		if @user
-			@user = User.update({password_token: SecureRandom.urlsafe_base64.to_s}, @user)
+			@user = User.update({'password_token' => SecureRandom.urlsafe_base64.to_s}, @user)
 			password_email(@user)
 			flash.now[:notice] = "Nous vous avons envoyé un message pour modifier votre mot de passe. Checkez vos emails !"
 		else
@@ -138,17 +142,17 @@ class UsersController < ApplicationController
 				flash.now[:error] = "Une erreur est survenue pendant la modification de votre profil"
 			end
 		else
-			flash.now[:error] = "Une erreur est survenue, vérifiez vos paramètres"
+			flash.now[:error] = "Merci de vérifier vos paramètres"
 		end
 		erb :'user/edit'
 	end
 
-	post '/upload' do
+	post '/upload', allows: [:img1, :img2, :img3, :img4, :img5] do
 		upload_images(params, @user)
 		erb :'user/edit'
 	end
 
-	post '/set-location' do
+	post '/set-location', allows: [:latitude, :longitude] do
 		update = edit_location(params, @user) unless (params['latitude'].nil? || params['longitude'].nil?)
 		if update
 			flash.now[:success] = "Votre localisation a été modifiée"
@@ -158,7 +162,7 @@ class UsersController < ApplicationController
 		erb :'user/location'
 	end
 
-	post '/report-as-fake' do
+	post '/report-as-fake', allows: [:user_id] do
 		user = User.find_by("id", params['user_id'])
 		if User.update({'reported_as_fake' => 1}, user)
 			flash[:success] = "L'utilisateur a été reporté comme faux compte"

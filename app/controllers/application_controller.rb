@@ -6,10 +6,6 @@ class ApplicationController < Sinatra::Base
 	set :views, Proc.new { File.join(root, "views") }
 	set :public_folder, Proc.new { File.join(root, "public") }
 
-	before '/*' do
-		location
-	end
-
 	get '/not-found' do
 		erb :'errors/not_found'
 	end
@@ -22,8 +18,8 @@ class ApplicationController < Sinatra::Base
 
 	def current_user
 		# to be removed
-		# current_user = User.find_by("id", 2)
-		current_user = session[:current_user_id] ? User.find_by("id", session[:current_user_id]) : nil
+		current_user = User.find_by("id", 2)
+		# current_user = session[:current_user_id] ? User.find_by("id", session[:current_user_id]) : nil
 	end
 
 	def message_count

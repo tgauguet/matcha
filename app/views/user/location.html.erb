@@ -12,23 +12,14 @@
 	</form>
 	<br/><br/>
 	<h2>LOCALISATION PAR DÉFAUT</h2>
-	<!-- <br/>
-	<i>I get these informations from user's IP address</i>
-	<p>-> latitude : <%= @lat %></p>
-	<p>-> longitude : <%= @lon %></p>
-	<br/> -->
 	<i>Ces informations seront issues de votre navigateur</i>
 	<p>-> latitude : <%= params[:lat] %></p>
 	<p>-> longitude : <%= params[:lon] %></p>
 	<br/>
-	<% if signed_in? %>
-	<% end %>
-	<p id="demo">Getting your location... </p>
-	<div id="mapholder"></div>
 	<form id="myForm" action='/set-location' method="post">
-	  <input type='hidden' id="lat" name='lat' value='' />
-	  <input type='hidden' id="lon" name='lon' value='' />
-	  <input type='submit' name='submit' value='ME LOCALISER' class="red-btn" />
+	  <input type='hidden' id="lat" name='latitude' value='<%= params[:lat] %>' />
+	  <input type='hidden' id="lon" name='longitude' value='<%= params[:lon] %>' />
+	  <input type='submit' value='ME LOCALISER' class="red-btn" />
 	</form>
 </div>
 <script type="text/javascript" src='/javascript/location.js'></script>

@@ -42,9 +42,15 @@ class User < DBset
   end
 
   def self.find_by(type, value)
-    if !type.nil? && !value.nil?
-       user = DBset.server.query("SELECT * FROM User WHERE #{type} = '#{value}'").to_a
-       return user.empty? ? nil : user.first.to_dot
+    begin
+      if !type.nil? && !value.nil?
+        state = DBset.server.prepare("SELECT * FROM User WHERE #{type}= ?")
+        user = state.execute(value).to_a
+        return user.empty? ? nil : user.first.to_dot
+      end
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
     end
   end
 
@@ -53,8 +59,8 @@ class User < DBset
       salt = BCrypt::Engine.generate_salt
       password = args['password'].encrypt(salt)
       args = DataModel.init(args)
-      res = DBset.server.query("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude)
-                    VALUES ('#{args['name']}', '#{args['firstname']}', '#{args['email']}', '#{args['login']}', '#{password}', '#{salt}', '#{args['latitude']}', '#{args['longitude']}')")
+      state = DBset.server.prepare("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+      state.execute(args['name'], args['firstname'], args['email'], args['login'], password, salt, args['latitude'], args['longitude'])
       id = DBset.server.query("SELECT LAST_INSERT_ID();").first['LAST_INSERT_ID()']
       self.find_by("id", id)
     rescue Mysql2::Error => e
@@ -71,7 +77,10 @@ class User < DBset
       end
       params = DataModel.init(params)
       params.each do |k,v|
-        DBset.server.query("UPDATE User SET #{k} = '#{v}' WHERE id = '#{args['id']}'") unless v.empty?
+        unless v.empty?
+          state = DBset.server.prepare("UPDATE User SET #{k} = ? WHERE id = ?")
+          state.execute(v, args['id'])
+        end
       end
       self.find_by("id", args['id'])
     rescue Mysql2::Error => e
@@ -114,7 +123,12 @@ class User < DBset
   end
 
   def self.between(min, max)
-    DBset.server.query("SELECT * FROM User WHERE id BETWEEN '#{min}' AND '#{max}'")
+    begin
+      DBset.server.query("SELECT * FROM User WHERE id BETWEEN '#{min}' AND '#{max}'")
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
   def self.complete?(id)
@@ -126,9 +140,10 @@ class User < DBset
     end
   end
 
-  def self.validate_uniqueness_of(param, value, table_name)
+  def self.validate_uniqueness_of(param, value)
     value = DataModel.protect_arg(value)
-    DBset.server.query("SELECT * FROM #{table_name} WHERE #{param} = '#{value}'").count == 0 ? TRUE : FALSE
+    state = DBset.server.prepare("SELECT * FROM User WHERE #{param} = ?")
+    state.execute(value).count == 0 ? TRUE : FALSE
   end
 
 end

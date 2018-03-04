@@ -8,10 +8,10 @@ module UserHelper
     if validate_length_of(params["password"], 8)
       error << "votre mot de passe est trop court (8 char min)"
     end
-    if (params["login"].present? && !User.validate_uniqueness_of("login", params["login"], "User"))
+    if (params["login"].present? && !User.validate_uniqueness_of("login", params["login"]))
       error << "ce login est déjà utilisé, merci d'en choisir un autre"
     end
-    if (params["email"].present? && !User.validate_uniqueness_of("email", params["email"], "User"))
+    if (params["email"].present? && !User.validate_uniqueness_of("email", params["email"]))
       error << "cet email est déjà utilisé, merci d'en choisir un autre"
     end
     error
@@ -42,8 +42,6 @@ module UserHelper
   def upload_images(params, user)
 		c = 0
 		params.each do |k,v|
-			puts k
-			puts v['filename']
 			@img = v['filename']
 			file = v['tempfile']
 			cp(file, "./app/public/files/#{@img}")

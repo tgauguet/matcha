@@ -1,6 +1,6 @@
 module ApplicationHelper
 
-  def location
+  def set_default_location
 	  page = "http://freegeoip.net/json/"
 	  doc = Nokogiri::HTML(open(page, 'User-Agent' => 'ruby'))
 		doc = JSON.parse(doc)

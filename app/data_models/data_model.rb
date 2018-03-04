@@ -20,11 +20,11 @@ module DataModel
 
   def self.clean(data)
     data = DataModel.init(data)
-    data['interested_in'] = data['interested_in'] ? data['interested_in'] : "B"
+    data['gender'] = data['gender'] ? data['gender'] : "B"
     data
   end
 
-  def self.generate_suggestions(data)
+  def self.get_suggestions(data)
     data = DataModel.init(data)
     user = User.find_by("id", data['id'])
     data['user_min_score'] = (user.public_score.to_i - 5).to_s

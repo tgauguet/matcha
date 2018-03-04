@@ -17,16 +17,16 @@
       <p>Préférences :</p>
       <div class="radio-cntnr">
         <p class="radio">
-          <input type="radio" name="interested_in" id="match1" value="M">
+          <input type="radio" name="gender" id="match3" value="B" checked>
+          <label for="match3"><img src="/images/both.png"/></label>
+        </p>
+        <p class="radio">
+          <input type="radio" name="gender" id="match1" value="M" <%= gender_is_given(params['gender'], "M") %>>
           <label for="match1"><img src="/images/male.png"/></label>
         </p>
         <p class="radio">
-          <input type="radio" name="interested_in" id="match2" value="F">
+          <input type="radio" name="gender" id="match2" value="F" <%= gender_is_given(params['gender'], "F") %>>
           <label for="match2"><img src="/images/female.png"/></label>
-        </p>
-        <p class="radio">
-          <input type="radio" name="interested_in" id="match3" value="B" checked>
-          <label for="match3"><img src="/images/both.png"/></label>
         </p>
       </div>
       <br/>
@@ -44,15 +44,15 @@
       <div class="filters">
         <select class="filter-box" name="location">
           <option disabled selected value></option>
-          <option value="2">2km</option>
-          <option value="3">3km</option>
-          <option value="5">5km</option>
-          <option value="10">10km</option>
-          <option value="20">20km</option>
-          <option value="50">50km</option>
-          <option value="100">100km</option>
-          <option value="500">500km</option>
-          <option value="1000">1000km</option>
+          <option value="2" <%= location_is_given(params['location'],"2") %>>2km</option>
+          <option value="3" <%= location_is_given(params['location'],"3") %>>3km</option>
+          <option value="5" <%= location_is_given(params['location'],"5") %>>5km</option>
+          <option value="10" <%= location_is_given(params['location'],"10") %>>10km</option>
+          <option value="20" <%= location_is_given(params['location'],"20") %>>20km</option>
+          <option value="50" <%= location_is_given(params['location'],"50") %>>50km</option>
+          <option value="100" <%= location_is_given(params['location'],"100") %>>100km</option>
+          <option value="500" <%= location_is_given(params['location'],"500") %>>500km</option>
+          <option value="1000" <%= location_is_given(params['location'],"1000") %>>1000km</option>
         </select>
       </div>
       <input type="hidden" name="order" value="<%= order %>"/>
@@ -61,20 +61,17 @@
       <div class="btn-cntnr">
         <input type="submit" value="RECHERCHER" class="red-btn"/>
       </div>
-    </form>
   </div>
   <div class="usrs">
     <div class="filters">
-      <form method="POST" action="/search">
-        Filtrer par :
-        <select name="order" class="filter-box" onchange="this.form.submit()">
-          <option disabled selected value></option>
-          <option value="age">Age</option>
-          <option value="location">Localisation</option>
-          <option value="public_score">Popularité</option>
-          <option value="tags">Tags</option>
-        </select>
-      </form>
+      Filtrer par :
+      <select name="order" class="filter-box" onchange="this.form.submit()">
+        <option disabled selected value></option>
+        <option value="age">Age</option>
+        <option value="location">Localisation</option>
+        <option value="public_score">Popularité</option>
+        <option value="tags">Tags</option>
+      </select>
     </div>
     <% @users.each do |user| %>
       <% user.to_dot %>
@@ -87,10 +84,11 @@
         </a>
     <% end %>
     <div class="paginate">
-      <div><%= previous_page(@page, @per_page, order) %></div>
+      <div><%= previous_page(@page) %></div>
       <div><%= @page %></div>
-      <div><%= next_page(@page, @page_count, @per_page, order, @users.count) %></div>
+      <div><%= next_page(@page, @page_count, @count, @per_page) %></div>
     </div>
+  </form>
 </div>
 <script>
 // sliders code

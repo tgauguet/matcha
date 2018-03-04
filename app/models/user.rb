@@ -7,10 +7,10 @@ class User
   def self.all_according_to(args)
     begin
       args = DataModel.clean(args)
-      if args['interested_in'] == "B"
+      if args['gender'] == "B"
         $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}'))").to_a
       else
-        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}') AND gender='#{args['interested_in']}')").to_a
+        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}') AND gender='#{args['gender']}')").to_a
       end
     rescue Mysql2::Error => e
       puts e.errno
@@ -18,13 +18,22 @@ class User
     end
   end
 
-  def self.all_personalized(args)
+  def self.personalized(args)
     begin
-      args = DataModel.generate_suggestions(args)
-      if args['interested_in'] == "B"
-        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND ((age BETWEEN '#{args['user_min_age']}' AND  '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}')))")
+      args = DataModel.clean(args)
+      args = DataModel.get_suggestions(args)
+      if args['gender'] == "B"
+        if args['interested_in'] == "B"
+          $server.query("SELECT * FROM User WHERE (((age BETWEEN '#{args['user_min_age']}' AND  '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}')) AND id IN (SELECT id FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}'))))")
+        else
+          $server.query("SELECT * FROM User WHERE (((age BETWEEN '#{args['user_min_age']}' AND  '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}') OR gender='#{args['interested_in']}') AND id IN (SELECT id FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}'))))")
+        end
       else
-        $server.query("SELECT * FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND ((age BETWEEN '#{args['user_min_age']}' AND '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}') OR gender='#{args['interested_in']}'))")
+        if args['interested_in'] == "B"
+          $server.query("SELECT * FROM User WHERE (((age BETWEEN '#{args['user_min_age']}' AND '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}')) AND id IN(SELECT id FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}') AND gender='#{args['gender']}')))")
+        else
+          $server.query("SELECT * FROM User WHERE (((age BETWEEN '#{args['user_min_age']}' AND '#{args['user_max_age']}') OR (public_score BETWEEN '#{args['user_min_score']}' AND '#{args['user_max_score']}') OR gender='#{args['interested_in']}') AND id IN(SELECT id FROM User WHERE (id <> '#{args['id']}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{args['id']}') AND (age BETWEEN '#{args['min_age']}' AND '#{args['max_age']}') AND (public_score BETWEEN '#{args['min_score']}' AND '#{args['max_score']}') AND gender='#{args['gender']}')))")
+        end
       end
     rescue Mysql2::Error => e
       puts e.errno

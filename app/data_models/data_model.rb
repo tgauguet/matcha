@@ -8,7 +8,7 @@ module DataModel
   end
 
   def self.protect_arg(value)
-    value = value ? Sanitize.clean(value.to_s.force_encoding("UTF-8")) : nil
+    value = value.blank? ? nil : Sanitize.clean(value.to_s.force_encoding("UTF-8"))
   end
 
   def self.clean(data)

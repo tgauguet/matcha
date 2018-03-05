@@ -42,11 +42,13 @@ module UserHelper
   def upload_images(params, user)
 		c = 0
 		params.each do |k,v|
-			@img = v['filename']
-			file = v['tempfile']
-			cp(file, "./app/public/files/#{@img}")
-			res = User.update({k => @img}, user)
-			c += 1 unless res.nil?
+      if valid_format(v['filename'])
+  			@img = v['filename']
+  			file = v['tempfile']
+  			cp(file, "./app/public/files/#{@img}")
+  			res = User.update({k => @img}, user)
+  			c += 1 unless res.nil?
+      end
 		end
 		if c > 0
 			flash.now[:success] = "#{c} image(s) ont été ajoutées a votre profil"
@@ -54,6 +56,10 @@ module UserHelper
 			flash.now[:notice] = "Une erreur est apparue lors de l'upload d'images'"
 		end
 	end
+
+  def valid_format(img)
+    img =~ /.\.(png|jpeg|jpg|gif)$/
+  end
 
   def edit_location(params, user)
     if params['latitude'].valid_float? && params['longitude'].valid_float?

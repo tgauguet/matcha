@@ -22,17 +22,32 @@ class UserConversation < DBset
   end
 
   def self.find_interlocutor(user_id, conversation_id)
-    id = DBset.server.query("SELECT user_id FROM User_conversation WHERE (conversation_id='#{conversation_id}' AND user_id NOT LIKE '#{user_id}')").first.to_dot.user_id
-    return id ? id : nil
+    begin
+      id = DBset.server.query("SELECT user_id FROM User_conversation WHERE (conversation_id='#{conversation_id}' AND user_id NOT LIKE '#{user_id}')").first.to_dot.user_id
+      return id ? id : nil
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
   def self.find_all(user_id, conversation_id)
-    DBset.server.query("SELECT id FROM User_conversation WHERE onversation_id='#{conversation_id}'").all
+    begin
+      DBset.server.query("SELECT id FROM User_conversation WHERE onversation_id='#{conversation_id}'").all
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
   def self.delete(id)
-    DBset.server.query("DELETE FROM User_conversation WHERE id='#{id}'")
-    return !self.exists?(id).nil?
+    begin
+      DBset.server.query("DELETE FROM User_conversation WHERE id='#{id}'")
+      return !self.exists?(id).nil?
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
 end

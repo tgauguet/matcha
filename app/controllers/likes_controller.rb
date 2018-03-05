@@ -14,7 +14,7 @@ class LikesController < ApplicationController
   end
 
   post '/like' do
-    if to_delete?(params['user_id'])
+    if like_exists?(params['user_id'])
       if Liked.delete(params)
         flash[:success] = "Vous ne likez plus ce profil"
         Notification.new("unmatch", params['user_id'], "#{@user.login} a supprimé votre match") unless Block.blocked?(@user.id, params['user_id'])

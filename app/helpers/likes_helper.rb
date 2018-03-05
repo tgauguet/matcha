@@ -4,7 +4,7 @@ module LikesHelper
     Liked.liked?(@user.id, current_user.id) != 0
   end
 
-  def to_delete?(id)
+  def like_exists?(id)
     Liked.liked?(id, current_user.id) != 0
   end
 
@@ -21,7 +21,7 @@ module LikesHelper
   end
 
   def its_a_match?(id)
-    liked_me?(id) && to_delete?(id)
+    liked_me?(id) && like_exists?(id)
   end
 
   def match_notifications(id)

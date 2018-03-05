@@ -152,7 +152,7 @@ class UsersController < ApplicationController
 		erb :'user/edit'
 	end
 
-	post '/set-location', allows: [:latitude, :longitude] do
+	post '/set-location', allows: [:latitude, :longitude, :city] do
 		update = edit_location(params, @user) unless (params['latitude'].nil? || params['longitude'].nil?)
 		if update
 			flash.now[:success] = "Votre localisation a été modifiée"

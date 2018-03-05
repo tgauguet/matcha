@@ -13,9 +13,7 @@
 	<br/><br/>
 	<h2>LOCALISATION PAR DÉFAUT</h2>
 	<i>Ces informations seront issues de votre navigateur</i>
-	<p>-> latitude : <%= params[:lat] %></p>
-	<p>-> longitude : <%= params[:lon] %></p>
-	<br/>
+	<br/><br/>
 	<form id="myForm" action='/set-location' method="post">
 	  <input type='hidden' id="lat" name='latitude' value='<%= params[:lat] %>' />
 	  <input type='hidden' id="lon" name='longitude' value='<%= params[:lon] %>' />

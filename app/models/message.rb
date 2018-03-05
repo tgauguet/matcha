@@ -3,8 +3,9 @@ class Message < DBset
   def self.new(content, user_id, conversation_id)
     begin
       content = DataModel.protect_arg(content)
-      DBset.server.query("INSERT INTO Message (content, user_id, conversation_id)
-                    VALUES ('#{content}', '#{user_id}', '#{conversation_id}')")
+      state = DBset.server.prepare("INSERT INTO Message (content, user_id, conversation_id)
+                    VALUES (?, ?, ?)")
+      state.execute(content, user_id, conversation_id)
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

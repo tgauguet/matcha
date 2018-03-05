@@ -1,15 +1,22 @@
 class Tagging < DBset
 
   def self.find_by_id(id)
-    if !id.nil?
-       tagging = DBset.server.query("SELECT * FROM Tagging WHERE id='#{id}'").first
-       return tagging ? tagging.to_dot : nil
+    begin
+      if id.to_i.is_a?(Integer)
+         tagging = DBset.server.query("SELECT * FROM Tagging WHERE id='#{id}'").first
+         return tagging ? tagging.to_dot : nil
+      end
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
     end
   end
 
   def self.exists?(user_id, tag_id)
     begin
-      DBset.server.query("SELECT id FROM Tagging WHERE (user_id='#{user_id}' AND tag_id='#{tag_id}')").count
+      if user_id.to_i.is_a?(Integer) && tag_id.to_i.is_a?(Integer)
+        DBset.server.query("SELECT id FROM Tagging WHERE (user_id='#{user_id}' AND tag_id='#{tag_id}')").count
+      end
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -17,17 +24,30 @@ class Tagging < DBset
   end
 
   def self.matchs(id, interlocutor)
-    DBset.server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE(user_id='#{id}')) AND user_id='#{interlocutor}')))")
+    begin
+      DBset.server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE(user_id='#{id}')) AND user_id='#{interlocutor}')))")
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
   def self.selection_match(id, interlocutor, ids_list)
-    DBset.server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE (user_id='#{id}' AND tag_id IN (SELECT id FROM Tag WHERE id IN (#{ids_list.join(', ')})))) AND user_id='#{interlocutor}')))")
+    begin
+      DBset.server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE (user_id='#{id}' AND tag_id IN (SELECT id FROM Tag WHERE id IN (#{ids_list.join(', ')})))) AND user_id='#{interlocutor}')))")
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
   def self.new(user_id, tag_id)
     begin
-      DBset.server.query("INSERT INTO Tagging (user_id, tag_id) VALUES ('#{user_id}', '#{tag_id}')")
-      DBset.server.query("SELECT LAST_INSERT_ID();").first
+      if user_id.to_i.is_a?(Integer) && tag_id.to_i.is_a?(Integer)
+        state = DBset.server.prepare("INSERT INTO Tagging (user_id, tag_id) VALUES (?,?)")
+        state.execute(user_id, tag_id)
+        DBset.server.query("SELECT LAST_INSERT_ID();").first
+      end
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

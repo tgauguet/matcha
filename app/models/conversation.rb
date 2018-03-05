@@ -22,8 +22,13 @@ class Conversation < DBset
   end
 
   def self.delete(id)
-    DBset.server.query("DELETE FROM Conversation WHERE id='#{id}'")
-    return !self.exists?(id).nil?
+    begin
+      DBset.server.query("DELETE FROM Conversation WHERE id='#{id}'")
+      return !self.exists?(id).nil?
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
 end

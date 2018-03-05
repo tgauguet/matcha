@@ -1,7 +1,12 @@
 class User < DBset
 
   def self.all(id)
-    DBset.server.query("SELECT * FROM User WHERE (id <> '#{id}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{id}'))").to_a
+    begin
+      DBset.server.query("SELECT * FROM User WHERE (id <> '#{id}' AND id NOT IN (SELECT user_id FROM Block WHERE sender_id='#{id}'))").to_a
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
   def self.all_according_to(args)
@@ -101,16 +106,26 @@ class User < DBset
   end
 
   def self.delete(value)
-    if value.to_i.to_s == value
-      DBset.server.query("DELETE FROM User WHERE id = '#{value}'")
-      return self.find_by("id", value).nil?
+    begin
+      if value.to_i.to_s == value
+        DBset.server.query("DELETE FROM User WHERE id = '#{value}'")
+        return self.find_by("id", value).nil?
+      end
+      false
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
     end
-    false
   end
 
   def self.match(args)
-    user = self.find_by("login", args["login"])
-    return user && (args["password"].check_password(user['salt'], user['password'])) ? self.find_by("id", user['id']) : nil
+    begin
+      user = self.find_by("login", args["login"])
+      return user && (args["password"].check_password(user['salt'], user['password'])) ? self.find_by("id", user['id']) : nil
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
   def self.logged_in(id)
@@ -141,9 +156,14 @@ class User < DBset
   end
 
   def self.validate_uniqueness_of(param, value)
-    value = DataModel.protect_arg(value)
-    state = DBset.server.prepare("SELECT * FROM User WHERE #{param} = ?")
-    state.execute(value).count == 0 ? TRUE : FALSE
+    begin
+      value = DataModel.protect_arg(value)
+      state = DBset.server.prepare("SELECT * FROM User WHERE #{param} = ?")
+      state.execute(value).count == 0 ? TRUE : FALSE
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
   end
 
 end

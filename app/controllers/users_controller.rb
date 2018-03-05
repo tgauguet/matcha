@@ -10,6 +10,11 @@ class UsersController < ApplicationController
 			authenticate
 		end
 	end
+	['/user/new', '/user/login', '/forgot-password'].each do |path|
+		before path do
+			unauthenticate
+		end
+	end
 
 	get '/user/new' do
 		@title = "Inscription"
@@ -34,6 +39,7 @@ class UsersController < ApplicationController
 	end
 
 	get '/user/:id/show' do
+		authenticate
 		@user = User.find_by("id", params[:id])
 		redirect '/' unless @user
 		@tags = Tagging.all(@user.id)

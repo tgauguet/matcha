@@ -41,4 +41,9 @@ class ApplicationController < Sinatra::Base
 		redirect '/' unless @user
 	end
 
+	def unauthenticate
+		@user = current_user
+		redirect '/' if @user
+	end
+
 end

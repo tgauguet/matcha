@@ -1,4 +1,6 @@
 require "./config/app.rb"
+require 'base64'
+require 'cgi'
 
 EM.run do
 
@@ -26,12 +28,11 @@ EM.run do
 
       ws.onopen do |handshake|
         @@clients << ws
+        puts handshake.query
+        #@user = current_user.id
 
         @@users << @user if @user
-        puts handshake.path
-        puts handshake.headers
-        puts handshake.query
-        puts handshake.origin
+        puts @user
         ws.send("Connected to #{handshake.path}.")
         @log.info("Connected to #{handshake.path}")
       end

@@ -1,12 +1,12 @@
 var ws, show;
 
-function connect(){
+function connect(query){
   try{
     show = function(el){
       return function(msg){ el.innerHTML = msg + '<br />' + el.innerHTML; }
     }(document.getElementById('msgs'));
 
-    ws = new WebSocket("ws://localhost:3001");
+    ws = new WebSocket("ws://localhost:3001?key=" + query);
 
     show("Socket Status: " + ws.readyState);
 
@@ -26,10 +26,6 @@ function connect(){
   }
 }
 
-$(function() {
-  connect();
-});
-
 function send() {
   var text = $("#message").val();
   if (text == '') {
@@ -46,7 +42,3 @@ function send() {
 
   $("#message").val('');
 }
-
-$('#message').keypress(function(event) {
-  if (event.keyCode == '13') { send(); }
-});

@@ -16,6 +16,7 @@
       <p><img src="/images/gender-symbols.png"/> <%= @user.gender %></p>
       <p><img src="/images/rabbit-shape.png"/> Zoophile/<%= @user.interested_in %></p>
       <p><img src="/images/clock.png"/> <%= @user.last_login.strftime('%m/%d/%Y') %></p>
+      <% if is_online? %><p><img src="/images/online.png"/> En ligne</p><% end %>
     </div>
   </div>
   <% if !reported_as_fake? %>

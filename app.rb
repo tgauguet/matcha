@@ -15,7 +15,7 @@ EM.run do
     EventMachine.stop
   }
 
-  class MyWS < ApplicationController
+  class MyWS
 
     @log = Logger.new(STDOUT)
     @@clients = []
@@ -29,13 +29,11 @@ EM.run do
 
       ws.onopen do |handshake|
         @@clients << ws
-        puts handshake.query
-        #@user = current_user.id
+        @user = User.find_by("id", handshake.query["key"]).id
 
         @@users << @user if @user
-        puts @user
-        ws.send("Connected to #{handshake.path}.")
-        @log.info("Connected (#{handshake.path}) :-)")
+        ws.send("Connected to #{handshake.path} as user N°#{@user}")
+        @log.info("Connected to '#{handshake.path}' as user N°#{@user}")
       end
 
       ws.onclose do

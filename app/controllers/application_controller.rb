@@ -17,8 +17,7 @@ class ApplicationController < Sinatra::Base
 	end
 
 	def current_user
-		#current_user = User.find_by("id", 2)
-		#current_user = nil
+		session[:current_user_id] = 2 # to be removed
 		current_user = session[:current_user_id] ? User.find_by("id", session[:current_user_id]) : nil
 	end
 
@@ -44,6 +43,10 @@ class ApplicationController < Sinatra::Base
 	def unauthenticate
 		@user = current_user
 		redirect '/' if @user
+	end
+
+	def is_online?
+		MyWS.users.include?(current_user.id)
 	end
 
 end

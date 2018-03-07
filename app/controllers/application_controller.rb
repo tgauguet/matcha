@@ -16,13 +16,10 @@ class ApplicationController < Sinatra::Base
 		User.update_score(id, new_val) unless (new_val < 1 || new_val > 99)
 	end
 
-	def self.current_user
-		current_user = User.find_by("id", 2)
-	end
-
 	def current_user
-		current_user = User.find_by("id", 2)
-		# current_user = session[:current_user_id] ? User.find_by("id", session[:current_user_id]) : nil
+		#current_user = User.find_by("id", 2)
+		#current_user = nil
+		current_user = session[:current_user_id] ? User.find_by("id", session[:current_user_id]) : nil
 	end
 
 	def message_count

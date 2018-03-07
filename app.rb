@@ -1,4 +1,6 @@
 require "./config/app.rb"
+require 'base64'
+require 'cgi'
 
 EM.run do
 
@@ -18,7 +20,6 @@ EM.run do
     @log = Logger.new(STDOUT)
     @@clients = []
     @@users = []
-    @user = current_user.id
 
     def self.users
       @@users
@@ -28,8 +29,11 @@ EM.run do
 
       ws.onopen do |handshake|
         @@clients << ws
+        puts handshake.query
+        #@user = current_user.id
 
         @@users << @user if @user
+        puts @user
         ws.send("Connected to #{handshake.path}.")
         @log.info("Connected (#{handshake.path}) :-)")
       end

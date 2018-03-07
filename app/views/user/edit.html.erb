@@ -30,6 +30,12 @@
       </div>
         <h3>DESCRIPTION</h3>
         <textarea rows="3"name="description"/></textarea>
+        <h3>AGE</h3>
+        <select name="age">
+          <% 100.times do |i| %>
+            <option value="<%= i + 1 %>"><%= i + 1 %></option>
+          <% end %>
+        </select>
         <h3>NOM</h3>
         <input type="text" name="name"/>
         <h3>PRÉNOM</h3>

@@ -17,7 +17,7 @@ class ApplicationController < Sinatra::Base
 	end
 
 	def current_user
-		session[:current_user_id] = 2 # to be removed
+		# session[:current_user_id] = 2 # to be removed
 		current_user = session[:current_user_id] ? User.find_by("id", session[:current_user_id]) : nil
 	end
 

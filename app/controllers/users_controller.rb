@@ -138,7 +138,7 @@ class UsersController < ApplicationController
 		redirect '/'
 	end
 
-	post '/edit-user', allows: [:interested_in, :description, :gender, :email, :name, :firstname] do
+	post '/edit-user', allows: [:interested_in, :description, :gender, :email, :name, :firstname, :age] do
 		valid_email = params['email'].empty? ? 1 : update_params(params)
 		if valid_email
 			@user = User.update(params, @user)

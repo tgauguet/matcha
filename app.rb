@@ -13,25 +13,41 @@ EM.run do
     EventMachine.stop
   }
 
-  @log = Logger.new(STDOUT)
-  @clients = []
+  class MyWS < ApplicationController
 
-  EM::WebSocket.run(:host => '0.0.0.0', :port => '3001') do |ws|
-    ws.onopen do |handshake|
-      @log.info "Connected :-)"
-      @clients << ws
-      ws.send "Connected to #{handshake.path}."
+    @log = Logger.new(STDOUT)
+    @@clients = []
+    @@users = []
+    @user = current_user.id
+
+    def self.users
+      @@users
     end
 
-    ws.onclose do
-      @log.info "WebSocket connection closed."
-      @clients.delete ws
-    end
+    EM::WebSocket.run(:host => '0.0.0.0', :port => '3001') do |ws|
 
-    ws.onmessage do |msg|
-      puts "Received message: #{msg}"
-      @clients.each do |socket|
-        socket.send msg
+      ws.onopen do |handshake|
+        @@clients << ws
+
+        @@users << @user if @user
+        ws.send("Connected to #{handshake.path}.")
+        @log.info("Connected (#{handshake.path}) :-)")
+      end
+
+      ws.onclose do
+        @@users -= [@user] if @@users && @user
+        @log.info("WebSocket connection closed.")
+        @@clients.delete(ws)
+      end
+
+      ws.onmessage do |msg|
+        puts "Received message: #{msg}"
+        # ajouter au message les informations nécessaires (user_id && conversation_id)
+        # Message.new(msg, 2 ,1)
+        # if Message.new, send msg to the view below
+        @@clients.each do |socket|
+          socket.send(msg)
+        end
       end
     end
   end

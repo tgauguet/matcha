@@ -14,11 +14,9 @@ EM.run do
   }
 
   class MyWS < ApplicationController
-
     @log = Logger.new(STDOUT)
     @@clients = []
     @@users = []
-    @user = current_user.id
 
     def self.users
       @@users
@@ -30,8 +28,12 @@ EM.run do
         @@clients << ws
 
         @@users << @user if @user
+        puts handshake.path
+        puts handshake.headers
+        puts handshake.query
+        puts handshake.origin
         ws.send("Connected to #{handshake.path}.")
-        @log.info("Connected (#{handshake.path}) :-)")
+        @log.info("Connected to #{handshake.path}")
       end
 
       ws.onclose do
@@ -50,6 +52,7 @@ EM.run do
         end
       end
     end
+
   end
 
   Thin::Server.start(

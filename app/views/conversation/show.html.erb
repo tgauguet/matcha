@@ -5,9 +5,9 @@
     <% message.to_dot %>
     <div class="<%= msg_class(message.user_id) %>"><% if my_msg(message.user_id) %><img src="/files/<%= @interlocutor.img1 %>"/><% end %><div><%= message.content %></div></div>
   <% end %>
+  <div id="msgs"></div>
   <div id="chat-log">
     <input type="text" id="message"/>
-    <div id="msgs"></div>
   </div>
   <br/>
   <form method="POST" action="/new-message">

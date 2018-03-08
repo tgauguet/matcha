@@ -4,7 +4,8 @@ require 'active_support/core_ext/module/delegation'
 require 'sinatra/base'
 require 'rack-flash'
 require 'thin'
-require 'em-websocket'
+require 'base64'
+require 'cgi'
 require 'bcrypt'
 require 'paperclip'
 require 'paperclip/rack'
@@ -16,8 +17,7 @@ require 'open-uri'
 require 'json'
 
 class MatchaApp < Sinatra::Base
-    require './config/db.rb'
-    require './config/email.rb'
+    Dir.glob("./config/*.rb").each { |file| require file }
 
     configure :development do
       enable :sessions, :method_override
@@ -34,7 +34,6 @@ class MatchaApp < Sinatra::Base
     		status 404
     		redirect '/not-found'
     	end
-
     end
 
     use ApplicationController

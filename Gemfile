@@ -8,6 +8,7 @@ gem "dbi"
 gem "thin"
 gem "dbd-odbc"
 gem 'em-websocket'
+gem 'em-http-request', :require => 'em-http'
 gem 'hash_dot'
 gem "paperclip"
 gem "sanitize"

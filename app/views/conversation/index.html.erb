@@ -9,6 +9,7 @@
         <div>
           <p class="unit-name"><%= @interlocutor.login.upcase %></p>
           <p class="unit-mssg"><%= last_message(@messages) %></p>
+          <p class="unit-mssg"><%= DateFormat.time_to_words(c.created_at) %></p>
         </div>
       </div>
     </a>

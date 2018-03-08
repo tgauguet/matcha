@@ -10,7 +10,7 @@ class ConversationsController < ApplicationController
 	get '/conversation/index' do
 		@user = current_user
 		redirect '/' unless @user
-		@conversations = UserConversation.all(@user.id)
+		@conversations = UserConversation.all(@user.id).to_a.reverse!
 		erb :'conversation/index'
 	end
 

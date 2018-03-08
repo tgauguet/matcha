@@ -33,6 +33,9 @@ function send() {
     return;
   }
 
+  var conversation = $("#conversation").val();
+  text = JSON.stringify({"message": text, "conversation": conversation})
+
   try {
     ws.send(text);
     show("Sent: " + text)

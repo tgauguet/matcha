@@ -2,7 +2,8 @@ class Conversation < DBset
 
   def self.find(id)
     begin
-      DBset.server.query("SELECT * FROM Conversation WHERE id='#{id}'").first
+      state = DBset.server.prepare("SELECT * FROM Conversation WHERE id= ?")
+      state.execute(id).first
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -23,7 +24,8 @@ class Conversation < DBset
 
   def self.delete(id)
     begin
-      DBset.server.query("DELETE FROM Conversation WHERE id='#{id}'")
+      state = DBset.server.prepare("DELETE FROM Conversation WHERE id= ?")
+      state.execute(id)
       return !self.exists?(id).nil?
     rescue Mysql2::Error => e
       puts e.errno

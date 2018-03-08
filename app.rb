@@ -21,24 +21,34 @@ EM.run do
     @@clients = []
     @@users = []
 
-    def self.users
-      @@users
-    end
-
     EM::WebSocket.run(:host => '0.0.0.0', :port => '3001') do |ws|
 
       ws.onopen do |handshake|
         @@clients << ws
         @user = User.find_by("id", handshake.query["key"]).id
-
-        @@users << @user if @user
+        puts "______________ BEGIN ________________"
+        puts "@user :"
+        puts @user
+        puts "@@users before :"
+        puts @@users
+        @@users << @user
+        puts "@@users after :"
+        puts @@users
         ws.send("Connected to #{handshake.path} as user N°#{@user}")
-        @log.info("Connected to '#{handshake.path}' as user N°#{@user}")
+        # @log.info("Connected to '#{handshake.path}' as user N°#{@user}")
       end
 
       ws.onclose do
-        @@users -= [@user] if @@users && @user
-        @log.info("WebSocket connection closed.")
+        puts "__________ ON CLOSE STARTS ___________"
+        puts "@user :"
+        puts @user
+        puts "@@users before :"
+        puts @@users
+        @@users -= [@user] if @user# == current_user
+        puts "@@users after :"
+        puts @@users
+        # @log.info("WebSocket connection closed.")
+        puts "____________ FINISH _________________"
         @@clients.delete(ws)
       end
 
@@ -51,6 +61,10 @@ EM.run do
           socket.send(msg)
         end
       end
+    end
+
+    def self.users
+      @@users
     end
   end
 

@@ -1,3 +1,6 @@
+require "erb"
+include ERB::Util
+
 module UserHelper
 
   def user_params(params)
@@ -73,7 +76,8 @@ module UserHelper
   end
 
   def proper_value(value)
-    @user[value] ? @user[value].force_encoding("UTF-8") : "ND"
+    res = @user[value] ? @user[value].force_encoding("UTF-8") : "ND"
+    h(res)
   end
 
   def proper_img(img)

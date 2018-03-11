@@ -7,7 +7,7 @@ class DBset
   set = set['development']
 
   begin
-    @@server = Mysql2::Client.new(:host => "localhost", :username => "root", :password => "root", :encoding => 'utf8')
+    @@server = Mysql2::Client.new(:host => "localhost", :username => "root", :password => "", :encoding => 'utf8')
     @@server.query("CREATE DATABASE IF NOT EXISTS matcha")
     @@server.query('use matcha')
     if @@server.query("SHOW TABLES LIKE 'User';").count == 0

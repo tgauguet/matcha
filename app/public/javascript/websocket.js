@@ -3,8 +3,10 @@ var ws, show;
 function connect(query){
   try{
     show = function(el){
-      return function(msg){ el.innerHTML = msg + '<br />' + el.innerHTML; }
-    }(document.getElementById('msgs'));
+      //return function(msg){ el.innerHTML = msg + '<br />' + el.innerHTML; }
+    //}(document.getElementById('msgs'));
+    console.log(el);
+    }
 
     ws = new WebSocket("ws://localhost:3001?key=" + query);
 

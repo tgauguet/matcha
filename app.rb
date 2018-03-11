@@ -17,8 +17,7 @@ EM.run do
 
   class MyWS < ApplicationController
     @log = Logger.new(STDOUT)
-    @@clients = []
-    @@users = []
+    @@users = {}
 
     def self.users
       @@users
@@ -27,20 +26,21 @@ EM.run do
     EM::WebSocket.run(:host => '0.0.0.0', :port => '3001') do |ws|
 
       ws.onopen do |handshake|
-        @@clients << ws
-        puts handshake.query
         #@user = current_user.id
 
-        @@users << @user if @user
-        puts @user
+        @@users[handshake.query['key']] = ws
+        #ws["user_id"] = handshake.query['key']
         ws.send("Connected to #{handshake.path}.")
         @log.info("Connected to #{handshake.path}")
       end
 
       ws.onclose do
-        @@users -= [@user] if @@users && @user
+        #@@users -= [@user] if @@users && @user
         @log.info("WebSocket connection closed.")
-        @@clients.delete(ws)
+        res= @@users.select{|key, hash| hash == ws}.each {|k, v|
+            @@users[k] = nil
+        }
+        #@@clients.delete(ws)
       end
 
       ws.onmessage do |msg|
@@ -48,9 +48,9 @@ EM.run do
         # ajouter au message les informations nécessaires (user_id && conversation_id)
         # Message.new(msg, 2 ,1)
         # if Message.new, send msg to the view below
-        @@clients.each do |socket|
-          socket.send(msg)
-        end
+        #@@clients.each do |socket|
+        #  socket.send(msg)
+        # end
       end
     end
 

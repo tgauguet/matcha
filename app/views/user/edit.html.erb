@@ -5,37 +5,37 @@
       <h3>GENRE</h3>
       <div class="radio-cntnr">
         <p class="radio">
-          <input type="radio" name="gender" id="kind1" value="M">
+          <input type="radio" name="gender" id="kind1" value="M" <%= current_user.gender == "M" ? "checked" : "" %>>
           <label for="kind1"><img src="/images/male.png"/></label>
         </p>
         <p class="radio">
-          <input type="radio" name="gender" id="kind2" value="F">
+          <input type="radio" name="gender" id="kind2" value="F" <%= current_user.gender == "F" ? "checked" : "" %>>
           <label for="kind2"><img src="/images/female.png"/></label>
         </p>
       </div>
       <h3>INTÉRESSÉ PAR</h3>
       <div class="radio-cntnr">
         <p class="radio">
-          <input type="radio" name="interested_in" id="match1" value="M">
+          <input type="radio" name="interested_in" id="match1" value="M" <%= current_user.interested_in == "M" ? "checked" : "" %>>
           <label for="match1"><img src="/images/male.png"/></label>
         </p>
         <p class="radio">
-          <input type="radio" name="interested_in" id="match2" value="F">
+          <input type="radio" name="interested_in" id="match2" value="F" <%= current_user.interested_in == "F" ? "checked" : "" %>>
           <label for="match2"><img src="/images/female.png"/></label>
         </p>
         <p class="radio">
-          <input type="radio" name="interested_in" id="match3" value="B">
+          <input type="radio" name="interested_in" id="match3" value="B" <%= current_user.interested_in == "B" ? "checked" : "" %>>
           <label for="match3"><img src="/images/both.png"/></label>
         </p>
       </div>
         <h3>DESCRIPTION</h3>
-        <textarea rows="3"name="description"/></textarea>
+        <textarea rows="3"name="description"/><%= current_user.description %></textarea>
         <h3>NOM</h3>
-        <input type="text" name="name"/>
+        <input type="text" name="name" value="<%= current_user.name %>"/>
         <h3>PRÉNOM</h3>
-        <input type="text" name="firstname"/>
+        <input type="text" name="firstname" value="<%= current_user.firstname %>"/>
         <h3>EMAIL</h3>
-        <input type="text" name="email"/>
+        <input type="text" name="email" value="<%= current_user.email %>"/>
         <br/><br/>
         <input type="submit" value="ENREGISTRER" class="red-btn"/>
   </form>

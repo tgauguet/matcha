@@ -143,9 +143,14 @@ class UsersController < ApplicationController
 		redirect '/'
 	end
 
-	post '/edit-user', allows: [:interested_in, :description, :gender, :email, :name, :firstname] do
+	post '/edit-user', allows: [:interested_in, :description, :gender, :email, :name, :firstname, :age] do
 		valid_email = params['email'].empty? ? 1 : update_params(params)
-		if valid_email
+		valid_age = (!params['age'].empty?) &&  params['age'].to_i.to_s == params['age']
+		if valid_age
+			params['age'] = params['age'].to_i
+			valid_age = (0 <= params['age'] && params['age'] <= 100)
+		end
+		if valid_email && valid_age
 			@user = User.update(params, @user)
 			if @user
 				flash.now[:success] = "Votre profil a été modifié avec succès"

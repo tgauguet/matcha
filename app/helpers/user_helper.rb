@@ -48,6 +48,7 @@ module UserHelper
       if valid_format(v['filename'])
   			@img = v['filename']
   			file = v['tempfile']
+            puts file.to_json
   			cp(file, "./app/public/files/#{@img}")
   			res = User.update({k => @img}, user)
   			c += 1 unless res.nil?
@@ -61,7 +62,8 @@ module UserHelper
 	end
 
   def valid_format(img)
-    img =~ /.\.(png|jpeg|jpg|gif)$/
+    #img =~ /.\.(png|jpeg|jpg|gif)$/
+    true
   end
 
   def edit_location(params, user)
@@ -93,11 +95,15 @@ module UserHelper
   end
 
   def profile_complete?(user)
-    c = 25
+    lst = ["name", "firstname", "login", "email", "password", "latitude", "longitude", "img1", "img2", "img3", "img4", "img5", "gender", "interested_in", "description", "city", "age"]
+    c = lst.length
+    res = c
     user.each do |k,v|
-      c -= 1 if v.nil? || v == ""
+        if lst.include? k
+            res -= 1 if v.nil? || v == ""
+        end
     end
-    ((c.to_f / 25) * 100).to_i
+    ((res.to_f / c) * 100).to_i
   end
 
 end

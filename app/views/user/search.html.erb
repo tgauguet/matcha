@@ -4,12 +4,12 @@
 <div class="search-cntnr">
   <div class="search-bar">
     <h2>RECHERCHE AVANCÉE</h2>
-    <form action="/search" method="POST">
+    <form action="/search" method="GET">
       <% if profile_complete?(current_user) < 80 %>
         <i>Complétez votre profil pour accéder aux suggestions</i>
       <% else %>
         <p class="checkbox-cntnr check-rgt">
-          <input type="checkbox" id="check1" name="personalized">
+          <input type="checkbox" id="check1" name="personalized" <%= ((defined? personalized) && (personalized == "on")) ? "checked" : "" %>>
           <label for="check1">Sélection personnalisées</label>
         </p>
       <% end %>
@@ -17,7 +17,7 @@
       <p>Préférences :</p>
       <div class="radio-cntnr">
         <p class="radio">
-          <input type="radio" name="gender" id="match3" value="B" checked>
+          <input type="radio" name="gender" id="match3" value="B" <%= gender_is_given(params['gender'], "B") %>>
           <label for="match3"><img src="/images/both.png"/></label>
         </p>
         <p class="radio">
@@ -57,7 +57,7 @@
       </div>
       <input type="hidden" name="order" value="<%= order %>"/>
       <p>Tags: <i>(séparés par une virgule)</i></p>
-      <input id="tags" type="text" name="tags"/>
+      <input id="tags" type="text" name="tags" value="<%= tags %>"/>
       <div class="btn-cntnr">
         <input type="submit" value="RECHERCHER" class="red-btn"/>
       </div>

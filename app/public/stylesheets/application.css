@@ -692,7 +692,7 @@ box-shadow: 0px 3px 11px -5px rgba(194,194,194,1);
   margin-top: -3em;
 }
 
-.usr-forms input[type="text"], .usr-forms textarea{
+.usr-forms input[type="text"], input[type="number"], .usr-forms textarea{
   width: 100%;
 }
 

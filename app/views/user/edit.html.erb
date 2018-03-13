@@ -34,6 +34,8 @@
         <input type="text" name="name" value="<%= current_user.name %>"/>
         <h3>PRÉNOM</h3>
         <input type="text" name="firstname" value="<%= current_user.firstname %>"/>
+        <h3>AGE</h3>
+        <input type="number" name="age" min="0" max="100" value="<%= current_user.age %>"/>
         <h3>EMAIL</h3>
         <input type="text" name="email" value="<%= current_user.email %>"/>
         <br/><br/>

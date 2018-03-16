@@ -22,6 +22,18 @@ function connect(query){
 
     ws.onmessage = function(msg) {
       show("Received: " + msg.data);
+      alert(msg.data);
+      var r = $("#header_notification")[0];
+      if (r.childNodes.length != 2)
+      {
+          var span = document.createElement("span")
+          span.classList.add("counter")
+          span.innerHTML = "1"
+          $("#header_notification")[0].appendChild(span)
+      }
+      else {
+          r.childNodes[1].innerHTML = parseInt(r.childNodes[1].innerHTML) + 1;
+      }
     }
   } catch(exception) {
     show("Error: " + exception);

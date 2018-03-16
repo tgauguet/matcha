@@ -10,7 +10,7 @@
 	<div>
 		<% if signed_in? %>
 			<a href="/conversation/index" class="header-icn"><img src="/images/message.png"/><%= message_count %></a>
-			<a href="/notification/index" class="header-icn"><img src="/images/notification.png"/><%= notification_count %></a>
+			<a href="/notification/index" id="header_notification" class="header-icn"><img src="/images/notification.png"/><%= notification_count %></a>
 			<a href="/logout" class="header-icn"><img src="/images/logout.png"/></a>
 		<% else %>
 			<a href="/user/new" class="red-btn non-nude">Inscription</a>

@@ -30,7 +30,7 @@ EM.run do
 
         @@users[handshake.query['key']] = ws
         #ws["user_id"] = handshake.query['key']
-        ws.send("Connected to #{handshake.path}.")
+        #ws.send("Connected to #{handshake.path}.")
         @log.info("Connected to #{handshake.path}")
       end
 

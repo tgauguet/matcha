@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 	helpers LikesHelper
 	helpers BlockHelper
 	helpers TagHelper
-	helpers WsHelper
+
 	include FileUtils::Verbose
 	['/images', '/edit', '/set-location', '/location', '/upload', '/edit-user'].each do |path|
 		before path do
@@ -24,11 +24,7 @@ class UsersController < ApplicationController
 	end
 
 	get '/images' do
-		#puts "---- GG ----"
-		#puts MyWS.users
-		#puts "------------"
 		@title = "Images"
-		send_ws_message("601", "gg")
 		erb :'user/images'
 	end
 

@@ -1,3 +1,4 @@
+require 'json'
 class ConversationsController < ApplicationController
 	helpers ConversationHelper
 	helpers UserHelper
@@ -25,6 +26,8 @@ class ConversationsController < ApplicationController
 			Message.new(params['message'], @user.id, params['conversation_id'])
 			Notification.new("message", @interlocutor.id, "#{@interlocutor.login} vous a envoyé un message") unless Block.blocked?(@user.id, @interlocutor.id)
 			update_public_score(@interlocutor.id, 1)
+			WsHelper.send_ws_message(@interlocutor.id.to_s, {:type => "conversation", :message => params['message'], :conversation_id => params['conversation_id']}.to_json);
+
 		end
 		redirect back
 	end

@@ -1,4 +1,7 @@
 require "erb"
+require "filemagic"
+require "securerandom"
+require "rack/mime"
 include ERB::Util
 
 module UserHelper
@@ -45,14 +48,14 @@ module UserHelper
   def upload_images(params, user)
 		c = 0
 		params.each do |k,v|
-      if valid_format(v['filename'])
-  			@img = v['filename']
-  			file = v['tempfile']
-            puts file.to_json
-  			cp(file, "./app/public/files/#{@img}")
-  			res = User.update({k => @img}, user)
-  			c += 1 unless res.nil?
-      end
+			mimetype = get_mimetype v['tempfile'].path
+			if /^image\/\w+$/ =~ mimetype
+				@img = SecureRandom.hex + Rack::Mime::MIME_TYPES.invert[mimetype]
+				file = v['tempfile']
+				cp(file, "./app/public/files/#{@img}")
+				res = User.update({k => @img}, user)
+				c += 1 unless res.nil?
+			end
 		end
 		if c > 0
 			flash.now[:success] = "#{c} image(s) ont été ajoutées a votre profil"
@@ -61,9 +64,10 @@ module UserHelper
 		end
 	end
 
-  def valid_format(img)
-    #img =~ /.\.(png|jpeg|jpg|gif)$/
-    true
+  def get_mimetype(img)
+    FileMagic.open(:mime) { |fm|
+        fm.file(img, true)
+    }
   end
 
   def edit_location(params, user)

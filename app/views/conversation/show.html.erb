@@ -1,15 +1,17 @@
 <div class="chat-cntnr">
   <a href="/conversation/index"><img src="/images/back.png" class="back"/></a>
   <h3>CONVERSATION AVEC <%= @interlocutor.login.upcase %></h3>
+  <div id="conversation_message">
   <% @messages.each do |message| %>
     <% message.to_dot %>
     <div class="<%= msg_class(message.user_id) %>"><% if my_msg(message.user_id) %><img src="/files/<%= @interlocutor.img1 %>"/><% end %><div><%= message.content %></div></div>
   <% end %>
-  <div id="chat-log">
+</div>
+<!--  <div id="chat-log">
     <input type="text" id="message">
     <div id="msgs"></div>
   </div>
-  <br/>
+  <br/> -->
   <form method="POST" action="/new-message">
     <input type="text" name="message" placeholder="Rédigez un message"/>
     <input type="hidden" name="interlocutor_id" value="<%= @interlocutor.id %>"/>
@@ -17,3 +19,6 @@
     <input type="submit" value="Envoyer"/>
   </form>
 </div>
+<script>
+    var USER_IMAGE = "<%= @interlocutor.img1 %>";
+</script>

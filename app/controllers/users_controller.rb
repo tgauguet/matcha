@@ -44,6 +44,7 @@ class UsersController < ApplicationController
 		@user = User.find_by("id", params[:id])
 		redirect '/' unless @user
 		@tags = Tagging.all(@user.id)
+		@online = MyWS.online? @user.id
 		@title = "Profil de #{@user.firstname} #{@user.name}"
 		if @user.id != current_user.id
 			if Visit.not_exists(@user.id, current_user.id) == 0

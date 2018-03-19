@@ -11,7 +11,8 @@ class Tag < DBset
 
   def self.exists?(content)
     begin
-      DBset.server.query("SELECT id FROM Tag WHERE content='#{content}'").first
+      state = DBset.server.prepare("SELECT id FROM Tag WHERE content = ?")
+      state.execute(content).first
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

@@ -23,6 +23,10 @@ EM.run do
       @@users
     end
 
+    def self.online?(user_id)
+        @@users[user_id.to_s]
+    end
+
     EM::WebSocket.run(:host => '0.0.0.0', :port => '3001') do |ws|
 
       ws.onopen do |handshake|

@@ -12,13 +12,16 @@ class TagsController < ApplicationController
   end
 
   post '/tags/new', allows: [:content] do
-    @content = params['content'].split(/\s*,\s*/)
+    @content = params['content'].split(",")
     tags = []
     if @content
       @content.each do |content|
         exists = Tag.exists?(content)
+        p exists
         if exists
-          @tag = Tagging.new(current_user.id, exists.to_dot.id) unless Tagging.exists?(current_user.id, exists.to_dot.id)
+          p Tagging.exists?(current_user.id, exists.to_dot.id) == 0
+          @tag = Tagging.new(current_user.id, exists.to_dot.id) if Tagging.exists?(current_user.id, exists.to_dot.id) == 0
+          p @tag
           tags << @tag if @tag
         else
           tag = Tag.new(content)

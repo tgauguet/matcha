@@ -34,7 +34,12 @@ class Tagging < DBset
 
   def self.selection_match(id, interlocutor, ids_list)
     begin
-      DBset.server.query("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE (user_id='#{id}' AND tag_id IN (SELECT id FROM Tag WHERE id IN (#{ids_list.join(', ')})))) AND user_id='#{interlocutor}')))")
+        tmp = ["?"]*ids_list.count
+        p "SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE (user_id=? AND tag_id IN (SELECT id FROM Tag WHERE id IN (#{tmp.join(', ')})))) AND user_id=?)))"
+        state = DBset.server.prepare("SELECT content FROM Tag WHERE (id IN (SELECT tag_id FROM Tagging WHERE (tag_id IN (SELECT tag_id FROM Tagging WHERE (user_id=? AND tag_id IN (SELECT id FROM Tag WHERE id IN (#{tmp.join(', ')})))) AND user_id=?)))")
+        state.execute(id, *ids_list, interlocutor)
+
+      #DBset.server.query()
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

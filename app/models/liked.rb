@@ -32,7 +32,7 @@ class Liked < DBset
 
   def self.delete(args)
     begin
-      DBset.server.query("DELETE FROM Liked WHERE (user_id = '#{args['user_id']}' AND sender_id = '#{args['sender_id']}')")
+      DBset.server.query("DELETE FROM Liked WHERE (user_id = '#{args['user_id']}' AND sender_id = '#{args['sender_id']}')") #TODO: EDIT
       return !self.liked?(args['user_id'], args['sender_id']).nil?
     rescue Mysql2::Error => e
       puts e.errno

@@ -14,7 +14,8 @@ class Message < DBset
 
   def self.all(id)
     begin
-      DBset.server.query("SELECT * FROM Message WHERE conversation_id='#{id}'")
+      state = DBset.server.prepare("SELECT * FROM Message WHERE conversation_id= ?")
+      state.execute(id)
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

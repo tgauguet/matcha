@@ -9,6 +9,7 @@
         <div>
           <p class="unit-name"><%= event(notif.event_type) %></p>
           <p class="unit-mssg"><%= notif.description %></p>
+          <p class="unit-mssg"><%= DateFormat.time_to_words(notif.created_at) %></p>
         </div>
       </div>
     </a>

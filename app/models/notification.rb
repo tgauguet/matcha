@@ -13,7 +13,8 @@ class Notification < DBset
 
   def self.mark_as_read(id)
     begin
-      DBset.server.query("UPDATE Notification SET is_read='1' WHERE id='#{id}'")
+      state = DBset.server.prepare("UPDATE Notification SET is_read='1' WHERE id= ?")
+      state.execute(id)
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -22,7 +23,8 @@ class Notification < DBset
 
   def self.all_message(id)
     begin
-      DBset.server.query("SELECT * FROM Notification WHERE (user_id='#{id}' AND event_type='message' AND is_read='0')")
+      state = DBset.server.prepare("SELECT * FROM Notification WHERE (user_id= ? AND event_type='message' AND is_read='0')")
+      state.execute(id)
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -31,7 +33,8 @@ class Notification < DBset
 
   def self.unread(id)
     begin
-      DBset.server.query("SELECT * FROM Notification WHERE (user_id='#{id}' AND is_read='0')")
+      state = DBset.server.prepare("SELECT * FROM Notification WHERE (user_id= ? AND is_read='0')")
+      state.execute(id)
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -40,7 +43,8 @@ class Notification < DBset
 
   def self.all(id)
     begin
-      DBset.server.query("SELECT * FROM Notification WHERE user_id='#{id}'")
+      state = DBset.server.prepare("SELECT * FROM Notification WHERE user_id= ?")
+      state.execute(id)
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

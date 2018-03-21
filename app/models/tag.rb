@@ -11,7 +11,8 @@ class Tag < DBset
 
   def self.exists?(content)
     begin
-      DBset.server.query("SELECT id FROM Tag WHERE content='#{content}'").first
+      state = DBset.server.prepare("SELECT id FROM Tag WHERE content= ?")
+      state.execute(content).first
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error
@@ -21,8 +22,9 @@ class Tag < DBset
   def self.find_by_id(id)
     begin
       if !id.nil?
-         tagging = DBset.server.query("SELECT content FROM Tag WHERE id='#{id}'").first
-         return tagging ? tagging.to_dot : nil
+        state = DBset.server.prepare("SELECT content FROM Tag WHERE id= ?")
+        tagging = state.execute(id).first
+        return tagging ? tagging.to_dot : nil
       end
     rescue Mysql2::Error => e
       puts e.errno

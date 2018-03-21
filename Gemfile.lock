@@ -17,6 +17,7 @@ GEM
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     concurrent-ruby (1.0.5)
+    cookiejar (0.3.3)
     crass (1.0.3)
     daemons (1.2.6)
     datamapper (1.0.2)
@@ -60,6 +61,14 @@ GEM
       uuidtools (~> 2.1.1)
     dm-validations (1.0.2)
       dm-core (~> 1.0.2)
+    em-http-request (1.1.5)
+      addressable (>= 2.3.4)
+      cookiejar (!= 0.3.1)
+      em-socksify (>= 0.3)
+      eventmachine (>= 1.0.3)
+      http_parser.rb (>= 0.6.0)
+    em-socksify (0.3.2)
+      eventmachine (>= 1.0.0.beta.4)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -134,6 +143,7 @@ DEPENDENCIES
   datamapper
   dbd-odbc
   dbi
+  em-http-request
   em-websocket
   geokit
   hash_dot

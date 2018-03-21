@@ -2,6 +2,5 @@ development:
   adapter: mysql
   pool: 2
   user: root
-  password: root
   host: localhost
   db_name: matcha

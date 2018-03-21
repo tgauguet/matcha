@@ -16,7 +16,9 @@
       <p><img src="/images/gender-symbols.png"/> <%= @user.gender %></p>
       <p><img src="/images/rabbit-shape.png"/> Zoophile/<%= @user.interested_in %></p>
       <p><img src="/images/clock.png"/> <%= @user.last_login.strftime('%m/%d/%Y') %></p>
+      <% if is_online?(params[:id].to_i) %><p><img src="/images/online.png"/> En ligne</p><% end %>
     </div>
+    <%= MyWS.users %><br/>
   </div>
   <% if !reported_as_fake? %>
     <div class="usr-infos">
@@ -79,6 +81,7 @@
       </div>
       <h3>DESCRIPTION</h3>
       <div class="usr-description-cntnr">
+        <!-- CHECK HERE -->
         <%= proper_value('description') %>
       </div>
     </div>

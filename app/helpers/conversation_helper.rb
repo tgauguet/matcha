@@ -4,7 +4,7 @@ module ConversationHelper
     @user = get_user(user_id)
     @conversation = get_conversation(conversation_id).to_dot
     @interlocutor = get_interlocutor(user_id, conversation_id)
-    @messages = Message.all(conversation_id)
+    @messages = Message.all(conversation_id).to_a.reverse!
   end
 
   def get_conversation(id)

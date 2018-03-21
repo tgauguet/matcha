@@ -25,12 +25,12 @@
   <script type="text/javascript" src='/javascript/websocket.js'></script>
   <script type="text/javascript" src="/javascript/bootstrap.min.js"></script>
   <%if signed_in? %>
-  <script>
-        console.log("OK");
-        connect(<%= current_user.id %>);
-        $('#message').keypress(function(event) {
-          if (event.keyCode == '13') { send(); }
-        });
-  </script>
+    <script>
+      // connect websocket server
+      connect(<%= current_user.id %>);
+      $('#message').keypress(function(event) {
+        if (event.keyCode == '13') { send(); }
+      });
+    </script>
   <% end %>
 </html>

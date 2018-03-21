@@ -16,15 +16,13 @@
       <p><img src="/images/gender-symbols.png"/> <%= @user.gender %></p>
       <p><img src="/images/rabbit-shape.png"/> Zoophile/<%= @user.interested_in %></p>
       <p><img src="/images/clock.png"/> <%= @user.last_login.strftime('%m/%d/%Y') %></p>
-      <% if is_online?(params[:id].to_i) %><p><img src="/images/online.png"/> En ligne</p><% end %>
     </div>
-    <%= MyWS.users %><br/>
   </div>
   <% if !reported_as_fake? %>
     <div class="usr-infos">
       <% unless @user.id == current_user.id %>
         <div class="usr-like-cntnr">
-          <% if have_image %>
+          <% if have_image && current_user.img1 %>
             <form action="/like" method="POST">
               <img src='/images/<%= heart_img %>'/>
               <input type="hidden" value="<%= @user.id %>" name="user_id"/>
@@ -43,10 +41,12 @@
             <input type="hidden" value="<%= current_user.id %>" name="sender_id"/>
             <input type="submit" value="<%= block_btn_val %> " class="white-btn">
           </form>
-          <div class="fake">
-            <img src='/images/connected.png'/>
-            <input type="submit" value="En ligne " class="white-btn">
-          </div>
+          <% if @online %>
+            <div class="fake">
+              <img src='/images/online.png'/>
+              <input type="submit" value="En ligne " class="white-btn">
+            </div>
+          <% end %>
         </div>
       <% end %>
       <h3>PHOTOS</h3>

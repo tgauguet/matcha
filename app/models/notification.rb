@@ -1,6 +1,9 @@
+require 'json'
+
 class Notification < DBset
 
   def self.new(event_type, user_id, description)
+    WsHelper.send_ws_message(user_id.to_s, {:type => event_type, :message => description}.to_json);
     begin
       state = DBset.server.prepare("INSERT INTO Notification (event_type, user_id, description) VALUES (? ,?, ?)")
       state.execute(event_type, user_id, description)

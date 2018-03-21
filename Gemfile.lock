@@ -82,6 +82,8 @@ GEM
       concurrent-ruby (~> 1.0)
     json (2.1.0)
     json_pure (1.8.6)
+    macaddr (1.7.1)
+      systemu (~> 2.6.2)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
     mime-types (3.1)
@@ -125,6 +127,7 @@ GEM
     sinatra-strong-params (0.0.3)
       sinatra (>= 1.4.0)
     stringex (1.1.0)
+    systemu (2.6.5)
     thin (1.7.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -133,6 +136,8 @@ GEM
     tilt (2.0.8)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    uuid (2.3.8)
+      macaddr (~> 1.0)
     uuidtools (2.1.5)
 
 PLATFORMS
@@ -160,6 +165,7 @@ DEPENDENCIES
   sinatra
   sinatra-strong-params
   thin
+  uuid
 
 BUNDLED WITH
    1.16.1

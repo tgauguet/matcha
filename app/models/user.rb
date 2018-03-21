@@ -89,7 +89,7 @@ class User < DBset
       end
       params = DataModel.init(params)
       params.each do |k,v|
-        unless v.empty?
+        unless v.nil?
           state = DBset.server.prepare("UPDATE User SET #{k} = ? WHERE id = ?")
           state.execute(v, args['id'])
         end

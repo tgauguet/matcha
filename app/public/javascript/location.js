@@ -1,36 +1,38 @@
 
-$('#somecomponent').locationpicker({
-  location: {
-      latitude: 48.8582,
-      longitude: 2.3387
-  },
-  radius: 500,
-  zoom: 15,
-  mapTypeId: google.maps.MapTypeId.ROADMAP,
-  styles: [],
-  mapOptions: {},
-  scrollwheel: true,
-  inputBinding: {
-    latitudeInput: $('#us2-lat'),
-    longitudeInput: $('#us2-lon'),
-    radiusInput: $('#us2-radius'),
-    locationNameInput: $('#us2-address')
-  },
-  enableAutocomplete: false,
-  enableAutocompleteBlur: false,
-  autocompleteOptions: null,
-  addressFormat: 'postal_code',
-  enableReverseGeocode: true,
-  draggable: true,
-  onchanged: function(currentLocation, radius, isMarkerDropped) {},
-  onlocationnotfound: function(locationName) {},
-  oninitialized: function (component) {},
-  // must be undefined to use the default gMaps marker
-  markerIcon: undefined,
-  markerDraggable: true,
-  markerVisible : true
-  }
-);
+function init_map(lat, lon) {
+
+    $('#somecomponent').locationpicker({
+      location: {
+          latitude: lat || 48.8582,
+          longitude: lon || 2.3387
+      },
+      radius: 500,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      styles: [],
+      mapOptions: {},
+      scrollwheel: true,
+      inputBinding: {
+        latitudeInput: $('#us2-lat'),
+        longitudeInput: $('#us2-lon'),
+        radiusInput: $('#us2-radius'),
+        locationNameInput: $('#us2-address')
+      },
+      enableAutocomplete: false,
+      enableAutocompleteBlur: false,
+      autocompleteOptions: null,
+      addressFormat: 'postal_code',
+      enableReverseGeocode: true,
+      draggable: true,
+      onchanged: function(currentLocation, radius, isMarkerDropped) {},
+      onlocationnotfound: function(locationName) {},
+      oninitialized: function (component) {},
+      // must be undefined to use the default gMaps marker
+      markerIcon: undefined,
+      markerDraggable: true,
+      markerVisible : true
+      }
+    );
 
 getLocation();
 var x = document.getElementById("demo");
@@ -76,4 +78,5 @@ function showError(error) {
             break;
     }
 
+}
 }

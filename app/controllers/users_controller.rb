@@ -4,6 +4,7 @@ class UsersController < ApplicationController
 	helpers LikesHelper
 	helpers BlockHelper
 	helpers TagHelper
+
 	include FileUtils::Verbose
 	['/images', '/edit', '/set-location', '/location', '/upload', '/edit-user'].each do |path|
 		before path do
@@ -43,6 +44,7 @@ class UsersController < ApplicationController
 		@user = User.find_by("id", params[:id])
 		redirect '/' unless @user
 		@tags = Tagging.all(@user.id)
+		@online = MyWS.online? @user.id
 		@title = "Profil de #{@user.firstname} #{@user.name}"
 		if @user.id != current_user.id
 			if Visit.not_exists(@user.id, current_user.id) == 0
@@ -140,7 +142,12 @@ class UsersController < ApplicationController
 
 	post '/edit-user', allows: [:interested_in, :description, :gender, :email, :name, :firstname, :age] do
 		valid_email = params['email'].empty? ? 1 : update_params(params)
-		if valid_email
+		valid_age = (!params['age'].empty?) &&  params['age'].to_i.to_s == params['age']
+		if valid_age
+			params['age'] = params['age'].to_i
+			valid_age = (0 <= params['age'] && params['age'] <= 100)
+		end
+		if valid_email && valid_age
 			@user = User.update(params, @user)
 			if @user
 				flash.now[:success] = "Votre profil a été modifié avec succès"

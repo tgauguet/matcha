@@ -1,26 +1,19 @@
 <div class="chat-cntnr">
   <a href="/conversation/index"><img src="/images/back.png" class="back"/></a>
   <h3>CONVERSATION AVEC <%= @interlocutor.login.upcase %></h3>
-  <div class="all-msg" id="out">
-    <% @messages.each do |message| %>
-      <% message.to_dot %>
-      <div class="<%= msg_class(message.user_id) %>"><% if my_msg(message.user_id) %><img src="/files/<%= @interlocutor.img1 %>"/><% end %><div><%= message.content %></div></div>
-    <% end %>
-  </div>
-  <div id="msgs"></div>
-  <div id="chat-log">
-    <input type="text" id="message" placeholder="Rédigez un message"/>
-  </div>
-  <br/>
-  <!-- <form method="POST" action="/new-message">
+  <div id="conversation_message">
+  <% @messages.each do |message| %>
+    <% message.to_dot %>
+    <div class="<%= msg_class(message.user_id) %>"><% if my_msg(message.user_id) %><img src="/files/<%= @interlocutor.img1 %>"/><% end %><div><%= message.content %></div></div>
+  <% end %>
+</div>
+  <form method="POST" action="/new-message">
     <input type="text" name="message" placeholder="Rédigez un message"/>
-    <input type="hidden" name="interlocutor_id" value="<%#= @interlocutor.id %>"/>
-    <input type="hidden" name="conversation_id" id="conversation" value="<%#= @conversation.id %>"/>
+    <input type="hidden" name="interlocutor_id" value="<%= @interlocutor.id %>"/>
+    <input type="hidden" name="conversation_id" value="<%= @conversation.id %>"/>
     <input type="submit" value="Envoyer"/>
-  </form> -->
+  </form>
 </div>
 <script>
-var out = document.getElementById("out");
-// allow 1px inaccuracy by adding 1
-var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+    var USER_IMAGE = "<%= @interlocutor.img1 %>";
 </script>

@@ -1,3 +1,9 @@
+require "erb"
+require "filemagic"
+require "securerandom"
+require "rack/mime"
+include ERB::Util
+
 module UserHelper
 
   def user_params(params)
@@ -42,13 +48,14 @@ module UserHelper
   def upload_images(params, user)
 		c = 0
 		params.each do |k,v|
-      if valid_format(v['filename'])
-  			@img = v['filename']
-  			file = v['tempfile']
-  			cp(file, "./app/public/files/#{@img}")
-  			res = User.update({k => @img}, user)
-  			c += 1 unless res.nil?
-      end
+			mimetype = get_mimetype v['tempfile'].path
+			if /^image\/\w+$/ =~ mimetype
+				@img = SecureRandom.hex + Rack::Mime::MIME_TYPES.invert[mimetype]
+				file = v['tempfile']
+				cp(file, "./app/public/files/#{@img}")
+				res = User.update({k => @img}, user)
+				c += 1 unless res.nil?
+			end
 		end
 		if c > 0
 			flash.now[:success] = "#{c} image(s) ont été ajoutées a votre profil"
@@ -57,8 +64,10 @@ module UserHelper
 		end
 	end
 
-  def valid_format(img)
-    img =~ /.\.(png|jpeg|jpg|gif)$/
+  def get_mimetype(img)
+    FileMagic.open(:mime) { |fm|
+        fm.file(img, true)
+    }
   end
 
   def edit_location(params, user)
@@ -73,7 +82,8 @@ module UserHelper
   end
 
   def proper_value(value)
-    @user[value] ? @user[value].force_encoding("UTF-8") : "ND"
+    res = @user[value] ? @user[value].force_encoding("UTF-8") : "ND"
+    h(res)
   end
 
   def proper_img(img)
@@ -89,11 +99,15 @@ module UserHelper
   end
 
   def profile_complete?(user)
-    c = 25
+    lst = ["name", "firstname", "login", "email", "password", "latitude", "longitude", "img1", "img2", "img3", "img4", "img5", "gender", "interested_in", "description", "city", "age"]
+    c = lst.length
+    res = c
     user.each do |k,v|
-      c -= 1 if v.nil? || v == ""
+        if lst.include? k
+            res -= 1 if v.nil? || v == ""
+        end
     end
-    ((c.to_f / 25) * 100).to_i
+    ((res.to_f / c) * 100).to_i
   end
 
 end

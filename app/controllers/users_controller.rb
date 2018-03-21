@@ -155,7 +155,7 @@ class UsersController < ApplicationController
 				flash.now[:error] = "Une erreur est survenue pendant la modification de votre profil"
 			end
 		else
-			flash.now[:error] = "Merci de vérifier vos paramètres"
+			flash.now[:error] = "Merci d'utiliser un age et un email valides"
 		end
 		erb :'user/edit'
 	end

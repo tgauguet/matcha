@@ -28,23 +28,18 @@
           <label for="match3"><img src="/images/both.png"/></label>
         </p>
       </div>
-        <h3>DESCRIPTION</h3>
-        <textarea rows="3"name="description"/></textarea>
-        <h3>AGE</h3>
-        <select name="age">
-          <% 100.times do |i| %>
-            <option value="<%= i + 1 %>"><%= i + 1 %></option>
-          <% end %>
-        </select>
-        <h3>NOM</h3>
-        <input type="text" name="name" value="<%= current_user.name %>"/>
-        <h3>PRÉNOM</h3>
-        <input type="text" name="firstname" value="<%= current_user.firstname %>"/>
-        <h3>AGE</h3>
-        <input type="number" name="age" min="0" max="100" value="<%= current_user.age %>"/>
-        <h3>EMAIL</h3>
-        <input type="text" name="email" value="<%= current_user.email %>"/>
-        <br/><br/>
-        <input type="submit" value="ENREGISTRER" class="red-btn"/>
+      <br>
+      <h3>DESCRIPTION</h3>
+      <textarea rows="3"name="description"/></textarea>
+      <h3>NOM</h3>
+      <input type="text" name="name" value="<%= current_user.name %>"/>
+      <h3>PRÉNOM</h3>
+      <input type="text" name="firstname" value="<%= current_user.firstname %>"/>
+      <h3>AGE</h3>
+      <input type="number" name="age" min="0" max="100" value="<%= current_user.age %>"/>
+      <h3>EMAIL</h3>
+      <input type="text" name="email" value="<%= current_user.email %>"/>
+      <br/><br/>
+      <input type="submit" value="ENREGISTRER" class="red-btn"/>
   </form>
 </div>

@@ -11,6 +11,9 @@ module UserHelper
     if !validate_email_format(params["email"])
       error << "votre adresse email n'est pas valide"
     end
+    if validate_number_presence_in(params["password"])
+      error << "votre mot de passe doit contenir au moins un chiffre"
+    end
     if validate_length_of(params["password"], 8)
       error << "votre mot de passe est trop court (8 char min)"
     end
@@ -27,11 +30,15 @@ module UserHelper
     params['email'] && validate_email_format(params["email"])
   end
 
+  def validate_number_presence_in(password)
+    password[/\d/].nil?
+  end
+
   def validate_presence_of(params)
     error = []
     params.each do |k, v|
       if !v.present?
-        error << k + " : ne peut pas être vide"
+        error << k + " : ne peut pas être vide" unless (k == 'longitude' || k == 'latitude')
       end
     end
     error

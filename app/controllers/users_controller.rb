@@ -131,7 +131,7 @@ class UsersController < ApplicationController
 	post '/send-password-email', allows: [:email] do
 		@user = User.find_by("email", params['email'])
 		if @user
-			@user = User.update({'password_token' => SecureRandom.urlsafe_base64.to_s}, @user)
+			@user = User.update({'password_token' => SecureRandom.hex[0,10].upcase.to_s}, @user)
 			password_email(@user)
 			flash.now[:notice] = "Nous vous avons envoyé un message pour modifier votre mot de passe. Checkez vos emails !"
 		else

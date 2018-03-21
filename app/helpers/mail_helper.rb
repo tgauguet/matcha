@@ -16,6 +16,7 @@ module MailHelper
 
   def password_email(user)
     token = user.password_token
+    puts token
     email = user.email
     id = user.id
     mail = Mail.new do

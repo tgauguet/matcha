@@ -27,7 +27,7 @@
   <%if signed_in? %>
     <script>
       // connect websocket server
-      connect(<%= current_user.id %>, <%= current_user.websocket_token %>);
+      connect(<%= current_user.id %>, "<%= current_user.websocket_token %>");
       $('#message').keypress(function(event) {
         if (event.keyCode == '13') { send(); }
       });

@@ -1,6 +1,5 @@
 class MyWS
   @log = Logger.new(STDOUT)
-  @@clients = []
   @@users = {}
 
   def self.users
@@ -14,11 +13,11 @@ class MyWS
   EM::WebSocket.run(:host => '0.0.0.0', :port => '3001') do |ws|
 
     ws.onopen do |handshake|
-      user = User.find_by('websocket_token', handshake.query['token']) if !handshake.query['token'].nil?
-      if user && (user.id.to_s != handshake.query['key'])
+      # user = User.find_by('websocket_token', handshake.query['token']) if !handshake.query['token'].nil?
+      # if user && (user.id.to_s != handshake.query['key'])
         @@users[handshake.query['key']] = ws
         @log.info("Connected to '#{handshake.path}' as user N°#{@user}")
-      end
+      # end
     end
 
     ws.onclose do

@@ -7,7 +7,7 @@ module SortHelper
     @users = generate_array(params)
     @users = @users.select { |u| tags_match(list,u.to_dot.id) > 0 } if list
     @users = @users.select { |u| get_distance(loc_params(u)) <= params['location'].to_i } if params['location']
-    @count = @users.count
+    @count = @users.nil? ? 0 : @users.count
   end
 
   def generate_array(params)
@@ -28,13 +28,15 @@ module SortHelper
   end
 
   def filtered_users(order)
-    @users.sort_by do |u|
-      if (order == "age" || order == "public_score" || order == "id")
-        u[order]
-      elsif order == "tags"
-        tags_count(u.to_dot.id)
-      elsif order == "location"
-        get_distance(loc_params(u))
+    if @users
+      @users.sort_by do |u|
+        if (order == "age" || order == "public_score" || order == "id")
+          u[order]
+        elsif order == "tags"
+          tags_count(u.to_dot.id)
+        elsif order == "location"
+          get_distance(loc_params(u))
+        end
       end
     end
 	end

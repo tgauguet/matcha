@@ -30,22 +30,14 @@ class User < DBset
     begin
       args = DataModel.clean(args)
       args = DataModel.get_suggestions(args)
-      if args['gender'] == "B"
-        if args['interested_in'] == "B"
-          state = DBset.server.prepare("SELECT * FROM User WHERE (((age BETWEEN ? AND  ?) OR (public_score BETWEEN ? AND ?)) AND id IN (SELECT id FROM User WHERE (id <> ? AND id NOT IN (SELECT user_id FROM Block WHERE sender_id= ?) AND (age BETWEEN ? AND ?) AND (public_score BETWEEN ? AND ?))))")
-          state.execute(args['user_min_age'], args['user_max_age'], args['user_min_score'], args['user_max_score'], args['id'], args['id'], args['min_age'], args['max_age'], args['min_score'], args['max_score'])
-        else
-          state = DBset.server.prepare("SELECT * FROM User WHERE (((age BETWEEN ? AND  ?) OR (public_score BETWEEN ? AND ?) OR gender= ?) AND id IN (SELECT id FROM User WHERE (id <> ? AND id NOT IN (SELECT user_id FROM Block WHERE sender_id= ?) AND (age BETWEEN ? AND ?) AND (public_score BETWEEN ? AND ?))))")
-          state.execute(args['user_min_age'], args['user_max_age'], args['user_min_score'], args['user_max_score'], args['interested_in'], args['id'], args['id'], args['min_age'], args['max_age'], args['min_score'], args['max_score'])
-        end
+      if args['interested_in'] == "B"
+        puts "CHECK HERE 3"
+        state = DBset.server.prepare("SELECT * FROM User WHERE (((age BETWEEN ? AND ?) OR (public_score BETWEEN ? AND ?)) AND id IN (SELECT id FROM User WHERE (id <> ? AND id NOT IN (SELECT user_id FROM Block WHERE sender_id= ?) AND (age BETWEEN ? AND ?) AND (public_score BETWEEN ? AND ?))))")
+        state.execute(args['user_min_age'], args['user_max_age'], args['user_min_score'], args['user_max_score'], args['id'], args['id'], args['min_age'], args['max_age'], args['min_score'], args['max_score'])
       else
-        if args['interested_in'] == "B"
-          state = DBset.server.prepare("SELECT * FROM User WHERE (((age BETWEEN ? AND '? OR (public_score BETWEEN ? AND ?)) AND id IN(SELECT id FROM User WHERE (id <> ? AND id NOT IN (SELECT user_id FROM Block WHERE sender_id= ?) AND (age BETWEEN ? AND ?) AND (public_score BETWEEN ? AND ?) AND gender= ?)))")
-          state.execute(args['user_min_age'], args['user_max_age'], args['user_min_score'], args['user_max_score'], args['id'], args['id'], args['min_age'], args['max_age'], args['min_score'], args['max_score'], args['gender'])
-        else
-          state = DBset.server.prepare("SELECT * FROM User WHERE (((age BETWEEN ? AND '? OR (public_score BETWEEN ? AND ?) OR gender= ?) AND id IN(SELECT id FROM User WHERE (id <> ? AND id NOT IN (SELECT user_id FROM Block WHERE sender_id= ?) AND (age BETWEEN ? AND ?) AND (public_score BETWEEN ? AND ?) AND gender= ?)))")
-          state.execute(args['user_min_age'], args['user_max_age'], args['user_min_score'], args['user_max_score'], args['interested_in'], args['id'], args['id'], args['min_age'], args['max_age'], args['min_score'], args['max_score'], args['gender'])
-        end
+        puts "CHECK HERE 4"
+        state = DBset.server.prepare("SELECT * FROM User WHERE (((age BETWEEN ? AND ?) OR (public_score BETWEEN ? AND ?) OR gender= ?) AND id IN (SELECT id FROM User WHERE (id <> ? AND id NOT IN (SELECT user_id FROM Block WHERE sender_id= ?) AND (age BETWEEN ? AND ?) AND (public_score BETWEEN ? AND ?))))")
+        state.execute(args['user_min_age'], args['user_max_age'], args['user_min_score'], args['user_max_score'], args['interested_in'], args['id'], args['id'], args['min_age'], args['max_age'], args['min_score'], args['max_score'])
       end
     rescue Mysql2::Error => e
       puts e.errno

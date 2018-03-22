@@ -15,16 +15,13 @@ function update_counter(loc)
     }
 }
 
-
-function connect(query){
+function connect(id, token){
   try{
     show = function(el){
-      //return function(msg){ el.innerHTML = msg + '<br />' + el.innerHTML; }
-    //}(document.getElementById('msgs'));
     console.log(el);
     }
 
-    ws = new WebSocket("ws://localhost:3001?key=" + query);
+    ws = new WebSocket("ws://localhost:3001?key=" + id + "&token=" + token);
 
     show("Socket Status > " + ws.readyState);
 
@@ -38,7 +35,6 @@ function connect(query){
 
     ws.onmessage = function(msg) {
       show("Received: " + msg.data);
-      //alert("> " + msg.data);
       var msg = JSON.parse(msg.data);
       if (msg["type"] == "conversation")
       {
@@ -57,15 +53,12 @@ function connect(query){
               di.appendChild(text);
               $("#conversation_message")[0].appendChild(di);
           }
-          //"message":"sadfb"
-          //"conversation_id":1
-          //<div class="<%= msg_class(message.user_id) %>"><% if my_msg(message.user_id) %><img src="/files/<%= @interlocutor.img1 %>"/><% end %><div><%= message.content %></div></div>
       }
       else
       {
           if (msg["type"] == "message")
             update_counter("#conversation_notification");
-        update_counter("#header_notification")
+          update_counter("#header_notification")
       }
     }
   } catch(exception) {

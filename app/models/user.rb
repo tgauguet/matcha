@@ -71,9 +71,9 @@ class User < DBset
       salt = BCrypt::Engine.generate_salt
       password = args['password'].encrypt(salt)
       args = DataModel.init(args)
-      args = DataModel.init_location(args)
-      state = DBset.server.prepare("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-      state.execute(args['name'], args['firstname'], args['email'], args['login'], password, salt, args['latitude'], args['longitude'])
+      args = DataModel.init_location_and_websocket_key(args)
+      state = DBset.server.prepare("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude, websocket_token) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      state.execute(args['name'], args['firstname'], args['email'], args['login'], password, salt, args['latitude'], args['longitude'], args['websocket_token'])
       id = DBset.server.query("SELECT LAST_INSERT_ID();").first['LAST_INSERT_ID()']
       self.find_by("id", id)
     rescue Mysql2::Error => e

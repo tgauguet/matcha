@@ -54,4 +54,17 @@ class UserConversation < DBset
     end
   end
 
+  def self.exists?(id1, id2)
+    begin
+      state = DBset.server.prepare("SELECT conversation_id FROM User_conversation WHERE (user_id= ? OR user_id= ?)")
+      res = state.execute(id1, id2)
+      a = []
+      res.each { |r| a << r.to_dot.conversation_id }
+      !a.uniq.empty?
+    rescue Mysql2::Error => e
+      puts e.errno
+      puts e.error
+    end
+  end
+
 end

@@ -3,15 +3,17 @@
   <% @conversations.each do |c| %>
     <% c.to_dot %>
     <% init_conversation(c.user_id, c.conversation_id) %>
-    <a href="/conversation/<%= @conversation.id %>/show">
-      <div class="unit-cntnr">
-        <img src="/files/<%= proper_img(@interlocutor.img1) %>"/>
-        <div>
-          <p class="unit-name"><%= @interlocutor.login.upcase %></p>
-          <p class="unit-mssg"><%= last_message(@messages) %></p>
-          <p class="unit-mssg"><%= DateFormat.time_to_words(c.created_at) %></p>
+    <% if @interlocutor %>
+      <a href="/conversation/<%= @conversation.id %>/show">
+        <div class="unit-cntnr">
+          <img src="/files/<%= proper_img(@interlocutor.img1) %>"/>
+          <div>
+            <p class="unit-name"><%= @interlocutor.login.upcase %></p>
+            <p class="unit-mssg"><%= last_message(@messages) %></p>
+            <p class="unit-mssg"><%= DateFormat.time_to_words(c.created_at) %></p>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
+    <% end %>
   <% end %>
 </div>

@@ -10,6 +10,7 @@ module InitDb
                   login VARCHAR(256) NOT NULL,
                   password VARCHAR(256) NOT NULL,
                   password_token VARCHAR(256),
+                  websocket_token VARCHAR(256),
                   gender VARCHAR(256),
                   interested_in VARCHAR(256),
                   description TEXT,

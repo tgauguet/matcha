@@ -27,12 +27,13 @@ module DataModel
     data
   end
 
-  def self.init_location(data)
+  def self.init_location_and_websocket_key(data)
 	  page = "http://freegeoip.net/json/"
 	  doc = Nokogiri::HTML(open(page, 'User-Agent' => 'ruby'))
 		doc = JSON.parse(doc)
 	  data['latitude'] = doc["latitude"].to_s
 		data['longitude'] = doc["longitude"].to_s
+    data['websocket_token'] = SecureRandom.hex[0,30].upcase.to_s
     data
 	end
 

@@ -12,10 +12,12 @@ class Conversation < DBset
 
   def self.new(id1, id2)
     begin
-      DBset.server.query("INSERT INTO Conversation VALUES ()")
-      conversation_id = DBset.server.query("SELECT LAST_INSERT_ID();").first['LAST_INSERT_ID()']
-      UserConversation.new(id1, conversation_id)
-      UserConversation.new(id2, conversation_id)
+      unless UserConversation.exists?(id1, id2)
+        DBset.server.query("INSERT INTO Conversation VALUES ()")
+        conversation_id = DBset.server.query("SELECT LAST_INSERT_ID();").first['LAST_INSERT_ID()']
+        UserConversation.new(id1, conversation_id)
+        UserConversation.new(id2, conversation_id)
+      end
     rescue Mysql2::Error => e
       puts e.errno
       puts e.error

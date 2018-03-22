@@ -1,3 +1,4 @@
+require "./app/lib/encrypt.rb"
 module InitDb
 
   def self.init_database(server)
@@ -28,23 +29,27 @@ module InitDb
                   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table User was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Visit (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
                   sender_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Visit was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Tag (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   content VARCHAR(256) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Tag was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Tagging (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
                   tag_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Tagging was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Notification (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
@@ -53,6 +58,7 @@ module InitDb
                   is_read INT(2) DEFAULT 0,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Notification was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Message (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
@@ -60,37 +66,44 @@ module InitDb
                   conversation_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Message was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Liked (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
                   sender_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Liked was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Conversation (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Conversation was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS User_conversation(
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
                   conversation_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table UserConversation was successfull created"
     server.query("CREATE TABLE IF NOT EXISTS Block (
                   id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                   user_id INT(6) NOT NULL,
                   sender_id INT(6) NOT NULL,
                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                   )")
+    puts "Table Block was successfull created"
   end
 
   def self.create_seeds(server)
     file = JSON.parse(File.read('./db/seeds/seeds.json'))
     fi = file.first
-    file.each do |seed|
-      server.query("INSERT INTO User (name, firstname, email, login, password, gender, interested_in, age, img1, city, latitude, longitude, public_score, description)
-       VALUES ('#{seed['name']}', '#{seed['firstname']}', '#{seed['email']}', '#{seed['login']}', '#{seed['password']}', '#{seed['gender']}', '#{seed['interested_in']}', '#{seed['age']}',
-          '#{seed['img1']}', '#{seed['city']}', '#{seed['latitude']}', '#{seed['longitude']}', '#{seed['public_score']}', '#{seed['description']}');")
+    salt = BCrypt::Engine.generate_salt
+    file.each_with_index do |seed, index|
+      print "CREATE SEEDS USER : #{index}/600 \r"
+      seed['password'] = seed['password'].encrypt(salt)
+      state = server.prepare("INSERT INTO User (name, firstname, email, login, password, gender, interested_in, age, img1, city, latitude, longitude, public_score, description, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      state.execute(seed['name'], seed['firstname'], seed['email'], seed['login'], seed['password'], seed['gender'], seed['interested_in'], seed['age'], seed['img1'], seed['city'], seed['latitude'], seed['longitude'], seed['public_score'], seed['description'], salt)
     end
   end
 

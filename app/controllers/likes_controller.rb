@@ -23,9 +23,7 @@ class LikesController < ApplicationController
     elsif Liked.new(params)
       flash[:success] = "Vous avez liké ce profil"
       Notification.new('like', params['user_id'], "#{@user.login} a liké votre profil") unless Block.blocked?(@user.id, params['user_id'])
-      if not_exists?(params['user_id']) == 1
-        Conversation.new(@user.id, params['user_id']) if its_a_match?(params['user_id'])
-      end
+      Conversation.new(@user.id, params['user_id']) if its_a_match?(params['user_id'])
       if its_a_match?(params['user_id'])
         match_notifications(params['user_id'])
       end

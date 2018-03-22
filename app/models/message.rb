@@ -4,8 +4,7 @@ class Message < DBset
     begin
       content = DataModel.protect_arg(content)
       unless content.blank?
-        state = DBset.server.prepare("INSERT INTO Message (content, user_id, conversation_id)
-                      VALUES (?, ?, ?)")
+        state = DBset.server.prepare("INSERT INTO Message (content, user_id, conversation_id) VALUES (?, ?, ?)")
         state.execute(content, user_id, conversation_id)
       end
     rescue Mysql2::Error => e
@@ -16,7 +15,7 @@ class Message < DBset
 
   def self.all(id)
     begin
-      state = DBset.server.prepare("SELECT * FROM Message WHERE conversation_id= ?")
+      state = DBset.server.prepare("SELECT * FROM Message WHERE conversation_id= ? ORDER BY created_at DESC")
       state.execute(id)
     rescue Mysql2::Error => e
       puts e.errno

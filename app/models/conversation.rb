@@ -12,7 +12,7 @@ class Conversation < DBset
 
   def self.new(id1, id2)
     begin
-      unless UserConversation.exists?(id1, id2)
+      if UserConversation.not_exists?(id1, id2)
         DBset.server.query("INSERT INTO Conversation VALUES ()")
         conversation_id = DBset.server.query("SELECT LAST_INSERT_ID();").first['LAST_INSERT_ID()']
         UserConversation.new(id1, conversation_id)

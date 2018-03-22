@@ -14,9 +14,9 @@ class MyWS
 
     ws.onopen do |handshake|
       user = User.find_by('websocket_token', handshake.query['token']) if !handshake.query['token'].nil?
-      if user && (user.id.to_s != handshake.query['key'])
+      if user && (user.id.to_s == handshake.query['key'])
         @@users[handshake.query['key']] = ws
-        @log.info("Connected to '#{handshake.path}' as user N°#{@user}")
+        @log.info("Connected to '#{handshake.path}' as user N°#{user.id}")
       end
     end
 

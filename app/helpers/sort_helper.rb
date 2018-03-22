@@ -94,7 +94,11 @@ module SortHelper
   end
 
   def gender_is_given(val, match)
-    'checked' if val == match
+    if val.blank? && match == 'B'
+      'checked'
+    else
+      'checked' if val == match
+    end
   end
 
   def location_is_given(val, match)

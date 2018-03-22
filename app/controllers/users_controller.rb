@@ -19,7 +19,6 @@ class UsersController < ApplicationController
 
 	get '/user/new' do
 		@title = "Inscription"
-		set_default_location
 		erb :'user/new'
 	end
 

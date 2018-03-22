@@ -38,7 +38,7 @@ module UserHelper
     error = []
     params.each do |k, v|
       if !v.present?
-        error << k + " : ne peut pas être vide" unless (k == 'longitude' || k == 'latitude')
+        error << k + " : ne peut pas être vide"
       end
     end
     error

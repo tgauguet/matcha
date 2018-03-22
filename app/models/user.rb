@@ -71,6 +71,7 @@ class User < DBset
       salt = BCrypt::Engine.generate_salt
       password = args['password'].encrypt(salt)
       args = DataModel.init(args)
+      args = DataModel.init_location(args)
       state = DBset.server.prepare("INSERT INTO User (name, firstname, email, login, password, salt, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
       state.execute(args['name'], args['firstname'], args['email'], args['login'], password, salt, args['latitude'], args['longitude'])
       id = DBset.server.query("SELECT LAST_INSERT_ID();").first['LAST_INSERT_ID()']

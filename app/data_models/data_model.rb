@@ -27,4 +27,13 @@ module DataModel
     data
   end
 
+  def self.init_location(data)
+	  page = "http://freegeoip.net/json/"
+	  doc = Nokogiri::HTML(open(page, 'User-Agent' => 'ruby'))
+		doc = JSON.parse(doc)
+	  data['latitude'] = doc["latitude"].to_s
+		data['longitude'] = doc["longitude"].to_s
+    data
+	end
+
 end
